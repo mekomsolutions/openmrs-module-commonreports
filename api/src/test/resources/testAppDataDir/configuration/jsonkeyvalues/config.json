@@ -42,5 +42,6 @@
     "report.lab.sicklingTest" : "382c9fa6-81d8-48c7-8b45-7866f5473030",
     "report.lab.bloodGroup" : "00ce9624-11e3-4015-b695-d7ff7cb3930e",
     "report.lab.urinalysis" : "c108ee98-5abc-43f3-9653-fc920d79e133",
-    "report.lab.prenatalVisitType" : "35ba9aff-901c-49dc-8630-a59385480d18"
+    "report.lab.prenatalVisitType" : "35ba9aff-901c-49dc-8630-a59385480d18",
+    "report.vaccination.active" : "true"
 }
