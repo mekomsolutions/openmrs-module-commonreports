@@ -61,5 +61,7 @@
     "report.emergency.leftWithoutPermission.concept" : "2ffc2e24-fa5c-4cb1-9366-8faec8225ee6",
     "report.emergency.yes.concept" : "bf885a9d-9f98-4990-8c20-ac4ace816bfe",
     "report.antenatal.active" : "true",
-    "report.antenatal2.active" : "true"
+    "report.antenatal2.active" : "true",
+    "report.antenatalGestation.active" : "true",
+    "report.antenatalRisks.active" : "true"
 }
