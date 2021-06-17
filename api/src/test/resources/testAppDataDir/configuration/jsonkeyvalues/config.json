@@ -100,5 +100,6 @@
     "report.antenatal.four" : "d29d0005-5e23-48cd-86ac-1ff9cd36dd13",
     "report.antenatal.fivePlus" : "3098581b-4ce3-4064-8e87-facb1d7a5ff5",
     "report.antenatal.yes" : "bf885a9d-9f98-4990-8c20-ac4ace816bfe",
-    "report.vaccination.active" : "true"
+    "report.vaccination.active" : "true",
+    "report.ecv.active" : "true"
 }
