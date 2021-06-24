@@ -13,3 +13,4 @@ A bundle of reports that consume the [OpenMRS Reporting module](https://github.c
 * [MSPP: Chronic Illnesses](readme/chronicIllnesses.md) report.
 * [MSPP: Antenatal](readme/antenatal.md) report.
 * [MSPP: Vaccination](readme/vaccination.md) report.
+* [MSPP: Child Care](readme/childCareDiseases.md) report.
