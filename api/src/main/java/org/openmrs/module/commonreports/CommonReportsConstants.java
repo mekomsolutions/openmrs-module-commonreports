@@ -33,6 +33,8 @@ public class CommonReportsConstants {
 	
 	public static final String COMPONENT_REPORTMANAGER_LAB = MODULE_ARTIFACT_ID + ".lab";
 	
+	public static final String COMPONENT_REPORTMANAGER_FAMILYPLANNING = MODULE_ARTIFACT_ID + ".familyPlanning";
+	
 	/*
 	 * URIs URLs
 	 */
