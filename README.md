@@ -7,4 +7,4 @@ A bundle of reports that consume the [OpenMRS Reporting module](https://github.c
 * Cambodia [MPA Guidelines](https://drive.google.com/file/d/0B5RYtMgBysYHOTk1cFpBNVpDdEE/view?usp=sharing) for Health Center Development 2008 ~ 2015 '_Outpatient Record Book_'.
 * [MSPP: New Episodes of Diseases](readme/newEpisodesOfDiseases.md) report.
 * [MSPP: Lab](readme/lab.md) report.
-* [Vaccination](readme/vaccination.md) report.
+* [MSPP: Vaccination](readme/vaccination.md) report.
