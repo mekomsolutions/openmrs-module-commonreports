@@ -130,15 +130,13 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		for (String member : gestationDuration) {
 			
 			if (member.equals("Total")) {
-				
-				SqlCohortDefinition sqd = new SqlCohortDefinition();
-				String st = "select person_id from obs where concept_id = (select DISTINCT concept_id from concept where uuid = '"
-				        + inizService.getValueFromKey("report.antenatal.numberOfWeeks")
-				        + "' and retired = 0)  AND obs_group_id IN (select obs_id from obs where concept_id = (select DISTINCT concept_id from concept where uuid = '"
-				        + inizService.getValueFromKey("report.antenatal.estimatedGestationalAge") + "' and retired = 0))";
-				sqd.setQuery(st);
+				CodedObsCohortDefinition sqd = new CodedObsCohortDefinition();
 				sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				sqd.setOperator(SetComparator.IN);
+				sqd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
+				sqd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
+				
 				antenatalGestation.addRow(member, sqd, parameterMappings);
 			} else {
 				
@@ -146,15 +144,16 @@ public class AntenatalReportManager extends ActivatedReportManager {
 				String firstNumber = bit[0];
 				String lastNumber = bit[1];
 				
-				SqlCohortDefinition sqd = new SqlCohortDefinition();
-				String st = "select person_id from obs where concept_id = (select DISTINCT concept_id from concept where uuid = '"
-				        + inizService.getValueFromKey("report.antenatal.numberOfWeeks")
-				        + "' and retired = 0) and (value_numeric BETWEEN " + firstNumber + " AND " + lastNumber
-				        + ") AND obs_group_id IN (select obs_id from obs where concept_id = (select DISTINCT concept_id from concept where uuid = '"
-				        + inizService.getValueFromKey("report.antenatal.estimatedGestationalAge") + "' and retired = 0))";
-				sqd.setQuery(st);
+				NumericObsCohortDefinition sqd = new NumericObsCohortDefinition();
+				sqd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
+				sqd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
 				sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				sqd.setValue1(Double.parseDouble(firstNumber));
+				sqd.setValue2(Double.parseDouble(lastNumber));
+				sqd.setOperator1(RangeComparator.GREATER_EQUAL);
+				sqd.setOperator2(RangeComparator.LESS_EQUAL);
+				
 				antenatalGestation.addRow(
 				    member + " " + MessageUtil.translate("commonreports.report.antenatalGestation.gestationWeeks"), sqd,
 				    parameterMappings);
@@ -212,14 +211,12 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		    parameterMappings);
 		
 		//Mothers with a birth plan
-		SqlCohortDefinition scd = new SqlCohortDefinition();
-		String st = "select person_id from obs where concept_id = (select DISTINCT concept_id from concept where uuid = '"
-		        + inizService.getValueFromKey("report.antenatal.numberOfWeeks")
-		        + "' and retired = 0)  AND obs_group_id IN (select obs_id from obs where concept_id = (select DISTINCT concept_id from concept where uuid = '"
-		        + inizService.getValueFromKey("report.antenatal.estimatedGestationalAge") + "' and retired = 0))";
-		scd.setQuery(st);
+		NumericObsCohortDefinition scd = new NumericObsCohortDefinition();
+		scd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
+		scd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
 		scd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		scd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.motherBirthPlan"), scd,
 		    parameterMappings);
 		
