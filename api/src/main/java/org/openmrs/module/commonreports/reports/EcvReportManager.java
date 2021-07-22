@@ -93,7 +93,7 @@ public class EcvReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrBefore", "${endDate}");
 		
-		String[] ecvList = inizService.getValueFromKey("report.ecvList").split(",");
+		String[] ecvList = inizService.getValueFromKey("report.vaccination.ecvList").split(",");
 		String st = "SELECT DISTINCT person_id FROM obs where 1=1";
 		
 		for (String member : ecvList) {
@@ -101,18 +101,18 @@ public class EcvReportManager extends ActivatedReportManager {
 			String lastOne = bit[bit.length - 1];
 			if (!NumberUtils.isNumber(lastOne)) {
 				st = st + " AND person_id IN (SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT concept_id from concept where uuid='"
-				        + inizService.getValueFromKey("report.vaccinations")
+				        + inizService.getValueFromKey("report.vaccination.vaccinations")
 				        + "') and value_coded=(select DISTINCT concept_id from concept where uuid='" + member + "')))";
 				
 			} else {
 				int lastIndex = Integer.parseInt(lastOne);
 				String vacName = member.substring(0, member.lastIndexOf(":"));
 				st = st + " AND person_id IN (SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT concept_id from concept where uuid='"
-				        + inizService.getValueFromKey("report.vaccinations")
+				        + inizService.getValueFromKey("report.vaccination.vaccinations")
 				        + "') and value_coded=(select DISTINCT concept_id from concept where uuid='" + vacName
 				        + "')) AND concept_id=(select DISTINCT concept_id from concept where uuid='"
-				        + inizService.getValueFromKey("report.vaccinationSequenceNumber") + "') and value_numeric="
-				        + lastIndex + ")";
+				        + inizService.getValueFromKey("report.vaccination.vaccinationSequenceNumberConcept")
+				        + "') and value_numeric=" + lastIndex + ")";
 			}
 			
 		}
