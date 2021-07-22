@@ -128,7 +128,6 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		
 		String[] gestationDuration = inizService.getValueFromKey("report.antenatal.gestationDuration").split(",");
 		for (String member : gestationDuration) {
-			System.out.println(member);
 			
 			if (member.equals("Total")) {
 				
