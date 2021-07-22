@@ -27,7 +27,7 @@ public class CommonReportsConstants {
 	
 	public static final String COMPONENT_REPORTMANAGER_OPDCONSULT = MODULE_ARTIFACT_ID + ".outpatientConsultation";
 	
-	public static final String COMPONENT_REPORTMANAGER_ANTENATALGESTATION = MODULE_ARTIFACT_ID + ".antenatalGestation";
+	public static final String COMPONENT_REPORTMANAGER_ANTENATAL = MODULE_ARTIFACT_ID + ".antenatal";
 	
 	public static final String COMPONENT_REPORTMANAGER_ANTENATALRISKS = MODULE_ARTIFACT_ID + ".antenatalRisks";
 	
