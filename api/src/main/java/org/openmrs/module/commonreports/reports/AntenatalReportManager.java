@@ -112,7 +112,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		
 		rd.setParameters(getParameters());
 		
-		// Antenal general
+		// Antenatal general
 		CohortCrossTabDataSetDefinition antenatalGestation = new CohortCrossTabDataSetDefinition();
 		antenatalGestation.addParameters(getParameters());
 		rd.addDataSetDefinition(getGestationName(), Mapped.mapStraightThrough(antenatalGestation));
@@ -126,37 +126,39 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		
-		String[] gestationDuration = inizService.getValueFromKey("report.antenatal.gestationDuration").split(",");
-		for (String member : gestationDuration) {
+		String[] gestationDurations = inizService.getValueFromKey("report.antenatal.gestationDuration").split(",");
+		for (String member : gestationDurations) {
 			
 			if (member.equals("Total")) {
-				CodedObsCohortDefinition sqd = new CodedObsCohortDefinition();
-				sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				sqd.setOperator(SetComparator.IN);
-				sqd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
-				sqd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
+				CodedObsCohortDefinition gestationDuration = new CodedObsCohortDefinition();
+				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				gestationDuration.setOperator(SetComparator.IN);
+				gestationDuration
+				        .setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
+				gestationDuration.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
 				
-				antenatalGestation.addRow(member, sqd, parameterMappings);
+				antenatalGestation.addRow(member, gestationDuration, parameterMappings);
 			} else {
 				
 				String[] bit = member.split("-");
 				String firstNumber = bit[0];
 				String lastNumber = bit[1];
 				
-				NumericObsCohortDefinition sqd = new NumericObsCohortDefinition();
-				sqd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
-				sqd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
-				sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				sqd.setValue1(Double.parseDouble(firstNumber));
-				sqd.setValue2(Double.parseDouble(lastNumber));
-				sqd.setOperator1(RangeComparator.GREATER_EQUAL);
-				sqd.setOperator2(RangeComparator.LESS_EQUAL);
+				NumericObsCohortDefinition gestationDuration = new NumericObsCohortDefinition();
+				gestationDuration
+				        .setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
+				gestationDuration.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
+				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				gestationDuration.setValue1(Double.parseDouble(firstNumber));
+				gestationDuration.setValue2(Double.parseDouble(lastNumber));
+				gestationDuration.setOperator1(RangeComparator.GREATER_EQUAL);
+				gestationDuration.setOperator2(RangeComparator.LESS_EQUAL);
 				
 				antenatalGestation.addRow(
-				    member + " " + MessageUtil.translate("commonreports.report.antenatalGestation.gestationWeeks"), sqd,
-				    parameterMappings);
+				    member + " " + MessageUtil.translate("commonreports.report.antenatalGestation.gestationWeeks"),
+				    gestationDuration, parameterMappings);
 				
 			}
 			
@@ -220,7 +222,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.motherBirthPlan"), scd,
 		    parameterMappings);
 		
-		//Prenatal visit + malaria test positive + chloroqine co prescribed 
+		//Prenatal visit + malaria test positive + chloroquine co prescribed 
 		CodedObsCohortDefinition malaria = new CodedObsCohortDefinition();
 		malaria.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		malaria.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
@@ -250,7 +252,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		    MessageUtil.translate("commonreports.report.antenatalRisks.prenatalMalariaPositiveChloroquine"), ccd2,
 		    parameterMappings);
 		
-		//Prental + MUAC =<21cm
+		//Prenatal + MUAC =<21cm
 		NumericObsCohortDefinition muac = new NumericObsCohortDefinition();
 		muac.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		muac.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
@@ -290,7 +292,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		
 		setColumnNames();
 		
-		// First Visit To column
+		// First Visit column
 		CodedObsCohortDefinition firstVisit = new CodedObsCohortDefinition();
 		firstVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		firstVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
@@ -341,7 +343,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalGestation.addColumn(col6, createCohortComposition(totalVisit), null);
 		
 		//Risks related
-		// All column
+		// All columns
 		GenderCohortDefinition allGender = new GenderCohortDefinition();
 		allGender.setMaleIncluded(true);
 		allGender.setFemaleIncluded(true);
