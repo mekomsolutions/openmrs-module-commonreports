@@ -97,7 +97,9 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		sqlDsd.setName("Family Planning SQL Dataset");
 		sqlDsd.setDescription("Family Planning SQL Dataset");
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/familyPlanning.sql");
+		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/familyPlanning.sql");
+		String sql = applyMetadataReplacements(rawSql);
+		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
 		
@@ -119,6 +121,40 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		
 		reportDesign.setProperties(designProperties);
 		return Arrays.asList(reportDesign);
+	}
+	
+	private String applyMetadataReplacements(String rawSql) {
+		String s = rawSql
+		        .replace(":FPAdministred",
+		            inizService.getConceptFromKey("report.familyPlanning.FPAdministred").getConceptId() + "")
+		        .replace(":familyPlanning",
+		            inizService.getConceptFromKey("report.familyPlanning.familyPlanning").getConceptId() + "")
+		        .replace(":femaleLT25",
+		            "person.gender = 'F' AND round(DATEDIFF(obs.obs_datetime, person.birthdate)/365.25, 1) < 25")
+		        .replace(":femaleGT25",
+		            "person.gender = 'F' AND round(DATEDIFF(obs.obs_datetime, person.birthdate)/365.25, 1) >= 25")
+		        .replace(":maleLT25",
+		            "person.gender = 'M' AND round(DATEDIFF(obs.obs_datetime, person.birthdate)/365.25, 1) < 25")
+		        .replace(":maleGT25",
+		            "person.gender = 'M' AND round(DATEDIFF(obs.obs_datetime, person.birthdate)/365.25, 1) >= 25")
+		        
+		        .replace(":typeOfUser",
+		            inizService.getConceptFromKey("report.familyPlanning.typeOfUser").getConceptId() + "")
+		        .replace(":new", inizService.getConceptFromKey("report.familyPlanning.new").getConceptId() + "")
+		        .replace(":existent", inizService.getConceptFromKey("report.familyPlanning.existent").getConceptId() + "")
+		        
+		        .replace(":microgynon",
+		            inizService.getConceptFromKey("report.familyPlanning.microgynon").getConceptId() + "")
+		        
+		        .replace(":microlut", inizService.getConceptFromKey("report.familyPlanning.microlut").getConceptId() + "")
+		        
+		        .replace(":depoProveraInjection",
+		            inizService.getConceptFromKey("report.familyPlanning.depoProveraInjection").getConceptId() + "")
+		        .replace(":jadel", inizService.getConceptFromKey("report.familyPlanning.jadel").getConceptId() + "")
+		        .replace(":condom", inizService.getConceptFromKey("report.familyPlanning.condom").getConceptId() + "")
+		        .replace(":FPObsGroupId",
+		            "obs_group_id IN (select obs_group_id from obs where obs_group_id IN (SELECT obs_id FROM obs");
+		return s;
 	}
 	
 }
