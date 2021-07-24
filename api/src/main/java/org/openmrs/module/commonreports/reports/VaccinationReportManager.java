@@ -2,6 +2,7 @@ package org.openmrs.module.commonreports.reports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,14 @@ import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.VisitCohortDefinition;
 import org.openmrs.module.reporting.common.DurationUnit;
 import org.openmrs.module.reporting.common.MessageUtil;
+import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -115,14 +118,27 @@ public class VaccinationReportManager extends ActivatedReportManager {
 			String[] bits = member.split(":");
 			String lastOne = bits[bits.length - 1];
 			if (!NumberUtils.isNumber(lastOne)) {
-				String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
-				        + inizService.getValueFromKey("report.vaccination.vaccinations")
-				        + "') and value_coded=(select DISTINCT CONCEPT_ID from concept where uuid='" + member + "'));";
+				 String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
+				       + inizService.getValueFromKey("report.vaccination.vaccinations")
+				       + "') and value_coded=(select DISTINCT CONCEPT_ID from concept where uuid='" + member + "'));";
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				
-				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), sql, parameterMappings);
+				 
+/* 				CodedObsCohortDefinition gestationDuration = new CodedObsCohortDefinition();
+				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				gestationDuration.setOperator(SetComparator.IN);
+				gestationDuration.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
+				gestationDuration.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinations"));
+				System.out.println(inizService.getConceptFromKey("VaccinationHistory"));
+				System.out.println(inizService.getConceptFromKey("report.vaccination.vaccinations"));
+				System.out.println(conceptService.getConceptByUuid(member));
+				System.out.println(Collections.singletonList(conceptService.getConceptByUuid(member)));
+				System.out.println(gestationDuration);
+				gestationDuration.setValueList(Collections.singletonList(conceptService.getConceptByUuid(member)));  */
+				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), sql,
+				    parameterMappings);
 				
 			} else {
 				int lastIndex = Integer.parseInt(lastOne);
@@ -137,12 +153,25 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				        + ") OR (concept_id=(select DISTINCT CONCEPT_ID from concept where uuid='"
 				        + inizService.getValueFromKey("report.vaccination.boostervaccinationSequenceNumberConcept")
 				        + "') AND value_numeric=" + lastIndex + "))";
+				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 				
 				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex, sql,
 				    parameterMappings);
+				/* 
+				
+									NumericObsCohortDefinition gestationDuration = new NumericObsCohortDefinition();
+								gestationDuration
+								        .setGroupingConcept(inizService.getConceptFromKey("report.vaccination.vaccinations"));
+								gestationDuration.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept"));
+								gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+								gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+								gestationDuration.setValue1(Double.parseDouble(lastIndex));
+								gestationDuration.setValue2(Double.parseDouble(lastNumber));
+								gestationDuration.setOperator1(RangeComparator.GREATER_EQUAL);
+								gestationDuration.setOperator2(RangeComparator.LESS_EQUAL); */
 				
 			}
 			
