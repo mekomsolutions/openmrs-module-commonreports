@@ -79,7 +79,7 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 		
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-05-01", "yyyy-MM-dd"));
-		context.addParameterValue("endDate", DateUtil.parseDate("2021-06-30", "yyyy-MM-dd"));
+		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-30", "yyyy-MM-dd"));
 		
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);

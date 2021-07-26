@@ -18,10 +18,13 @@ import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.PresenceOrAbsenceCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.VisitCohortDefinition;
 import org.openmrs.module.reporting.common.DurationUnit;
 import org.openmrs.module.reporting.common.MessageUtil;
+import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -118,33 +121,39 @@ public class VaccinationReportManager extends ActivatedReportManager {
 			String[] bits = member.split(":");
 			String lastOne = bits[bits.length - 1];
 			if (!NumberUtils.isNumber(lastOne)) {
-				 String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
+			/* 	 String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
 				       + inizService.getValueFromKey("report.vaccination.vaccinations")
 				       + "') and value_coded=(select DISTINCT CONCEPT_ID from concept where uuid='" + member + "'));";
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				 
-/* 				CodedObsCohortDefinition gestationDuration = new CodedObsCohortDefinition();
+				  */
+ 				CodedObsCohortDefinition gestationDuration = new CodedObsCohortDefinition();
 				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 				gestationDuration.setOperator(SetComparator.IN);
 				gestationDuration.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
 				gestationDuration.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinations"));
+				gestationDuration.setValueList(Arrays.asList(conceptService.getConceptByUuid(member)));  
+
+
+
+
 				System.out.println(inizService.getConceptFromKey("VaccinationHistory"));
 				System.out.println(inizService.getConceptFromKey("report.vaccination.vaccinations"));
 				System.out.println(conceptService.getConceptByUuid(member));
 				System.out.println(Collections.singletonList(conceptService.getConceptByUuid(member)));
 				System.out.println(gestationDuration);
-				gestationDuration.setValueList(Collections.singletonList(conceptService.getConceptByUuid(member)));  */
-				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), sql,
+
+				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), gestationDuration,
 				    parameterMappings);
 				
 			} else {
-				int lastIndex = Integer.parseInt(lastOne);
+				//int lastIndex = Integer.parseInt(lastOne);
+				Double lastIndex = Double.parseDouble(lastOne);
 				String vacName = member.substring(0, member.lastIndexOf(":"));
 				
-				String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
+			/* 	String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
 				        + inizService.getValueFromKey("report.vaccination.vaccinations")
 				        + "') and value_coded=(select DISTINCT CONCEPT_ID from concept where uuid='" + vacName
 				        + "')) AND ((concept_id=(select DISTINCT CONCEPT_ID from concept where uuid='"
@@ -157,21 +166,48 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				 */
+
+				 
+				CodedObsCohortDefinition gestationDuration = new CodedObsCohortDefinition();
+				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				gestationDuration.setOperator(SetComparator.IN);
+				gestationDuration.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
+				gestationDuration.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinations"));
+				gestationDuration.setValueList(Arrays.asList(conceptService.getConceptByUuid(vacName)));  
+
 				
-				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex, sql,
+									NumericObsCohortDefinition gestationD = new NumericObsCohortDefinition();
+								gestationD
+								        .setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
+								gestationD.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept"));
+								gestationD.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+								gestationD.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+								gestationD.setValue1(lastIndex);
+								gestationD.setOperator1(RangeComparator.EQUAL); 
+
+								NumericObsCohortDefinition gestationG = new NumericObsCohortDefinition();
+								gestationG
+								        .setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
+								gestationG.setQuestion(inizService.getConceptFromKey("report.vaccination.boostervaccinationSequenceNumberConcept"));
+								gestationG.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+								gestationG.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+								gestationD.setValue1(lastIndex);
+								gestationD.setOperator1(RangeComparator.EQUAL); 
+								
+								PresenceOrAbsenceCohortDefinition pa = new PresenceOrAbsenceCohortDefinition();
+								pa.addCohortToCheck(Mapped.mapStraightThrough(gestationD));
+								pa.addCohortToCheck(Mapped.mapStraightThrough(gestationG));
+				pa.setPresentInAtLeast(1);
+				pa.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+								pa.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+								
+				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex, createCohortComposition(gestationDuration,pa),
 				    parameterMappings);
-				/* 
+
+
 				
-									NumericObsCohortDefinition gestationDuration = new NumericObsCohortDefinition();
-								gestationDuration
-								        .setGroupingConcept(inizService.getConceptFromKey("report.vaccination.vaccinations"));
-								gestationDuration.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept"));
-								gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-								gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-								gestationDuration.setValue1(Double.parseDouble(lastIndex));
-								gestationDuration.setValue2(Double.parseDouble(lastNumber));
-								gestationDuration.setOperator1(RangeComparator.GREATER_EQUAL);
-								gestationDuration.setOperator2(RangeComparator.LESS_EQUAL); */
 				
 			}
 			
