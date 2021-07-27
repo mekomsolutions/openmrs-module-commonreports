@@ -84,7 +84,7 @@ public class AntenatalReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		
-		for (Iterator<DataSetRow> itr = data.getDataSets().get("Antenatal Gestation").iterator(); itr.hasNext();) {
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Antenatal Gestation").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
 			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
@@ -111,7 +111,7 @@ public class AntenatalReportManagerTest extends BaseModuleContextSensitiveMysqlB
 			
 		}
 		
-		for (Iterator<DataSetRow> itr = data.getDataSets().get("Antenatal Risks").iterator(); itr.hasNext();) {
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Antenatal Risks").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
 			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
