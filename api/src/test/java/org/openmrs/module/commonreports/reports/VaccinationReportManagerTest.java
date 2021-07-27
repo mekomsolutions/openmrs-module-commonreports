@@ -86,7 +86,7 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 		
 		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			
+			System.out.println(row);
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
 			// one row
 			Cohort _0mTo1yFemalesReceivedBCG = (Cohort) row
@@ -99,22 +99,22 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 			assertEquals(1, _0mTo1yMalesReceivedBCG.getSize());
 			
 			Cohort _0mTo1yFemalesReceivedPenta3 = (Cohort) row
-			        .getColumnValue("Pentavalent Vaccination 3." + VaccinationReportManager.col1);
+			        .getColumnValue("Pentavalent Vaccination 3.0." + VaccinationReportManager.col1);
 			assertNotNull(_0mTo1yFemalesReceivedPenta3);
 			assertEquals(1, _0mTo1yFemalesReceivedPenta3.getSize());
 			
 			Cohort _prenatalFemalesReceivedPenta3 = (Cohort) row
-			        .getColumnValue("Pentavalent Vaccination 3." + VaccinationReportManager.col5);
+			        .getColumnValue("Pentavalent Vaccination 3.0." + VaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedPenta3);
 			assertEquals(1, _prenatalFemalesReceivedPenta3.getSize());
 			
 			Cohort _malesReceivedPenta3 = (Cohort) row
-			        .getColumnValue("Pentavalent Vaccination 3." + VaccinationReportManager.col4);
+			        .getColumnValue("Pentavalent Vaccination 3.0." + VaccinationReportManager.col4);
 			assertNotNull(_malesReceivedPenta3);
 			assertEquals(0, _malesReceivedPenta3.getSize());
 			
 			Cohort _prenatalFemalesReceivedOPV2 = (Cohort) row
-			        .getColumnValue("Oral Polio Vaccination 2." + VaccinationReportManager.col5);
+			        .getColumnValue("Oral Polio Vaccination 2.0." + VaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedOPV2);
 			assertEquals(1, _prenatalFemalesReceivedOPV2.getSize());
 			
@@ -124,12 +124,12 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 			assertEquals(1, _femalesReceivedIPV.getSize());
 			
 			Cohort _femalesReceivedRota2 = (Cohort) row
-			        .getColumnValue("Rotavirus Vaccination 2." + VaccinationReportManager.col1);
+			        .getColumnValue("Rotavirus Vaccination 2.0." + VaccinationReportManager.col1);
 			assertNotNull(_femalesReceivedRota2);
 			assertEquals(1, _femalesReceivedRota2.getSize());
 			
 			Cohort _prenatalFemalesReceivedDT = (Cohort) row
-			        .getColumnValue("Diphtheria Tetanus Vaccination 1." + VaccinationReportManager.col5);
+			        .getColumnValue("Diphtheria Tetanus Vaccination 1.0." + VaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedDT);
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
 		}
