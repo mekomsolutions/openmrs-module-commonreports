@@ -119,6 +119,23 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		
 		Properties designProperties = new Properties();
 		
+		designProperties.put("newUser.label", MessageUtil.translate("commonreports.report.familyPlanning.newUser.label"));
+		designProperties.put("existentUser.label",
+		    MessageUtil.translate("commonreports.report.familyPlanning.existentUser.label"));
+		designProperties.put("LT25years.label",
+		    MessageUtil.translate("commonreports.report.familyPlanning.LT25years.label"));
+		designProperties.put("GT25years.label",
+		    MessageUtil.translate("commonreports.report.familyPlanning.GT25years.label"));
+		designProperties.put("method.label", MessageUtil.translate("commonreports.report.familyPlanning.method.label"));
+		designProperties.put("females.label", MessageUtil.translate("commonreports.report.familyPlanning.females.label"));
+		designProperties.put("males.label", MessageUtil.translate("commonreports.report.familyPlanning.males.label"));
+		designProperties.put("PC.label", MessageUtil.translate("commonreports.report.familyPlanning.PC.label"));
+		designProperties.put("PP.label", MessageUtil.translate("commonreports.report.familyPlanning.PP.label"));
+		designProperties.put("depo.label", MessageUtil.translate("commonreports.report.familyPlanning.depo.label"));
+		designProperties.put("implant.label", MessageUtil.translate("commonreports.report.familyPlanning.implant.label"));
+		designProperties.put("condoms.label", MessageUtil.translate("commonreports.report.familyPlanning.condoms.label"));
+		designProperties.put("total.label", MessageUtil.translate("commonreports.report.familyPlanning.total.label"));
+		
 		reportDesign.setProperties(designProperties);
 		return Arrays.asList(reportDesign);
 	}
