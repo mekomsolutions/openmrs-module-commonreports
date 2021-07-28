@@ -117,7 +117,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalGestation.addParameters(getParameters());
 		rd.addDataSetDefinition(getGestationName(), Mapped.mapStraightThrough(antenatalGestation));
 		
-		//Risks
+		// Risks
 		CohortCrossTabDataSetDefinition antenatalRisks = new CohortCrossTabDataSetDefinition();
 		antenatalRisks.addParameters(getParameters());
 		rd.addDataSetDefinition(getRisksName(), Mapped.mapStraightThrough(antenatalRisks));
@@ -164,7 +164,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 			
 		}
 		
-		//Risks related
+		// Risks related
 		GenderCohortDefinition female = new GenderCohortDefinition();
 		female.setFemaleIncluded(true);
 		
@@ -195,12 +195,13 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.ironDefANC"), ccd,
 		    parameterMappings);
 		
-		// Prenatal visit + Fer Folate Co prescribed 
-		SqlCohortDefinition sqd = new SqlCohortDefinition(
-		        "select patient_id from orders where concept_id=(select DISTINCT concept_id from concept where uuid = '"
-		                + inizService.getValueFromKey("report.antenatal.ferrousFolate")
-		                + "' and retired = 0) and order_type_id =(select order_type_id from order_type where uuid = '"
-		                + inizService.getValueFromKey("report.antenatal.drugOrder") + "')");
+		// Prenatal visit + Fer Folate Co prescribed
+		SqlCohortDefinition sqd = new SqlCohortDefinition("select patient_id from orders where concept_id="
+		        + inizService.getConceptFromKey("report.antenatal.ferrousFolate").getConceptId()
+		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
+		        + inizService.getValueFromKey("report.antenatal.drugOrder")
+		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
+		
 		sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition ccd1 = new CompositionCohortDefinition();
@@ -208,11 +209,12 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalIron"), ccd1,
 		    parameterMappings);
 		
-		//Prenatal visit treated for Fe def (Same as above--> Prenatal visit + Fer Folate Co prescribed)
+		// Prenatal visit treated for Fe def (Same as above--> Prenatal visit + Fer
+		// Folate Co prescribed)
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalIronDef"), ccd1,
 		    parameterMappings);
 		
-		//Mothers with a birth plan
+		// Mothers with a birth plan
 		NumericObsCohortDefinition scd = new NumericObsCohortDefinition();
 		scd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
 		scd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
@@ -222,7 +224,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.motherBirthPlan"), scd,
 		    parameterMappings);
 		
-		//Prenatal visit + malaria test positive + chloroquine co prescribed 
+		// Prenatal visit + malaria test positive + chloroquine co prescribed
 		CodedObsCohortDefinition malaria = new CodedObsCohortDefinition();
 		malaria.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		malaria.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
@@ -239,11 +241,11 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		
 		malaria.setValueList(malariaPositiveConceptSet);
 		
-		SqlCohortDefinition sql = new SqlCohortDefinition(
-		        "select patient_id from orders where concept_id=(select DISTINCT concept_id from concept where uuid = '"
-		                + inizService.getValueFromKey("report.antenatal.chloroquine")
-		                + "' and retired = 0) and order_type_id =(select order_type_id from order_type where uuid = '"
-		                + inizService.getValueFromKey("report.antenatal.drugOrder") + "')");
+		SqlCohortDefinition sql = new SqlCohortDefinition("select patient_id from orders where concept_id="
+		        + inizService.getConceptFromKey("report.antenatal.chloroquine").getConceptId()
+		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
+		        + inizService.getValueFromKey("report.antenatal.drugOrder")
+		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
 		sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition ccd2 = new CompositionCohortDefinition();
@@ -252,7 +254,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		    MessageUtil.translate("commonreports.report.antenatalRisks.prenatalMalariaPositiveChloroquine"), ccd2,
 		    parameterMappings);
 		
-		//Prenatal + MUAC =<21cm
+		// Prenatal + MUAC =<21cm
 		NumericObsCohortDefinition muac = new NumericObsCohortDefinition();
 		muac.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		muac.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
@@ -266,7 +268,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalMUAC=<21cm"), ccd3,
 		    parameterMappings);
 		
-		//Women + fer folate co prescribed 
+		// Women + fer folate co prescribed
 		VisitService vs = Context.getVisitService();
 		List<VisitType> lVT = new ArrayList<VisitType>();
 		String[] otherVisitTypes = inizService.getValueFromKey("report.antenatal.otherVisitTypes").split(",");
@@ -278,11 +280,11 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		VisitCohortDefinition _other = new VisitCohortDefinition();
 		_other.setVisitTypeList(lVT);
 		
-		SqlCohortDefinition sqdc = new SqlCohortDefinition(
-		        "select patient_id from orders where concept_id=(select DISTINCT concept_id from concept where uuid = '"
-		                + inizService.getValueFromKey("report.antenatal.ferrousFolate")
-		                + "' and retired = 0) and order_type_id =(select order_type_id from order_type where uuid = '"
-		                + inizService.getValueFromKey("report.antenatal.drugOrder") + "')");
+		SqlCohortDefinition sqdc = new SqlCohortDefinition("select patient_id from orders where concept_id="
+		        + inizService.getConceptFromKey("report.antenatal.ferrousFolate").getConceptId()
+		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
+		        + inizService.getValueFromKey("report.antenatal.drugOrder")
+		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
 		sqdc.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		sqdc.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition ccd5 = new CompositionCohortDefinition();
@@ -342,7 +344,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		CodedObsCohortDefinition totalVisit = new CodedObsCohortDefinition();
 		antenatalGestation.addColumn(col6, createCohortComposition(totalVisit), null);
 		
-		//Risks related
+		// Risks related
 		// All columns
 		GenderCohortDefinition allGender = new GenderCohortDefinition();
 		allGender.setMaleIncluded(true);
