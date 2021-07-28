@@ -39,9 +39,9 @@ It is setup by setting the following properties in the [initializer](https://git
 
 `report.emergency.otherViolenceType.concept` specifies a concept defining other violence type emergency. It should be answering the concept defined by the `report.emergency.question.concept` property.
 
-`report.emergency.medicalAndSurgicalEmergenciesQuesion.concept` specifies a coded question answered by the coded report.emergency.medicalAndSurgicalEmergenciesQuesion.concept points to the question answered by the coded answers specified by the report.emergency.medicalAndSurgicalEmergenciesSetOfSets.concept property. Eg, 'Visit Diagnoses'.
+`report.emergency.medicalAndSurgicalEmergenciesQuesion.concept` points to the question answered by the coded answers specified by the `report.emergency.medicalAndSurgicalEmergenciesSetOfSets.concept` property. Eg, 'Visit Diagnoses'.
 
-report.emergency.medicalAndSurgicalEmergenciesSetOfSets.concept specifies a concept set that informs of 'Medical and Surgical Emergency' categories. These categories are sets that group all concepts to be reported on report.emergency.medicalAndSurgicalEmergenciesQuesion.concept.
+`report.emergency.medicalAndSurgicalEmergenciesSetOfSets.concept` specifies a concept set that informs of 'Medical and Surgical Emergency' categories. These categories are sets that group all concepts to be reported on `report.emergency.medicalAndSurgicalEmergenciesQuesion.concept`.
 
 See an example of the concept Set of Sets structure:
 
