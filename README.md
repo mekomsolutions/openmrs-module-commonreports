@@ -8,4 +8,4 @@ A bundle of reports that consume the [OpenMRS Reporting module](https://github.c
 * [MSPP: New Episodes of Diseases](readme/newEpisodesOfDiseases.md) report.
 * [MSPP: Lab](readme/lab.md) report.
 * [MSPP: Visits](readme/visits.md) report.
-* [Emergency](readme/emergency.md) report.
+* [MSPP: Emergency](readme/emergency.md) report.
