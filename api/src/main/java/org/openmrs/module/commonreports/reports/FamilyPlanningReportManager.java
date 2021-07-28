@@ -94,8 +94,8 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		rd.setUuid(getUuid());
 		
 		SqlDataSetDefinition sqlDsd = new SqlDataSetDefinition();
-		sqlDsd.setName("Family Planning SQL Dataset");
-		sqlDsd.setDescription("Family Planning SQL Dataset");
+		sqlDsd.setName(MessageUtil.translate("commonreports.report.familyPlanning.datasetName"));
+		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.familyPlanning.datasetDescription"));
 		
 		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/familyPlanning.sql");
 		String sql = applyMetadataReplacements(rawSql);
