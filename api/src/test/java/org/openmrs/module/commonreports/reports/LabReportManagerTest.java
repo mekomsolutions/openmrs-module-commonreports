@@ -1,10 +1,10 @@
 package org.openmrs.module.commonreports.reports;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.DatabaseConfig;
@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
-import org.openmrs.module.commonreports.reports.NewEpisodesOfDiseasesReportManager;
+import org.openmrs.module.commonreports.reports.LabReportManager;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -40,13 +40,12 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 import static java.math.BigDecimal.ONE;
+import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
-public class NewEpisodesOfDiseasesReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class LabReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public NewEpisodesOfDiseasesReportManagerTest() throws SQLException {
+	public LabReportManagerTest() throws SQLException {
 		super();
 	}
 	
@@ -64,7 +63,7 @@ public class NewEpisodesOfDiseasesReportManagerTest extends BaseModuleContextSen
 	private ConceptService cs;
 	
 	@Autowired
-	private NewEpisodesOfDiseasesReportManager manager;
+	private LabReportManager manager;
 	
 	@Override
 	public void executeDataSet(IDataSet dataset) {
@@ -91,7 +90,7 @@ public class NewEpisodesOfDiseasesReportManagerTest extends BaseModuleContextSen
 	public void setUp() throws Exception {
 		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		executeDataSet("org/openmrs/module/commonreports/include/newEpisodesOfDiseasesTestDataset.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/labTestDataset.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
@@ -111,25 +110,20 @@ public class NewEpisodesOfDiseasesReportManagerTest extends BaseModuleContextSen
 		ReportManagerUtil.setupReport(manager);
 		
 		// verif
-		ReportDesign design = rs.getReportDesignByUuid("7688966e-fca5-4fde-abab-1b46a87a1185");
+		ReportDesign design = rs.getReportDesignByUuid("988d3408-9aac-4b6f-9cab-77c3f02beef5");
 		
-		Assert.assertEquals("sheet:1,row:4,dataset:" + manager.getName(), design.getProperties().get("repeatingSections"));
 		Assert.assertEquals(1, design.getResources().size());
 		
 		ReportDefinition def = design.getReportDefinition();
-		Assert.assertEquals("8b787bdc-c852-481c-b6fa-6683ec7e30d8", def.getUuid());
+		Assert.assertEquals("14f9b6a6-e176-467c-83ee-6281e743834d", def.getUuid());
 	}
 	
 	@Test
 	public void testReport() throws Exception {
 		// setup
 		EvaluationContext context = new EvaluationContext();
-		context.addParameterValue("startDate", DateUtil.parseDate("2008-08-01", "yyyy-MM-dd"));
-		context.addParameterValue("endDate", DateUtil.parseDate("2009-09-30", "yyyy-MM-dd"));
-		boolean malariaVerified = false;
-		boolean feverVerified = false;
-		boolean diabetesVerified = false;
-		boolean allOtherDiagnoses = false;
+		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
+		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();
@@ -138,36 +132,24 @@ public class NewEpisodesOfDiseasesReportManagerTest extends BaseModuleContextSen
 		// verify
 		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			if (row.getColumnValue("Maladies/Symptomes").equals("MALARIA")) {
-				assertEquals(new BigDecimal(2), row.getColumnValue("F_25-49"));
-				assertEquals(ONE, row.getColumnValue("M_1-4"));
-				assertEquals(ONE, row.getColumnValue("M_Total"));
-				assertEquals(new BigDecimal(2), row.getColumnValue("F_Total"));
-				assertEquals(new BigDecimal(2), row.getColumnValue("TotalReferredCases"));
-				malariaVerified = true;
-			}
-			if (row.getColumnValue("Maladies/Symptomes").equals("FEVER")) {
-				assertEquals(ONE, row.getColumnValue("M_1-4"));
-				assertEquals(ONE, row.getColumnValue("M_Total"));
-				assertNull(row.getColumnValue("F_Total"));
-				assertEquals(null, row.getColumnValue("TotalReferredCases"));
-				feverVerified = true;
-			}
-			if (row.getColumnValue("Maladies/Symptomes").equals("DIABETES")) {
-				assertEquals(ONE, row.getColumnValue("M_1-4"));
-				assertEquals(ONE, row.getColumnValue("M_Total"));
-				assertNull(row.getColumnValue("F_Total"));
-				assertEquals(null, row.getColumnValue("TotalReferredCases"));
-				diabetesVerified = true;
-			}
-			if (row.getColumnValue("Maladies/Symptomes").equals("All other diagnoses")) {
-				assertEquals(ONE, row.getColumnValue("F_25-49"));
-				assertEquals(ONE, row.getColumnValue("F_Total"));
-				assertEquals(ONE, row.getColumnValue("TotalReferredCases"));
-				allOtherDiagnoses = true;
-			}
+			assertEquals(ONE, row.getColumnValue("sputum"));
+			assertEquals(ONE, row.getColumnValue("sputumPositive"));
+			assertEquals(ONE, row.getColumnValue("malariaRapid"));
+			assertEquals(ONE, row.getColumnValue("malariaRapidPositive"));
+			assertEquals(ONE, row.getColumnValue("malariaMicro"));
+			assertEquals(ONE, row.getColumnValue("malariaMicroPositive"));
+			assertEquals(BigDecimal.valueOf(2), row.getColumnValue("malariaTotal"));
+			assertEquals(BigDecimal.valueOf(2), row.getColumnValue("malariaPositive"));
+			assertEquals(ONE, row.getColumnValue("CBC"));
+			assertEquals(ONE, row.getColumnValue("sickling"));
+			assertEquals(ONE, row.getColumnValue("sicklingPositive"));
+			assertEquals(ONE, row.getColumnValue("bloodGroup"));
+			assertEquals(ONE, row.getColumnValue("urinalysis"));
+			assertEquals(ONE, row.getColumnValue("otherSickling"));
+			assertEquals(ONE, row.getColumnValue("otherSicklingPositive"));
+			assertEquals(ONE, row.getColumnValue("otherbloodGroup"));
 		}
-		assertTrue(malariaVerified && feverVerified && diabetesVerified && allOtherDiagnoses);
+		
 	}
 	
 	private void updateDatabase(String filename) throws Exception {
