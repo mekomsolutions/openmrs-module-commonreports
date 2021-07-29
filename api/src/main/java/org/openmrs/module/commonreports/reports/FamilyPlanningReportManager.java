@@ -168,9 +168,7 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		        .replace(":depoProveraInjection",
 		            inizService.getConceptFromKey("report.familyPlanning.depoProveraInjection").getConceptId() + "")
 		        .replace(":jadel", inizService.getConceptFromKey("report.familyPlanning.jadel").getConceptId() + "")
-		        .replace(":condom", inizService.getConceptFromKey("report.familyPlanning.condom").getConceptId() + "")
-		        .replace(":FPObsGroupId",
-		            "obs_group_id IN (select obs_group_id from obs where obs_group_id IN (SELECT obs_id FROM obs");
+		        .replace(":condom", inizService.getConceptFromKey("report.familyPlanning.condom").getConceptId() + "");
 		return s;
 	}
 	
