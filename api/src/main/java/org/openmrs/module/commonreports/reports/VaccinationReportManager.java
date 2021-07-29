@@ -80,10 +80,11 @@ public class VaccinationReportManager extends ActivatedReportManager {
 	public String getVaccinationName() {
 		return MessageUtil.translate("commonreports.report.vaccination.reportName");
 	}
-
+	
 	public String getECVName() {
 		return MessageUtil.translate("commonreports.report.ecv.reportName");
 	}
+	
 	public static String col1 = "";
 	
 	public static String col2 = "";
@@ -116,10 +117,10 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		vaccination.addParameters(getParameters());
 		rd.addDataSetDefinition(getName(), Mapped.mapStraightThrough(vaccination));
 		
-		CohortCrossTabDataSetDefinition ecv = new CohortCrossTabDataSetDefinition();
+		/* CohortCrossTabDataSetDefinition ecv = new CohortCrossTabDataSetDefinition();
 		ecv.addParameters(getParameters());
 		rd.addDataSetDefinition(getName(), Mapped.mapStraightThrough(ecv));
-		
+		 */
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
@@ -150,60 +151,29 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				    parameterMappings);
 				
 			} else {
-				//int lastIndex = Integer.parseInt(lastOne);
-				Double lastIndex = Double.parseDouble(lastOne);
+				int lastIndex = Integer.parseInt(lastOne);
+				//Double lastIndex = Double.parseDouble(lastOne);
 				String vacName = member.substring(0, member.lastIndexOf(":"));
 				
-				/* 	String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
-					        + inizService.getValueFromKey("report.vaccination.vaccinations")
-					        + "') and value_coded=(select DISTINCT CONCEPT_ID from concept where uuid='" + vacName
-					        + "')) AND ((concept_id=(select DISTINCT CONCEPT_ID from concept where uuid='"
-					        + inizService.getValueFromKey("report.vaccination.vaccinationSequenceNumberConcept")
-					        + "') AND value_numeric=" + lastIndex
-					        + ") OR (concept_id=(select DISTINCT CONCEPT_ID from concept where uuid='"
-					        + inizService.getValueFromKey("report.vaccination.boostervaccinationSequenceNumberConcept")
-					        + "') AND value_numeric=" + lastIndex + "))";
-					
-					SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
-					sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-					sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-					 */
+				String sqlQuery = "SELECT person_id FROM obs where ( obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
+				        + ") AND concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
+				        + " AND value_numeric =" + lastIndex
+				        + ") OR ( obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + " AND value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
+				        + ") AND concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.boostervaccinationSequenceNumberConcept")
+				                .getConceptId()
+				        + " AND value_numeric =" + lastIndex + ") AND obs_datetime BETWEEN :onOrAfter AND :onOrBefore";
+				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
+				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex, sql,
+				    parameterMappings);
 				
-				CodedObsCohortDefinition vaccinations = new CodedObsCohortDefinition();
-				vaccinations.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				vaccinations.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				vaccinations.setOperator(SetComparator.IN);
-				vaccinations.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
-				vaccinations.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinations"));
-				vaccinations.setValueList(Arrays.asList(conceptService.getConceptByUuid(vacName)));
-				
-				NumericObsCohortDefinition vaccinationSequence = new NumericObsCohortDefinition();
-				vaccinationSequence.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
-				vaccinationSequence
-				        .setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept"));
-				vaccinationSequence.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				vaccinationSequence.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				vaccinationSequence.setValue1(lastIndex);
-				vaccinationSequence.setOperator1(RangeComparator.EQUAL);
-				
-				NumericObsCohortDefinition vaccinationBooster = new NumericObsCohortDefinition();
-				vaccinationBooster.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
-				vaccinationBooster.setQuestion(
-				    inizService.getConceptFromKey("report.vaccination.boostervaccinationSequenceNumberConcept"));
-				vaccinationBooster.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				vaccinationBooster.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				vaccinationBooster.setValue1(lastIndex);
-				vaccinationBooster.setOperator1(RangeComparator.EQUAL);
-				
-				PresenceOrAbsenceCohortDefinition presenceOrAbsence = new PresenceOrAbsenceCohortDefinition();
-				presenceOrAbsence.addCohortToCheck(Mapped.mapStraightThrough(vaccinationSequence));
-				presenceOrAbsence.addCohortToCheck(Mapped.mapStraightThrough(vaccinationBooster));
-				presenceOrAbsence.setPresentInAtLeast(1);
-				presenceOrAbsence.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				presenceOrAbsence.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				
-				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex,
-				    createCohortComposition(vaccinations, presenceOrAbsence), parameterMappings);
 				
 			}
 			
