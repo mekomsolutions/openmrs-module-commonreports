@@ -104,7 +104,7 @@ public class PatientHistoryReportManager extends ActivatedReportManager {
 
 	@Override
 	public boolean isActivated() {
-		return false;
+		return super.isActivated();
 	}
 
 	@Override
