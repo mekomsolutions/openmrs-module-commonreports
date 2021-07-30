@@ -235,14 +235,14 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		AgeCohortDefinition _0mTo1y = new AgeCohortDefinition();
 		_0mTo1y.setMinAge(0);
 		_0mTo1y.setMinAgeUnit(DurationUnit.MONTHS);
-		_0mTo1y.setMaxAge(1);
-		_0mTo1y.setMaxAgeUnit(DurationUnit.YEARS);
+		_0mTo1y.setMaxAge(11);
+		_0mTo1y.setMaxAgeUnit(DurationUnit.MONTHS);
 		
 		AgeCohortDefinition _1To2y = new AgeCohortDefinition();
-		_1To2y.setMinAge(1);
-		_1To2y.setMinAgeUnit(DurationUnit.YEARS);
-		_1To2y.setMaxAge(2);
-		_1To2y.setMaxAgeUnit(DurationUnit.YEARS);
+		_1To2y.setMinAge(12);
+		_1To2y.setMinAgeUnit(DurationUnit.MONTHS);
+		_1To2y.setMaxAge(23);
+		_1To2y.setMaxAgeUnit(DurationUnit.MONTHS);
 		
 		VisitCohortDefinition _prenatal = new VisitCohortDefinition();
 		_prenatal.setVisitTypeList(Arrays.asList(Context.getVisitService()
