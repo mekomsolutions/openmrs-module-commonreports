@@ -37,8 +37,6 @@ public class CommonReportsConstants {
 	
 	public static final String COMPONENT_REPORTMANAGER_VACCINATION = MODULE_ARTIFACT_ID + ".vaccination";
 	
-	public static final String COMPONENT_REPORTMANAGER_ECV = MODULE_ARTIFACT_ID + ".ecv";
-	
 	/*
 	 * URIs URLs
 	 */

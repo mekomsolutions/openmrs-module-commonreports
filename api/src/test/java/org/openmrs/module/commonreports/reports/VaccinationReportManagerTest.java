@@ -84,9 +84,8 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		
-		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("Vaccination").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			System.out.println(row);
 			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
 			// one row
@@ -133,6 +132,29 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 			        .getColumnValue("Diphtheria Tetanus Vaccination 1." + VaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedDT);
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
+		}
+		
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("ECV").iterator(); itr.hasNext();) {
+			DataSetRow row = itr.next();
+			System.out.println(row);
+			
+			// In CrossTabDataSet reports all rows and columns are in fact just columns of
+			// one row
+			Cohort _0mTo1yFemalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol1);
+			assertNotNull(_0mTo1yFemalesECV);
+			assertEquals(1, _0mTo1yFemalesECV.getSize());
+			
+			Cohort _1To2yFemalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol2);
+			assertNotNull(_1To2yFemalesECV);
+			assertEquals(0, _1To2yFemalesECV.getSize());
+			
+			Cohort _0mTo1yMalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol3);
+			assertNotNull(_0mTo1yMalesECV);
+			assertEquals(0, _0mTo1yMalesECV.getSize());
+			
+			Cohort _1To2yMalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol4);
+			assertNotNull(_1To2yMalesECV);
+			assertEquals(0, _1To2yMalesECV.getSize());
 		}
 	}
 	

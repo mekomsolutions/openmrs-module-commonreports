@@ -78,7 +78,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 	}
 	
 	public String getVaccinationName() {
-		return MessageUtil.translate("commonreports.report.vaccination.reportName");
+		return MessageUtil.translate("commonreports.report.vaccination.all.reportName");
 	}
 	
 	public String getECVName() {
@@ -94,6 +94,14 @@ public class VaccinationReportManager extends ActivatedReportManager {
 	public static String col4 = "";
 	
 	public static String col5 = "";
+	
+	public static String ecvCol1 = "";
+	
+	public static String ecvCol2 = "";
+	
+	public static String ecvCol3 = "";
+	
+	public static String ecvCol4 = "";
 	
 	@Override
 	public List<Parameter> getParameters() {
@@ -115,16 +123,17 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		
 		CohortCrossTabDataSetDefinition vaccination = new CohortCrossTabDataSetDefinition();
 		vaccination.addParameters(getParameters());
-		rd.addDataSetDefinition(getName(), Mapped.mapStraightThrough(vaccination));
+		rd.addDataSetDefinition(getVaccinationName(), Mapped.mapStraightThrough(vaccination));
 		
-		/* CohortCrossTabDataSetDefinition ecv = new CohortCrossTabDataSetDefinition();
+		CohortCrossTabDataSetDefinition ecv = new CohortCrossTabDataSetDefinition();
 		ecv.addParameters(getParameters());
-		rd.addDataSetDefinition(getName(), Mapped.mapStraightThrough(ecv));
-		 */
+		rd.addDataSetDefinition(getECVName(), Mapped.mapStraightThrough(ecv));
+		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		
+		// Vaccinations
 		String[] vaccinationConceptsListWithSequence = inizService
 		        .getValueFromKey("report.vaccination.vaccinationConceptsListWithSequence").split(",");
 		
@@ -133,51 +142,87 @@ public class VaccinationReportManager extends ActivatedReportManager {
 			String[] bits = member.split(":");
 			String lastOne = bits[bits.length - 1];
 			if (!NumberUtils.isNumber(lastOne)) {
-				/* 	 String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id= (select DISTINCT CONCEPT_ID from concept where uuid='"
-					       + inizService.getValueFromKey("report.vaccination.vaccinations")
-					       + "') and value_coded=(select DISTINCT CONCEPT_ID from concept where uuid='" + member + "'));";
-					SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
-					sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-					sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-					  */
-				CodedObsCohortDefinition vaccinations = new CodedObsCohortDefinition();
-				vaccinations.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				vaccinations.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				vaccinations.setOperator(SetComparator.IN);
-				vaccinations.setGroupingConcept(inizService.getConceptFromKey("VaccinationHistory"));
-				vaccinations.setQuestion(inizService.getConceptFromKey("report.vaccination.vaccinations"));
-				vaccinations.setValueList(Arrays.asList(conceptService.getConceptByUuid(member)));
-				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), vaccinations,
-				    parameterMappings);
+				
+				String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id = "
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId() + ");";
+				
+				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
+				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), sql, parameterMappings);
 				
 			} else {
 				int lastIndex = Integer.parseInt(lastOne);
-				//Double lastIndex = Double.parseDouble(lastOne);
 				String vacName = member.substring(0, member.lastIndexOf(":"));
 				
-				String sqlQuery = "SELECT person_id FROM obs where ( obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
+				String sqlQuery = "SELECT person_id FROM obs where ( obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + ") AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
 				        + " AND value_numeric =" + lastIndex
-				        + ") OR ( obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
+				        + ") OR ( obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN (  SELECT obs_group_id FROM obs where concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
-				        + " AND value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
+				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + ") AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.boostervaccinationSequenceNumberConcept")
 				                .getConceptId()
-				        + " AND value_numeric =" + lastIndex + ") AND obs_datetime BETWEEN :onOrAfter AND :onOrBefore";
+				        + " AND value_numeric =" + lastIndex + ")";
+				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex, sql,
 				    parameterMappings);
 				
-				
 			}
 			
 		}
+		
+		// ECV
+		String[] ecvList = inizService.getValueFromKey("report.vaccination.ecvList").split(",");
+		String ecvQuery = "SELECT DISTINCT person_id FROM obs where 1=1";
+		
+		for (String member : ecvList) {
+			String[] bit = member.split(":");
+			String lastOne = bit[bit.length - 1];
+			if (!NumberUtils.isNumber(lastOne)) {
+				ecvQuery = ecvQuery
+				        + " AND person_id IN (SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + " and value_coded=" + conceptService.getConceptByUuid(member).getConceptId()
+				        + ") AND concept_id = "
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + " and value_datetime <= :onOrBefore )";
+				
+			} else {
+				int lastIndex = Integer.parseInt(lastOne);
+				String vacName = member.substring(0, member.lastIndexOf(":"));
+				
+				ecvQuery = ecvQuery
+				        + " AND person_id IN ( SELECT person_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id = "
+				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + " and value_coded = " + conceptService.getConceptByUuid(vacName).getConceptId()
+				        + " ) AND concept_id = "
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + " and value_datetime <= :onOrBefore ) AND concept_id ="
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
+				        + " and value_numeric = " + lastIndex + "  AND :onOrAfter = :onOrAfter)";
+			}
+		}
+		ecvQuery = ecvQuery + ";";
+		SqlCohortDefinition ecvSql = new SqlCohortDefinition(ecvQuery);
+		
+		ecvSql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		ecvSql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		ecv.addRow("ECV", ecvSql, parameterMappings);
 		
 		setColumnNames();
 		
@@ -209,6 +254,11 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		vaccination.addColumn(col4, createCohortComposition(_1To2y, males), null);
 		vaccination.addColumn(col5, createCohortComposition(_prenatal, females), null);
 		
+		ecv.addColumn(col1, createCohortComposition(_0mTo1y, females), null);
+		ecv.addColumn(col2, createCohortComposition(_1To2y, females), null);
+		ecv.addColumn(col3, createCohortComposition(_0mTo1y, males), null);
+		ecv.addColumn(col4, createCohortComposition(_1To2y, males), null);
+		
 		return rd;
 	}
 	
@@ -223,7 +273,14 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
 		col5 = MessageUtil.translate("commonreports.report.vaccination.females.label") + " - "
 		        + MessageUtil.translate("commonreports.report.vaccination.prenatal.label");
-		
+		ecvCol1 = MessageUtil.translate("commonreports.report.vaccination.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.vaccination.females.label");
+		ecvCol2 = MessageUtil.translate("commonreports.report.vaccination.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.vaccination.females.label");
+		ecvCol3 = MessageUtil.translate("commonreports.report.vaccination.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
+		ecvCol4 = MessageUtil.translate("commonreports.report.vaccination.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
 	}
 	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
