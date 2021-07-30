@@ -84,7 +84,7 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		
-		for (Iterator<DataSetRow> itr = data.getDataSets().get("Vaccination").iterator(); itr.hasNext();) {
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Vaccination").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
 			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
@@ -134,7 +134,7 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
 		}
 		
-		for (Iterator<DataSetRow> itr = data.getDataSets().get("ECV").iterator(); itr.hasNext();) {
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP ECV").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
 			System.out.println(row);
 			
