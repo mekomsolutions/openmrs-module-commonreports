@@ -262,7 +262,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		muac.setOperator1(RangeComparator.GREATER_EQUAL);
 		muac.setValue1(0.0);
 		muac.setOperator2(RangeComparator.LESS_EQUAL);
-		muac.setValue2(210.0);
+		muac.setValue2(21.0);
 		CompositionCohortDefinition ccd3 = new CompositionCohortDefinition();
 		ccd3.initializeFromElements(_prenatal, muac, female);
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalMUAC=<21cm"), ccd3,
