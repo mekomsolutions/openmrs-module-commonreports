@@ -9,4 +9,6 @@ A bundle of reports that consume the [OpenMRS Reporting module](https://github.c
 * [MSPP: Lab](readme/lab.md) report.
 * [MSPP: Visits](readme/visits.md) report.
 * [MSPP: Emergency](readme/emergency.md) report.
-* [Family Planning](readme/familyPlanning.md) report.
+* [MSPP: Family Planning](readme/familyPlanning.md) report.
+* [MSPP: Chronic Illnesses](readme/chronicIllnesses.md) report.
+* [MSPP: Antenatal](readme/antenatal.md) report.
