@@ -112,9 +112,9 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		map.put("Children seen for the first time.Children under 6 months - M", 1);
 		map.put("Children seen for the first time.Children under 6 months - F", 0);
 		map.put("Children seen for the first time.Children under 6 months - Total", 1);
-		map.put("Children seen for the first time.Children 6 months to 23 months - M", 2);
-		map.put("Children seen for the first time.Children 6 months to 23 months - F", 1);
-		map.put("Children seen for the first time.Children 6 months to 23 months - Total", 3);
+		map.put("Children seen for the first time.Children 6 months to 23 months - M", 1);
+		map.put("Children seen for the first time.Children 6 months to 23 months - F", 0);
+		map.put("Children seen for the first time.Children 6 months to 23 months - Total", 1);
 		map.put("Children seen for the first time.Children from 24 months to 59 months - M", 0);
 		map.put("Children seen for the first time.Children from 24 months to 59 months - F", 1);
 		map.put("Children seen for the first time.Children from 24 months to 59 months - Total", 1);
@@ -130,9 +130,9 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		map.put("Children seen for the first time with weighed measured.Children under 6 months - M", 0);
 		map.put("Children seen for the first time with weighed measured.Children under 6 months - F", 0);
 		map.put("Children seen for the first time with weighed measured.Children under 6 months - Total", 0);
-		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - M", 2);
+		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - M", 1);
 		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - F", 0);
-		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - Total", 2);
+		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - Total", 1);
 		map.put("Children seen for the first time with weighed measured.Children from 24 months to 59 months - M", 0);
 		map.put("Children seen for the first time with weighed measured.Children from 24 months to 59 months - F", 1);
 		map.put("Children seen for the first time with weighed measured.Children from 24 months to 59 months - Total", 1);

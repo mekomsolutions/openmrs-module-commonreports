@@ -19,7 +19,9 @@ It is setup by setting the following properties in [initializer](https://github.
     "report.childCare.dose.numericQuestion.concept" : "uuid-to-dose-numericQuestion-concept",
     "report.childCare.vaccinationsQuestion.concept" : "uuid-to-vaccinationsQuestion-concept",
     "report.childCare.vitaminA.concept" : "uuid-to-vitaminA-concept",
-    "report.childCare.albendazole.concept" : "uuid-to-albendazole-concept"
+    "report.childCare.albendazole.concept" : "uuid-to-albendazole-concept",
+    "report.childCare.firstVisitQuestion.concept" : "uuid-to-firstVisit-question-concept",
+    "report.childCare.yesAnswer.concept" : "uuid-to-yesAnswer-concept"
 }
 ```
 `report.childCare.active` activates the report to be usable when the module is loaded.
@@ -43,5 +45,9 @@ It is setup by setting the following properties in [initializer](https://github.
 `report.childCare.vitaminA.concept` specifies Vitamin A answer concept answering `report.childCare.vaccinationsQuestion.concept`
 
 `report.childCare.albendazole.concept` specifies Albendazole answer concept answering `report.childCare.vaccinationsQuestion.concept`
+
+`report.childCare.firstVisitQuestion.concept` specifies the concept required to determine whether the visit is the patients first visit.
+
+`report.childCare.yesAnswer.concept` specifies the yes concept answering `report.childCare.firstVisitQuestion.concept`.
 
 Find the report template at [MSPP Child Care Report](https://docs.google.com/spreadsheets/d/13A3gBRwi45-YwnArNsDgQB4EPVwsTswp/edit#gid=134070428).

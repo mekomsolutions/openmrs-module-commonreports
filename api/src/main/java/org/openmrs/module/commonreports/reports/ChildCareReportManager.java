@@ -209,14 +209,19 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		_0To60m.setMaxAge(60);
 		_0To60m.setMaxAgeUnit(DurationUnit.MONTHS);
 		
-		// Children seen for the first time
-		SqlCohortDefinition childrenSeenFirstTime = new SqlCohortDefinition();
-		String sql = "SELECT v.patient_id FROM visit v WHERE v.date_started BETWEEN date(:onOrAfter) AND date(:onOrBefore) "
-		        + "AND NOT EXISTS (SELECT 1 FROM visit new_v "
-		        + "WHERE new_v.patient_id = v.patient_id AND new_v.visit_id <> v.visit_id);";
-		childrenSeenFirstTime.setQuery(sql);
-		childrenSeenFirstTime.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		childrenSeenFirstTime.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		// Children seen for the first time		
+		VisitType vt = vs.getVisitTypeByUuid(inizService.getValueFromKey("report.childCare.malnutrition.visitType.uuid"));
+		VisitCohortDefinition malnutritionChildren = new VisitCohortDefinition();
+		malnutritionChildren.setVisitTypeList(Arrays.asList(vt));
+		
+		CodedObsCohortDefinition firstVisitChildren = new CodedObsCohortDefinition();
+		firstVisitChildren.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		firstVisitChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		firstVisitChildren.setOperator(SetComparator.IN);
+		firstVisitChildren.setQuestion(inizService.getConceptFromKey("report.childCare.firstVisitQuestion.concept"));
+		firstVisitChildren.setValueList(Arrays.asList(inizService.getConceptFromKey("report.childCare.yesAnswer.concept")));
+		
+		CompositionCohortDefinition childrenSeenFirstTime = createCohortComposition(malnutritionChildren, firstVisitChildren);
 		
 		// Children seen for the first time + MUAC measurement
 		Concept muacMeasurementConcept = inizService

@@ -119,5 +119,7 @@
     "report.childCare.dose.numericQuestion.concept" : "1f4109b3-b201-46df-a341-dcfa5299a187",
     "report.childCare.vaccinationsQuestion.concept" : "3c25e650-ccfa-48da-b276-a7872796b113",
     "report.childCare.vitaminA.concept" : "54528cf8-0022-4f32-a038-cbb2d5965ae5",
-    "report.childCare.albendazole.concept" : "8f668b49-584f-4cba-b0f2-817a8aaf50c4"
+    "report.childCare.albendazole.concept" : "8f668b49-584f-4cba-b0f2-817a8aaf50c4",
+    "report.childCare.firstVisitQuestion.concept" : "29556441-cc5a-4ebd-8a1c-3a0424aa8240",
+    "report.childCare.yesAnswer.concept" : "482ec74a-4aa7-47ab-a822-3f2747a50f86"
 }
