@@ -259,7 +259,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		NumericObsCohortDefinition muacMeasuredLessThan115 = new NumericObsCohortDefinition();
 		muacMeasuredLessThan115.setQuestion(muacMeasurementConcept);
 		muacMeasuredLessThan115.setValue1(115.0);
-		muacMeasuredLessThan115.setOperator1(RangeComparator.GREATER_EQUAL);
+		muacMeasuredLessThan115.setOperator1(RangeComparator.LESS_THAN);
 		muacMeasuredLessThan115.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		muacMeasuredLessThan115.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		
