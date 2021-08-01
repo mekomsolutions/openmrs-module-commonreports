@@ -144,7 +144,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 			if (!NumberUtils.isNumber(lastOne)) {
 				
 				String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId() + ");";
@@ -159,7 +159,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				String vacName = member.substring(0, member.lastIndexOf(":"));
 				
 				String sqlQuery = "SELECT person_id FROM obs where ( obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
@@ -167,13 +167,12 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
 				        + " AND value_numeric =" + lastIndex
 				        + ") OR ( obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN (  SELECT obs_group_id FROM obs where concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + ") AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.boostervaccinationSequenceNumberConcept")
-				                .getConceptId()
+				        + inizService.getConceptFromKey("report.vaccination.boosterSequenceNumberConcept").getConceptId()
 				        + " AND value_numeric =" + lastIndex + ")";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
@@ -199,7 +198,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
 				        + " and value_coded=" + conceptService.getConceptByUuid(member).getConceptId()
 				        + ") AND concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime <= :onOrBefore )";
 				
 			} else {
@@ -211,7 +210,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
 				        + " and value_coded = " + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + " ) AND concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDate").getConceptId()
+				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime <= :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
 				        + " and value_numeric = " + lastIndex + "  AND :onOrAfter = :onOrAfter)";
