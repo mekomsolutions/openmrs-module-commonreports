@@ -30,61 +30,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
-
+	
 	public ChildCareReportManagerTest() throws SQLException {
 		super();
 	}
-
+	
 	@Autowired
 	private InitializerService iniz;
-
+	
 	@Autowired
 	private ReportService rs;
-
+	
 	@Autowired
 	private ReportDefinitionService rds;
-
+	
 	@Autowired
 	@Qualifier("childCareReportManager")
 	private ActivatedReportManager manager;
-
+	
 	@Before
 	public void setUp() throws Exception {
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
 		executeDataSet("org/openmrs/module/commonreports/include/childCareTestDataset.xml");
-
+		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
-
+		
 		for (Loader loader : iniz.getLoaders()) {
 			if (loader.getDomainName().equals(Domain.JSON_KEY_VALUES.getName())) {
 				loader.load();
 			}
 		}
 	}
-
+	
 	@Test
 	public void setupReport_shouldSetupChildCareReport() {
-
+		
 		// replay
 		ReportManagerUtil.setupReport(manager);
-
+		
 		// verif
 		Assert.assertNotNull(rs.getReportDesignByUuid("0623f477-542c-4b37-8ee6-2a1a4a1821b8"));
-
+		
 	}
-
+	
 	@Test
 	public void testReport() throws Exception {
-
+		
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-06-30", "yyyy-MM-dd"));
-
+		
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		data.getDataSets();
-
+		
 		Map<String, Integer> columnValuePairs = getColumnValues();
 		for (DataSet ds : data.getDataSets().values()) {
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
@@ -96,10 +96,10 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 			}
 		}
 	}
-
+	
 	private Map<String, Integer> getColumnValues() {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-
+		
 		map.put("Total children seen.Children under 6 months - M", 1);
 		map.put("Total children seen.Children under 6 months - F", 0);
 		map.put("Total children seen.Children under 6 months - Total", 1);
@@ -112,9 +112,9 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		map.put("Children seen for the first time.Children under 6 months - M", 1);
 		map.put("Children seen for the first time.Children under 6 months - F", 0);
 		map.put("Children seen for the first time.Children under 6 months - Total", 1);
-		map.put("Children seen for the first time.Children 6 months to 23 months - M", 1);
-		map.put("Children seen for the first time.Children 6 months to 23 months - F", 0);
-		map.put("Children seen for the first time.Children 6 months to 23 months - Total", 1);
+		map.put("Children seen for the first time.Children 6 months to 23 months - M", 2);
+		map.put("Children seen for the first time.Children 6 months to 23 months - F", 1);
+		map.put("Children seen for the first time.Children 6 months to 23 months - Total", 3);
 		map.put("Children seen for the first time.Children from 24 months to 59 months - M", 0);
 		map.put("Children seen for the first time.Children from 24 months to 59 months - F", 1);
 		map.put("Children seen for the first time.Children from 24 months to 59 months - Total", 1);
@@ -130,9 +130,9 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		map.put("Children seen for the first time with weighed measured.Children under 6 months - M", 0);
 		map.put("Children seen for the first time with weighed measured.Children under 6 months - F", 0);
 		map.put("Children seen for the first time with weighed measured.Children under 6 months - Total", 0);
-		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - M", 1);
+		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - M", 2);
 		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - F", 0);
-		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - Total", 1);
+		map.put("Children seen for the first time with weighed measured.Children 6 months to 23 months - Total", 2);
 		map.put("Children seen for the first time with weighed measured.Children from 24 months to 59 months - M", 0);
 		map.put("Children seen for the first time with weighed measured.Children from 24 months to 59 months - F", 1);
 		map.put("Children seen for the first time with weighed measured.Children from 24 months to 59 months - Total", 1);
@@ -181,7 +181,7 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		map.put("Albendazole.Children from 24 months to 59 months - Dose 1", 0);
 		map.put("Albendazole.Children from 24 months to 59 months - Dose 2", 0);
 		map.put("Albendazole.Children from 24 months to 59 months - Dose 3", 0);
-
+		
 		return map;
 	}
 }
