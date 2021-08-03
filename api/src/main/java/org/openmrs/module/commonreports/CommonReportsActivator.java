@@ -36,7 +36,12 @@ public class CommonReportsActivator extends BaseModuleActivator {
 		for (ActivatedReportManager reportManager : Context.getRegisteredComponents(ActivatedReportManager.class)) {
 			if (reportManager.isActivated()) {
 				log.info("Setting up report " + reportManager.getName() + "...");
-				ReportManagerUtil.setupReport(reportManager); // if this fails the module won't start altogether
+				try {
+					ReportManagerUtil.setupReport(reportManager);
+				}
+				catch (Exception e) {
+					log.error("Failed to setup " + reportManager.getName() + " report because of: " + e.getMessage());
+				}
 			}
 		}
 		
