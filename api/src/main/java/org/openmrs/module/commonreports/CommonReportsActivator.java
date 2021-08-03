@@ -40,7 +40,7 @@ public class CommonReportsActivator extends BaseModuleActivator {
 					ReportManagerUtil.setupReport(reportManager);
 				}
 				catch (Exception e) {
-					log.error("Failed to setup " + reportManager.getName() + " report because of: " + e.getMessage());
+					log.error("Failed to setup '" + reportManager.getName() + "' report because of: " + e.getMessage());
 				}
 			}
 		}
