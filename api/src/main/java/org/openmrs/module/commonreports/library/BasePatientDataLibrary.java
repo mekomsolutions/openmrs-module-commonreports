@@ -78,13 +78,25 @@ public class BasePatientDataLibrary extends BaseDefinitionLibrary<PatientDataDef
 			Map<String, String> map = new LinkedHashMap<String, String>(); // LinkedHashMap to keep the Address Template
 			                                                               // XML order.
 			reader.moveDown(); // Get down the nameMappings, sizeMappings... etc level
-			
 			while (reader.hasMoreChildren()) {
 				if (reader.getNodeName().equals("nameMappings")) {
 					while (reader.hasMoreChildren()) {
 						reader.moveDown();
 						String key = reader.getAttribute("name");
 						String value = reader.getAttribute("value");
+						
+						// Provision for the the case when the values are children nodes
+						if (key == null && value == null) {
+							while (reader.hasMoreChildren()) {
+								reader.moveDown();
+								if (key == null) {
+									key = reader.getValue();
+								} else {
+									value = reader.getValue();
+								}
+								reader.moveUp();
+							}
+						}
 						map.put(key, value);
 						reader.moveUp();
 					}
@@ -103,7 +115,6 @@ public class BasePatientDataLibrary extends BaseDefinitionLibrary<PatientDataDef
 		String addressTemplateXml = locationService.getAddressTemplate();
 		@SuppressWarnings("unchecked")
 		Map<String, String> nameMappings = (Map<String, String>) xstream.fromXML(addressTemplateXml);
-		
 		return nameMappings;
 	}
 	
