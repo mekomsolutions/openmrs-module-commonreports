@@ -26,6 +26,7 @@
     "report.newEpisodesOfDiseases.questions.conceptSet" : "8dcb0dd6-b31f-41d1-b144-d49a2c5340ab",
     "report.newEpisodesOfDiseases.allDiagnoses.conceptSet" : "dccb05f6-a27b-4331-989c-9a669e84e467",
     "report.chronicIllnesses.active" : "true",
+    "report.chronicIllnesses.diagnosisQuestion.concept" : "a2d6a832-78d1-4b60-861d-3da2d32a41d7",
     "report.chronicIllnesses.conceptSet" : "e6e533d1-ab5e-4811-87ac-2eb12cf2f839",
     "report.chronicIllnesses.referral.concept" : "276cccb6-0c0b-4f84-8947-298aceea5e62",
     "report.newEpisodesOfDiseases.referral.concept" : "07783b52-01de-488f-9ad5-1973e943e8ec",
