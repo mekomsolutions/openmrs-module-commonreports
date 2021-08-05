@@ -209,9 +209,20 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		_0To60m.setMaxAge(60);
 		_0To60m.setMaxAgeUnit(DurationUnit.MONTHS);
 		
+		VisitCohortDefinition visitesChildren = new VisitCohortDefinition();
+		//		visitesChildren.setVisitTypeList(vs.getAllVisitTypes(false));
+		visitesChildren.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
+		visitesChildren.addParameter(new Parameter("startedOnOrBefore", "On Or Before", Date.class));
+		
+		Map<String, Object> visitParameterMappings = new HashMap<String, Object>();
+		visitParameterMappings.put("startedOnOrAfter", "${startDate}");
+		visitParameterMappings.put("startedOnOrBefore", "${endDate}");
+		
+		CompositionCohortDefinition totalChildrenSeen = createCohortComposition(visitesChildren, _0To60m);
+		
 		// Children seen for the first time
 		SqlCohortDefinition childrenSeenFirstTime = new SqlCohortDefinition();
-		String sql = "SELECT v.patient_id FROM visit v WHERE v.date_started BETWEEN date(:onOrAfter) AND date(:onOrBefore) "
+		String sql = "SELECT v.patient_id FROM visit v WHERE v.date_started BETWEEN :onOrAfter AND :onOrBefore "
 		        + "AND NOT EXISTS (SELECT 1 FROM visit new_v "
 		        + "WHERE new_v.patient_id = v.patient_id AND new_v.visit_id <> v.visit_id);";
 		childrenSeenFirstTime.setQuery(sql);
@@ -274,7 +285,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		
 		// adding rows
 		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.total.children.seen"),
-		    _0To60m, null);
+		    totalChildrenSeen, visitParameterMappings);
 		characteristicsDatasetDef.addRow(
 		    MessageUtil.translate("commonreports.report.childCare.children.seen.forThe.firstTime"), childrenSeenFirstTime,
 		    parameterMappings);
