@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -137,7 +139,8 @@ public class PatientHistoryManagerTest extends BaseModuleContextSensitiveTest {
 		assertEquals("Collet", getStringValue(dataSetRow, "First Name"));
 		assertEquals("Chebaskwony", getStringValue(dataSetRow, "Last Name"));
 		assertEquals("1976-08-25 00:00:00.0", getStringValue(dataSetRow, "Date of Birth"));
-		assertEquals("44", getStringValue(dataSetRow, "Current Age"));
+		String currentAge = Integer.toString(Period.between(LocalDate.of(1976, 8, 25), LocalDate.now()).getYears());
+		assertEquals(currentAge, getStringValue(dataSetRow, "Current Age"));
 		assertEquals("F", getStringValue(dataSetRow, "Gender"));
 		assertEquals("Kapina", getStringValue(dataSetRow, "Address"));
 	}
