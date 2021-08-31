@@ -209,16 +209,16 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		_0To60m.setMaxAge(60);
 		_0To60m.setMaxAgeUnit(DurationUnit.MONTHS);
 		
-		VisitCohortDefinition visites = new VisitCohortDefinition();
-		visites.setVisitTypeList(vs.getAllVisitTypes(false));
-		visites.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
-		visites.addParameter(new Parameter("startedOnOrBefore", "On Or Before", Date.class));
+		VisitCohortDefinition visits = new VisitCohortDefinition();
+		visits.setVisitTypeList(vs.getAllVisitTypes(false));
+		visits.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
+		visits.addParameter(new Parameter("startedOnOrBefore", "On Or Before", Date.class));
 		
 		Map<String, Object> visitParameterMappings = new HashMap<String, Object>();
 		visitParameterMappings.put("startedOnOrAfter", "${startDate}");
 		visitParameterMappings.put("startedOnOrBefore", "${endDate}");
 		
-		CompositionCohortDefinition totalChildrenSeen = createCohortComposition(visites, _0To60m);
+		CompositionCohortDefinition totalChildrenSeen = createCohortComposition(visits, _0To60m);
 		
 		// Children seen for the first time
 		SqlCohortDefinition childrenSeenFirstTime = new SqlCohortDefinition();
