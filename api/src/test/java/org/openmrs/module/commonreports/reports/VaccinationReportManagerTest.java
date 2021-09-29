@@ -129,7 +129,7 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 			assertEquals(1, _femalesReceivedRota2.getSize());
 			
 			Cohort _prenatalFemalesReceivedDT = (Cohort) row
-			        .getColumnValue("Diphtheria Tetanus Vaccination 1." + VaccinationReportManager.col5);
+			        .getColumnValue("Diphtheria Tetanus Vaccination 11." + VaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedDT);
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
 		}

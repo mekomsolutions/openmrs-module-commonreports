@@ -165,14 +165,6 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + ") AND concept_id ="
 				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
-				        + " AND value_numeric =" + lastIndex
-				        + ") OR ( obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN (  SELECT obs_group_id FROM obs where concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
-				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
-				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
-				        + ") AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.boosterSequenceNumberConcept").getConceptId()
 				        + " AND value_numeric =" + lastIndex + ")";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
