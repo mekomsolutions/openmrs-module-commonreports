@@ -215,13 +215,23 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		    parameterMappings);
 		
 		// Mothers with a birth plan
-		NumericObsCohortDefinition scd = new NumericObsCohortDefinition();
-		scd.setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
-		scd.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
-		scd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		scd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		//Assumption made that who ever comes for visit has a birth plan
+		CodedObsCohortDefinition birthPlan = new CodedObsCohortDefinition();
+		birthPlan.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		birthPlan.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		birthPlan.setOperator(SetComparator.IN);
 		
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.motherBirthPlan"), scd,
+		birthPlan.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
+		
+		List<Concept> visitNumbers = new ArrayList<Concept>();
+		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.one"));
+		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.two"));
+		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.three"));
+		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.four"));
+		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.fivePlus"));
+		
+		birthPlan.setValueList(visitNumbers);
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.motherBirthPlan"), birthPlan,
 		    parameterMappings);
 		
 		// Prenatal visit + malaria test positive + chloroquine co prescribed
