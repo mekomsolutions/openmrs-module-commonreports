@@ -143,6 +143,8 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory6.label"));
 		designProperties.put("ageCategory7.label",
 		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory7.label"));
+		designProperties.put("ageCategory8.label",
+		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory8.label"));
 		designProperties.put("total.label", MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.total.label"));
 		designProperties.put("males.label", MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.males.label"));
 		designProperties.put("females.label",
