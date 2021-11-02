@@ -141,15 +141,17 @@ public class NewEpisodesOfDiseasesReportManagerTest extends BaseModuleContextSen
 			if (row.getColumnValue("Maladies/Symptomes").equals("MALARIA")) {
 				assertEquals(new BigDecimal(2), row.getColumnValue("F_25-49"));
 				assertEquals(ONE, row.getColumnValue("M_1-4"));
-				assertEquals(ONE, row.getColumnValue("M_Total"));
+				assertEquals(ONE, row.getColumnValue("M_20-24"));
+				assertEquals(new BigDecimal(2), row.getColumnValue("M_Total"));
 				assertEquals(new BigDecimal(2), row.getColumnValue("F_Total"));
 				assertEquals(new BigDecimal(2), row.getColumnValue("TotalReferredCases"));
 				malariaVerified = true;
 			}
 			if (row.getColumnValue("Maladies/Symptomes").equals("FEVER")) {
 				assertEquals(ONE, row.getColumnValue("M_1-4"));
+				assertEquals(ONE, row.getColumnValue("F_15-19"));
 				assertEquals(ONE, row.getColumnValue("M_Total"));
-				assertNull(row.getColumnValue("F_Total"));
+				assertEquals(ONE, row.getColumnValue("F_Total"));
 				assertEquals(null, row.getColumnValue("TotalReferredCases"));
 				feverVerified = true;
 			}

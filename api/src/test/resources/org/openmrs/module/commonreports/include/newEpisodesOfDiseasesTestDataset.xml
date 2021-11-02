@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <dataset>
+	<person person_id="97" gender="M" birthdate="1988-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:45:51.0" voided="false" uuid="7629f32a-5f33-4a47-915c-9766ddacd95a" deathdate_estimated="false"/>
+	<person person_id="98" gender="F" birthdate="1990-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:48:34.0" voided="false" uuid="904bc161-f75d-4984-8494-bba49d0a4ebe" deathdate_estimated="false"/>
+  
+	<patient patient_id="97" creator="1" date_created="2021-06-10 06:23:13.0" voided="false" allergy_status="Unknown"/>
+	<patient patient_id="98" creator="1" date_created="2021-06-10 06:24:54.0" voided="false" allergy_status="Unknown"/>
+  
 	<encounter encounter_id="3000" encounter_type="2" patient_id="7" visit_id="4" location_id="1" form_id="1" 
 	encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" 
 	voided="false" uuid="713ab6cf-71e6-4f69-9a8a-747b948a5656"/>
@@ -152,5 +158,19 @@
 		 comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false"
 		 value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]"
 		 value_numeric="[NULL]" value_datetime="[NULL]" value_drug="[NULL]"
-		 uuid="4b0f07b4-8604-4cd4-bbba-07241f971271" />
+		 uuid="4b0f07b4-8604-4cd4-bbba-07241f971271" />\
+
+	<obs obs_id="4010" person_id="97" concept_id="21" encounter_id="3000"
+		 obs_datetime="2008-09-02 00:00:00.0" location_id="1" value_coded="1923"
+		 comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false"
+		 value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]"
+		 value_numeric="[NULL]" value_datetime="[NULL]" value_drug="[NULL]"
+		 uuid="04b165af-bb72-4950-9cbe-3485ede16a61" />
+
+	<obs obs_id="4011" person_id="98" concept_id="21" encounter_id="3000"
+		 obs_datetime="2008-09-02 00:00:00.0" location_id="1" value_coded="1924"
+		 comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false"
+		 value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]"
+		 value_numeric="[NULL]" value_datetime="[NULL]" value_drug="[NULL]"
+		 uuid="b4ba9aff-901c-49dc-8630-a59385480d18" />
 </dataset>
