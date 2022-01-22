@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <person person_id="3" gender="M" dead="false" creator="1" birthdate_estimated="0" date_created="2008-08-15 15:57:09.0" voided="false" void_reason="" uuid="75e04d42-3ca8-11e3-bf2b-0800271c1b77"/>
+
+    <patient patient_id="1" creator="1" date_created="2008-08-15 15:57:09.0" voided="false" void_reason=""/>
+
+    <patient_identifier patient_identifier_id="1" patient_id="1" identifier="GAN200000" identifier_type="1"
+                        preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"
+                        uuid="0b7cf2fa-b377-455c-8750-231cf34a21ac"/>
+
+    <users user_id="1" person_id="3" system_id="3-6" username="superuser" retired="false"
+           password="ff6d1655327d385e11a04e1632b4f33ceb8fafd2" salt="5d32c5fd9fde391c755f1f4dfd5e1d6e3debe6"
+           secret_question="" creator="1" date_created="2008-08-15 15:46:47.0"
+           uuid="Z9fd3a7b-6482-487d-87eR-c07b123MxF99"/>
+
+    <person person_id="2" gender="M" dead="false" creator="1" birthdate_estimated="0" date_created="2008-08-15 15:57:09.0"
+            voided="false" void_reason="" uuid="75e04d42-3ca8-11e3-bf2b-0800271c1b78"/>
+
+    <patient patient_id="2" creator="1" date_created="2008-08-15 15:57:09.0" voided="false" void_reason=""/>
+
+    <patient_identifier patient_identifier_id="2" patient_id="2" identifier="GAN200001" identifier_type="1"
+                        preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"
+                        uuid="0b7cf2fa-b377-455c-8750-231cf34a21ab"/>
+
+    <location location_id="1" name="Room1" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"
+              uuid="c36006e5-9fbb-4f20-866b-0ece245615a1"/>
+
+    <appointment_speciality speciality_id="1" name="Ortho" uuid="c36006e5-9fbb-4f20-866b-0ece245615a1" creator="1"/>
+
+    <appointment_service appointment_service_id="1" name="Consultation" description="Consultation" start_time="09:00:00" end_time="17:00:00" location_id="1"
+                        speciality_id="1" max_appointments_limit="4" duration_mins="30" creator="1" uuid="c36006e5-9fbb-4f20-866b-0ece245615a6" voided="false"/>
+    <appointment_service_type appointment_service_type_id="1" appointment_service_id="1" name="serviceType1" duration_mins="30" uuid="678906e5-9fbb-4f20-866b-0ece24564578" creator="1" date_created="2108-08-10 15:57:09.0"  voided="false"/>
+    <appointment_service_type appointment_service_type_id="2" appointment_service_id="1" name="serviceType2" duration_mins="30" uuid="678906e5-9fbb-4f20-866b-0ece24564878" creator="1" date_created="2108-08-10 15:57:09.0"  voided="true"/>
+
+    <appointment_service appointment_service_id="2" name="Treatment" description="Treatment" start_time="09:00:00" end_time="17:00:00" location_id="1" uuid="c36006d4-9fbb-4f20-866b-0ece245615b1"
+                         speciality_id="1" max_appointments_limit="4" duration_mins="30" creator="1" voided="true" voided_by="1" void_reason=""/>
+
+    <patient_appointment patient_appointment_id="1" patient_id ="1" creator="1" date_created="2008-08-15 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c1b77" location_id = "1" appointment_service_id="1"/>
+    <patient_appointment patient_appointment_id="2" patient_id ="1" appointment_service_id="1" start_date_time="2108-08-15 12:00:00.0" end_date_time="2108-08-15 13:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c1111"/>
+    <patient_appointment patient_appointment_id="3" patient_id ="1" appointment_service_id="1" start_date_time="2108-08-15 13:00:00.0" end_date_time="2108-08-15 14:00:00.0" status="CheckedIn" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c12222"/>
+    <patient_appointment patient_appointment_id="5" patient_id ="1" appointment_service_id="1" start_date_time="2108-08-15 13:00:00.0" end_date_time="2108-08-15 14:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="true" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13344"/>
+    <patient_appointment patient_appointment_id="6" patient_id ="1" appointment_service_id="1" start_date_time="2108-08-15 13:00:00.0" end_date_time="2108-08-15 14:00:00.0" status="Cancelled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13345"/>
+    <patient_appointment patient_appointment_id="7" patient_id ="1" appointment_service_type_id="1" start_date_time="2108-08-14 13:00:00.0" end_date_time="2108-08-14 14:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13346"/>
+    <patient_appointment patient_appointment_id="8" patient_id ="1" appointment_service_type_id="1" start_date_time="2108-08-15 14:00:00.0" end_date_time="2108-08-15 15:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="true" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13347"/>
+    <patient_appointment patient_appointment_id="9" patient_id ="1" appointment_service_type_id="1" start_date_time="2108-08-16 14:00:00.0" end_date_time="2108-08-16 15:00:00.0" status="Cancelled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13348"/>
+
+    <patient_appointment patient_appointment_id="10" patient_id ="1" appointment_service_id="1" appointment_service_type_id="1" start_date_time="2017-08-08 14:00:00.0" end_date_time="2017-08-10 15:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13349"/>
+    <patient_appointment patient_appointment_id="11" patient_id ="1" appointment_service_id="1" start_date_time="2017-08-08 14:00:00.0" end_date_time="2017-08-10 15:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="true" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13350"/>
+    <patient_appointment patient_appointment_id="12" patient_id ="1" appointment_service_id="1" start_date_time="2017-08-08 14:00:00.0" end_date_time="2017-08-10 15:00:00.0" status="Completed" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13351"/>
+    <patient_appointment patient_appointment_id="13" patient_id ="1" appointment_service_id="1" appointment_service_type_id="2" start_date_time="2017-08-08 14:00:00.0" end_date_time="2017-08-10 15:00:00.0" status="Cancelled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="75504r42-3ca8-11e3-bf2b-0800271c13222"/>
+
+    <patient_appointment_audit patient_appointment_audit_id="1" appointment_id="2" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="26104r42-3ca8-11e3-bf2b-0800271c13222"/>
+    <patient_appointment_audit patient_appointment_audit_id="2" appointment_id="3" status="CheckedIn" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="26104r42-3ca8-11e3-bf2b-0800271c13233"/>
+    <patient_appointment_audit patient_appointment_audit_id="3" appointment_id="3" status="Completed" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="26104r42-3ca8-11e3-bf2b-0800271c13234"/>
+    <patient_appointment_audit patient_appointment_audit_id="4" appointment_id="3" status="CheckedIn" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="26104r42-3ca8-11e3-bf2b-0800271c13235"/>
+
+
+    <person person_id="220" gender="M" dead="false" creator="1" birthdate_estimated="0"
+            date_created="2008-08-15 15:57:09.0" voided="false" void_reason=""
+            uuid="85c632b5-d6fb-4624-9400-c45ffbc7f076"/>
+    <person_name person_name_id="220" preferred="true" person_id="220" prefix="" given_name="System" middle_name=""
+                 family_name="OpenMRS" family_name_suffix="" creator="1" date_created="2005-09-22 00:00:00.0"
+                 voided="false" void_reason="" uuid="644ae99d-67ff-4077-a42d-03768fce0f9e"/>
+
+    <person person_id="221" gender="M" dead="false" creator="1" birthdate_estimated="0"
+            date_created="2008-08-15 15:57:09.0" voided="false" void_reason=""
+            uuid="f9a9c62d-53c2-4de2-ad00-79355e6d48b3"/>
+    <person_name person_name_id="221" person_id="221" preferred="true" prefix="" given_name="Lab System" middle_name=""
+                 family_name="OpenMRS" family_name_suffix="" creator="1" date_created="2005-09-22 00:00:00.0"
+                 voided="false" void_reason="" uuid="203bb950-34aa-4b8a-aa6b-585e989f3939"/>
+
+
+    <provider provider_id="2220" person_id="220" name="System" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="2bdc3f7d-d911-401a-84e9-5494dda83e8e" />
+    <provider provider_id="2221" person_id="221" name="labtechnician" identifier="labtechnician" creator="1"
+              date_created="2005-01-01 00:00:00.0"  retired="false" uuid="2d15071d-439d-44e8-9825-aa8e1a30d2a2"/>
+
+    <patient_appointment_provider patient_appointment_provider_id="1" provider_id="2220" patient_appointment_id="2" response="ACCEPTED"
+              comments="visit as scheduled" date_created="2005-09-22 00:00:00.0" creator="1"
+                                  voided="false" void_reason="" uuid="f716177b-82ca-49e7-8394-cfe7c8d21f80"/>
+
+    <patient_appointment patient_appointment_id="14" patient_id ="1" appointment_service_id="1" start_date_time="2019-05-14 12:00:00.00"
+                         end_date_time="2019-04-14 13:00:00.00" status="Scheduled" creator="1" date_created="2019-05-13 12:00:00.00"
+                         voided="false" void_reason="" uuid="91c62b6b-d7ef-49b4-9a8b-164b2aa55edf"/>
+    <patient_appointment patient_appointment_id="15" patient_id ="1" appointment_service_id="1" start_date_time="2019-05-16 12:00:00.00"
+                         end_date_time="2019-04-16 13:00:00.00" status="Scheduled" creator="1" date_created="2019-05-13 12:00:00.00"
+                         voided="false" void_reason="" uuid="638180c8-98f3-4fe4-b14a-9196da665bc6"/>
+
+    <patient_appointment patient_appointment_id="14" patient_id ="2" appointment_service_type_id="1" start_date_time="2108-08-11 13:00:00.0"
+                         end_date_time="2108-08-11 13:00:00.0" status="Scheduled" creator="1" date_created="2108-07-10 15:57:09.0"
+                         voided="false" void_reason="" uuid="c36006e5-9fbb-4f20-866b-0ece245615a8"/>
+
+    <patient_appointment_provider patient_appointment_provider_id="2" provider_id="2221" patient_appointment_id="14" response="ACCEPTED"
+                                  comments="visit as scheduled" date_created="2005-09-22 00:00:00.0" creator="1"
+                                  voided="false" void_reason="" uuid="f716177b-82ca-49e7-8394-cfe7c8d21f81" />
+
+    <patient_appointment patient_appointment_id="15" patient_id ="2" appointment_service_type_id="1" start_date_time="2108-08-08 13:00:00.0"
+                         end_date_time="2108-08-08 14:00:00.0" status="Scheduled" creator="1" date_created="2108-07-11 15:57:09.0"
+                         voided="false" void_reason="" uuid="c36006e5-9fbb-4f20-866b-0ece236715a8"/>
+
+    <!-- Appointment for voided patient-->
+    <person person_id="4" gender="M" dead="false" creator="1" birthdate_estimated="0" date_created="2008-08-01 20:20:10.0" voided="true" void_reason="Test void reason" uuid="5e27e922-67c3-43b2-82cd-4a0d66763655"/>
+    <patient patient_id="3" creator="1" date_created="2008-08-15 11:10:35.0" voided="true" void_reason=""/>
+    <patient_identifier patient_identifier_id="2" patient_id="2" identifier="GAN300000" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2006-01-01 00:00:00.0" voided="false" uuid="35f46473-9ed1-4812-8f3a-4740c13dc54f"/>
+    <patient_appointment patient_appointment_id="16" patient_id ="3" appointment_service_id="1" appointment_service_type_id="2" start_date_time="2017-08-08 14:00:00.0" end_date_time="2017-08-10 15:00:00.0" status="Scheduled" creator="1" date_created="2108-08-10 15:57:09.0" voided="false" void_reason="" uuid="aeead7f2-fc3d-48bb-9c63-e861aaea4a9c"/>
+
+</dataset>
