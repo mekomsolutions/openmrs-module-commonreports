@@ -1,5 +1,5 @@
-## Visits Report
-This report searches through patient visits, determining whether fall in the 'New' or 'Follow-up' category. It is a MSPP Report requested by the Haitian MoH to any clinic in Haiti.
+## Repartition des visites MSPP Report
+This is a MSPP Report requested by the Haitian MoH to any clinic in Haiti.This report queries for patients that have specific forms filled during visits such as `Bahmni^Planification familiale` for `Family Planning` and `Bahmni^Consultation prénatale` for `Antenatal Care` 
 
 **Setup**
 
@@ -21,6 +21,4 @@ It is setup by setting the following properties in [initializer](https://github.
 `report.visits.familyPlanning.visitType.uuid` specifies the family planning visit type.
 
 **Note**
-'Prenatal' and 'Family planning' visits are reported on separately and therefore have to be specified in the above properties.
-
-Find the report template at [MSPP Statistics Report - Visits](https://docs.google.com/spreadsheets/d/13A3gBRwi45-YwnArNsDgQB4EPVwsTswp/edit#gid=1723158101).
+Find the report template at [MSPP Statistics Report - Visits](https://docs.google.com/spreadsheets/d/1GkXsUl4yuvU9USpl2QZ02aR1xX_jDMOU).

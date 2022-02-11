@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <person person_id="97" gender="M" birthdate="2013-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:23:13.0" voided="false" uuid="16fe4da6-f83b-467b-903a-8a1593ce5afe" deathdate_estimated="false" />
+  <!--A 0.6 yr -->
+  <person person_id="98" gender="M" birthdate="2021-08-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:24:54.0" voided="false" uuid="8887f424-a553-498e-96de-02be673d9dfc" deathdate_estimated="false" />
+  <!--B 14 yrs -->
+  <person person_id="99" gender="M" birthdate="2008-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:25:48.0" voided="false" uuid="56758655-601c-41ac-9a05-1d23a8d8c4d0" deathdate_estimated="false" />
+  <!--C 11 yrs -->
+  <person person_id="910" gender="F" birthdate="2011-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:26:58.0" voided="false" uuid="9eee9dc1-c276-4662-9a41-34946d52b5ba" deathdate_estimated="false" />
+  <!--D 25 yrs -->
+  <person person_id="911" gender="F" birthdate="1997-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:27:44.0" voided="false" uuid="cd691c20-f2b5-4701-9b42-1d3a07667392" deathdate_estimated="false" />
+  <!--E 27 yrs -->
+  <person person_id="912" gender="M" birthdate="1995-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:28:33.0" voided="false" uuid="4036c3e0-bd24-4682-8aa4-a2a67677dd00" deathdate_estimated="false" />
+  <!--F 0.4 yrs -->
+  <person person_id="913" gender="F" birthdate="2021-09-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:29:22.0" voided="false" uuid="fc77ff44-90d6-4d4d-98b0-267f33daa8ba" deathdate_estimated="false" />
+  <!--G 17 yrs -->
+  <person person_id="914" gender="M" birthdate="2005-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:30:23.0" voided="false" uuid="a907ce15-c68d-47b7-9e43-04c9848d55a6" deathdate_estimated="false" />
+  <!--H 20 yrs -->
+  <person person_id="915" gender="F" birthdate="2002-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:31:25.0" voided="false" uuid="91c30afe-4ff7-473b-8b6c-1900b9a46523" deathdate_estimated="false" />
+
+  <patient patient_id="97" creator="1" date_created="2021-06-10 06:23:13.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="98" creator="1" date_created="2021-06-10 06:24:54.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="99" creator="1" date_created="2021-06-10 06:25:48.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="910" creator="1" date_created="2021-06-10 06:26:58.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="911" creator="1" date_created="2021-06-10 06:27:44.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="912" creator="1" date_created="2021-06-10 06:28:33.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="913" creator="1" date_created="2021-06-10 06:29:22.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="914" creator="1" date_created="2021-06-10 06:30:23.0" voided="false" allergy_status="Unknown" />
+  <patient patient_id="915" creator="1" date_created="2021-06-10 06:31:25.0" voided="false" allergy_status="Unknown" />
+
+  <visit_type visit_type_id="93" name="Lab" description="Lab Visit" creator="1" date_created="2021-06-09 00:00:00.0" changed_by="1" date_changed="2021-06-09 06:30:03.0" retired="false" uuid="929fb1a1-d801-4b56-9d15-503685a6c49d" />
+  <visit_type visit_type_id="94" name="N/A" description="Visit type used to be assigned to legacy visits, imported from the historical database" creator="2" date_created="2021-06-09 06:30:03.0" changed_by="1" date_changed="2021-06-09 06:30:03.0" retired="true" retired_by="2" date_retired="2021-06-09 06:30:03.0" retire_reason="Retired by module Initializer" uuid="e4f9bb8e-8ac5-405f-9baf-21dc8de28a73" />
+  <visit_type visit_type_id="95" name="Prenatal" description="Prenatal Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="35ba9aff-901c-49dc-8630-a59385480d18" />
+  <visit_type visit_type_id="96" name="Family Planning" description="Planification familiale Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="c4643116-8a61-499f-b62b-ff9375db0b7d" />
+  <visit_type visit_type_id="97" name="Vaccination infantile" description="Vaccination infantile Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="91c6bdce-3b92-42a2-9fa8-6ef6b169c4b2" />
+  <visit_type visit_type_id="98" name="Malnutrition" description="Malnutrition Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="a631dbbc-daa4-48aa-8fe4-3b5784360ab1" />
+  <visit_type visit_type_id="99" name="G&#233;n&#233;ral" description="G&#233;n&#233;ral Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="b9ba7b27-e64b-44d1-b4c5-2ced77f477d0" />
+  <visit_type visit_type_id="910" name="TB" description="TB Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="ad29e858-68a1-44eb-ae62-94157a8a52b0" />
+
+  <encounter encounter_id="100" encounter_type="2" patient_id="98" location_id="1" encounter_datetime="2020-06-10 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" void_reason="" uuid="d9e0fa3f-44d5-4f43-81a5-9dd3d49923ab" />
+  <encounter encounter_id="101" encounter_type="2" patient_id="98" location_id="1" encounter_datetime="2022-06-10 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" void_reason="" uuid="603683b6-6967-4b85-99f8-3c573ee4d3cb" />
+  <encounter encounter_id="102" encounter_type="2" patient_id="99" location_id="1" encounter_datetime="2022-06-10 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" voided="false" void_reason="" uuid="5a9656a3-655b-4b05-af86-82467e91f7ba" />
+  <encounter_type encounter_type_id="2" name="Emergency" description="Emergency visit" creator="1" date_created="2005-02-24 00:00:00.0" retired="false" uuid="07000be2-26b6-4cce-8b40-866d8435b613" />
+
+
+  <visit visit_id="91" patient_id="99" visit_type_id="99" date_started="2020-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="2ae0597c-680c-43ad-b235-f146d3bd4b3d" />
+  <visit visit_id="92" patient_id="910" visit_type_id="99" date_started="2020-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="1421d3cc-ec71-4f24-99ad-8f0038cffb6d" />
+  <visit visit_id="93" patient_id="911" visit_type_id="95" date_started="2021-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="a46b586a-6434-4d40-8779-64becfd828f9" />
+  <visit visit_id="94" patient_id="914" visit_type_id="95" date_started="2020-08-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="87cf0c92-96c2-45c7-92c8-072125ade4b6" />
+  <visit visit_id="95" patient_id="915" visit_type_id="95" date_started="2020-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="f30c87f6-4f2e-4b1e-8ccf-721703ac1c9b" />
+  <visit visit_id="96" patient_id="98" visit_type_id="99" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="41322af2-0f93-43b1-b04c-05af3bd98c47" />
+  <visit visit_id="97" patient_id="99" visit_type_id="99" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="90db6c43-0b1e-4372-973d-b3ddbfb11b2a" />
+  <visit visit_id="98" patient_id="910" visit_type_id="99" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="6c65381d-3fed-4b64-9e56-fce24087997a" />
+  <visit visit_id="99" patient_id="911" visit_type_id="95" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="12074002-6172-41d0-8287-89a2155b4bc3" />
+  <visit visit_id="100" patient_id="912" visit_type_id="96" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="06295cb6-e444-431d-b65e-e1d466f54db3" />
+  <visit visit_id="101" patient_id="913" visit_type_id="99" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="37527dc0-0963-4f9e-8a23-8777a5037d74" />
+  <visit visit_id="102" patient_id="914" visit_type_id="95" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="8e35630c-2bfd-4c5f-8aac-95f1c8f42e13" />
+  <visit visit_id="103" patient_id="915" visit_type_id="95" date_started="2022-02-10 06:23:14.0" date_stopped="2023-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="f4eb72f9-a75a-40fb-b532-73c257c7876c" />
+  
+    
+  <!--B 14 yrs -->
+  <obs obs_id="3100" person_id="99" concept_id="5089" obs_datetime="2020-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Anthropométrie.1/4-0" uuid="688934d2-257c-426b-a852-996f2aaea154" />
+  <!-- 11 yrs -->
+  <obs obs_id="3101" person_id="910" concept_id="5089" obs_datetime="2020-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Anthropométrie.1/4-0" uuid="8ef0317b-38f7-4f9e-b31b-f5e5c115378f" />
+  <!-- ANC 25 yrs-->
+  <obs obs_id="3102" person_id="911" concept_id="5089" obs_datetime="2021-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Consultation prénatale.1/4-0" uuid="e519fb23-28d5-4a75-ac79-9a066681f382" />
+  <!-- ANC 17 yrs-->
+  <obs obs_id="3103" person_id="914" concept_id="5089" obs_datetime="2020-08-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Consultation prénatale.1/4-0" uuid="2816590f-b65d-4d9d-8ab0-3c02134af73e" />
+  <!-- ANC 20 yrs-->
+  <obs obs_id="3104" person_id="915" concept_id="5089" obs_datetime="2020-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Consultation prénatale.1/4-0" uuid="f699aff2-1a56-4648-99f5-07623ed1f93b" />
+
+
+  <obs obs_id="3105" person_id="98" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Examen physique.1/4-0" uuid="7934a3e5-a71f-48d6-9785-cf1bacad212d" />
+  <!--B 14 yrs -->
+  <obs obs_id="3106" person_id="99" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Anthropométrie.1/4-0" uuid="c3c4685e-3e14-4231-81ae-7ca86da9f627" />
+  <!--B 11 yrs -->
+  <obs obs_id="3107" person_id="910" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Anthropométrie.1/4-0" uuid="ef12ffdc-6d8c-42d4-baa7-c876ab171020" />
+
+  <!-- ANC 25 yrs-->
+  <obs obs_id="3108" person_id="911" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Consultation prénatale.1/4-0" uuid="e55de343-0514-4710-b301-10696f9a5181" />
+  <!-- FP 27 yrs-->
+  <obs obs_id="3109" person_id="912" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Planification familiale.1/4-0" uuid="a0bbc855-2fa9-4b20-b9bc-50ab3882bce0" />
+
+  <obs obs_id="3110" person_id="913" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Examen physique.1/4-0" uuid="9ce8f818-f3c3-4931-9279-5154d81ea698" />
+  <!-- ANC 17 yrs-->
+  <obs obs_id="3111" person_id="914" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Consultation prénatale.1/4-0" uuid="047cd827-00ec-42b0-82a0-b37dcf6da4e7" />
+  <!-- ANC 20 yrs-->
+  <obs obs_id="3112" person_id="915" concept_id="5089" obs_datetime="2022-02-10 00:00:00.0" location_id="1" value_coded="[NULL]" comments="" creator="1" date_created="2008-08-18 14:09:35.0" voided="false" value_coded_name_id="[NULL]" value_complex="[NULL]" value_text="[NULL]" value_numeric="80" value_datetime="[NULL]" value_drug="[NULL]" form_namespace_and_path="Bahmni^Consultation prénatale.1/4-0" uuid="d87f9474-8c69-427e-8689-1bf7a187d8a9" />
+
+</dataset>
