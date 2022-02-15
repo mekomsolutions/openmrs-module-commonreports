@@ -92,6 +92,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
+		parameterMappings.put("effectiveDate", "${endDate}");
 		
 		Concept questionConcept = inizService.getConceptFromKey("report.emergency.question.concept");
 		
@@ -113,12 +114,14 @@ public class EmergencyReportManager extends ActivatedReportManager {
 		_0To14y.setMinAgeUnit(DurationUnit.YEARS);
 		_0To14y.setMaxAge(14);
 		_0To14y.setMaxAgeUnit(DurationUnit.YEARS);
+		_0To14y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		AgeCohortDefinition above14y = new AgeCohortDefinition();
 		above14y.setMinAge(15);
 		above14y.setMinAgeUnit(DurationUnit.YEARS);
 		above14y.setMaxAge(200);
 		above14y.setMaxAgeUnit(DurationUnit.YEARS);
+		above14y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		{
 			// Public road accident
@@ -129,6 +132,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 				CodedObsCohortDefinition roadAccident = new CodedObsCohortDefinition();
 				roadAccident.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				roadAccident.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				roadAccident.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 				roadAccident.setOperator(SetComparator.IN);
 				roadAccident.setQuestion(questionConcept);
 				roadAccident.setValueList(Arrays.asList(accident));
@@ -144,6 +148,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			
 			workAccident.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			workAccident.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			workAccident.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			workAccident.setOperator(SetComparator.IN);
 			workAccident.setQuestion(questionConcept);
 			workAccident.setValueList(Arrays.asList(wac));
@@ -157,6 +162,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			
 			sexualViolence.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			sexualViolence.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			sexualViolence.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			sexualViolence.setOperator(SetComparator.IN);
 			sexualViolence.setQuestion(questionConcept);
 			sexualViolence.setValueList(Arrays.asList(svc));
@@ -185,6 +191,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			Concept pvc = inizService.getConceptFromKey("report.emergency.physicalViolence.concept");
 			physicalViolence.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			physicalViolence.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			physicalViolence.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			physicalViolence.setOperator(SetComparator.IN);
 			physicalViolence.setQuestion(questionConcept);
 			physicalViolence.setValueList(Arrays.asList(pvc));
@@ -211,6 +218,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			
 			otherViolenceType.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			otherViolenceType.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			otherViolenceType.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			otherViolenceType.setOperator(SetComparator.IN);
 			otherViolenceType.setQuestion(questionConcept);
 			otherViolenceType.setValueList(Arrays.asList(ovtc));
@@ -240,6 +248,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 				CodedObsCohortDefinition medicalAndSurgicalEmergencies = new CodedObsCohortDefinition();
 				medicalAndSurgicalEmergencies.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				medicalAndSurgicalEmergencies.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				medicalAndSurgicalEmergencies.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 				medicalAndSurgicalEmergencies.setOperator(SetComparator.IN);
 				medicalAndSurgicalEmergencies.setQuestion(mseq);
 				medicalAndSurgicalEmergencies.setValueList(new ArrayList<Concept>(emergency.getSetMembers()));
@@ -258,6 +267,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			
 			otherEmergencies.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			otherEmergencies.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			otherEmergencies.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			otherEmergencies.setOperator(SetComparator.IN);
 			otherEmergencies.setQuestion(oeq);
 			otherEmergencies.setValueList(new ArrayList<Concept>(oec.getSetMembers()));
@@ -286,6 +296,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			
 			leftWithoutPermissionCategory.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			leftWithoutPermissionCategory.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			leftWithoutPermissionCategory.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			leftWithoutPermissionCategory.setOperator(SetComparator.IN);
 			leftWithoutPermissionCategory.setQuestion(lwpc);
 			leftWithoutPermissionCategory.setValueList(Arrays.asList(yesAns));
@@ -302,6 +313,7 @@ public class EmergencyReportManager extends ActivatedReportManager {
 			
 			referralCategory.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			referralCategory.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			referralCategory.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 			referralCategory.setOperator(SetComparator.IN);
 			referralCategory.setQuestion(referralConcept);
 			
@@ -347,6 +359,10 @@ public class EmergencyReportManager extends ActivatedReportManager {
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
+		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
+		if (size > 0) {
+			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		}
 		return compCD;
 	}
 }

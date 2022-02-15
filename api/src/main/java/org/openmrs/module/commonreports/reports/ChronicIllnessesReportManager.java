@@ -184,53 +184,62 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 		GenderCohortDefinition females = new GenderCohortDefinition();
 		females.setFemaleIncluded(true);
 		
+		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
+		ageParameterMappings.put("effectiveDate", "${endDate}");
+		
 		AgeCohortDefinition _0To9y = new AgeCohortDefinition();
 		_0To9y.setMinAge(0);
 		_0To9y.setMinAgeUnit(DurationUnit.YEARS);
 		_0To9y.setMaxAge(9);
 		_0To9y.setMaxAgeUnit(DurationUnit.YEARS);
-		chronicIllnessesDsd.addColumn(col1, createCohortComposition(_0To9y, females), null);
-		chronicIllnessesDsd.addColumn(col2, createCohortComposition(_0To9y, males), null);
+		_0To9y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		chronicIllnessesDsd.addColumn(col1, createCohortComposition(_0To9y, females), ageParameterMappings);
+		chronicIllnessesDsd.addColumn(col2, createCohortComposition(_0To9y, males), ageParameterMappings);
 		
 		AgeCohortDefinition _10To14y = new AgeCohortDefinition();
 		_10To14y.setMinAge(10);
 		_10To14y.setMinAgeUnit(DurationUnit.YEARS);
 		_10To14y.setMaxAge(14);
 		_10To14y.setMaxAgeUnit(DurationUnit.YEARS);
-		chronicIllnessesDsd.addColumn(col3, createCohortComposition(_10To14y, females), null);
-		chronicIllnessesDsd.addColumn(col4, createCohortComposition(_10To14y, males), null);
+		_10To14y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		chronicIllnessesDsd.addColumn(col3, createCohortComposition(_10To14y, females), ageParameterMappings);
+		chronicIllnessesDsd.addColumn(col4, createCohortComposition(_10To14y, males), ageParameterMappings);
 		
 		AgeCohortDefinition _15To19y = new AgeCohortDefinition();
 		_15To19y.setMinAge(15);
 		_15To19y.setMinAgeUnit(DurationUnit.YEARS);
 		_15To19y.setMaxAge(19);
 		_15To19y.setMaxAgeUnit(DurationUnit.YEARS);
-		chronicIllnessesDsd.addColumn(col5, createCohortComposition(_15To19y, females), null);
-		chronicIllnessesDsd.addColumn(col6, createCohortComposition(_15To19y, males), null);
+		_15To19y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		chronicIllnessesDsd.addColumn(col5, createCohortComposition(_15To19y, females), ageParameterMappings);
+		chronicIllnessesDsd.addColumn(col6, createCohortComposition(_15To19y, males), ageParameterMappings);
 		
 		AgeCohortDefinition _20To24y = new AgeCohortDefinition();
 		_20To24y.setMinAge(20);
 		_20To24y.setMinAgeUnit(DurationUnit.YEARS);
 		_20To24y.setMaxAge(24);
 		_20To24y.setMaxAgeUnit(DurationUnit.YEARS);
-		chronicIllnessesDsd.addColumn(col7, createCohortComposition(_20To24y, females), null);
-		chronicIllnessesDsd.addColumn(col8, createCohortComposition(_20To24y, males), null);
+		_20To24y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		chronicIllnessesDsd.addColumn(col7, createCohortComposition(_20To24y, females), ageParameterMappings);
+		chronicIllnessesDsd.addColumn(col8, createCohortComposition(_20To24y, males), ageParameterMappings);
 		
 		AgeCohortDefinition _25To49y = new AgeCohortDefinition();
 		_25To49y.setMinAge(25);
 		_25To49y.setMinAgeUnit(DurationUnit.YEARS);
 		_25To49y.setMaxAge(49);
 		_25To49y.setMaxAgeUnit(DurationUnit.YEARS);
-		chronicIllnessesDsd.addColumn(col9, createCohortComposition(_25To49y, females), null);
-		chronicIllnessesDsd.addColumn(col10, createCohortComposition(_25To49y, males), null);
+		_25To49y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		chronicIllnessesDsd.addColumn(col9, createCohortComposition(_25To49y, females), ageParameterMappings);
+		chronicIllnessesDsd.addColumn(col10, createCohortComposition(_25To49y, males), ageParameterMappings);
 		
 		AgeCohortDefinition _50yAndAbove = new AgeCohortDefinition();
 		_50yAndAbove.setMinAge(50);
 		_50yAndAbove.setMinAgeUnit(DurationUnit.YEARS);
 		_50yAndAbove.setMaxAge(200);
 		_50yAndAbove.setMaxAgeUnit(DurationUnit.YEARS);
-		chronicIllnessesDsd.addColumn(col11, createCohortComposition(_50yAndAbove, females), null);
-		chronicIllnessesDsd.addColumn(col12, createCohortComposition(_50yAndAbove, males), null);
+		_50yAndAbove.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		chronicIllnessesDsd.addColumn(col11, createCohortComposition(_50yAndAbove, females), ageParameterMappings);
+		chronicIllnessesDsd.addColumn(col12, createCohortComposition(_50yAndAbove, males), ageParameterMappings);
 		
 		// Referred To column
 		CodedObsCohortDefinition referral = new CodedObsCohortDefinition();
@@ -278,6 +287,10 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
+		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
+		if (size > 0) {
+			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		}
 		return compCD;
 	}
 	

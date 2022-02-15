@@ -140,6 +140,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		under6m.setMinAgeUnit(DurationUnit.DAYS);
 		under6m.setMaxAge(5);
 		under6m.setMaxAgeUnit(DurationUnit.MONTHS);
+		under6m.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// category 2
 		AgeCohortDefinition _6To23m = new AgeCohortDefinition();
@@ -147,6 +148,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		_6To23m.setMinAgeUnit(DurationUnit.MONTHS);
 		_6To23m.setMaxAge(23);
 		_6To23m.setMaxAgeUnit(DurationUnit.MONTHS);
+		_6To23m.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// category 3
 		AgeCohortDefinition _24To59m = new AgeCohortDefinition();
@@ -154,10 +156,12 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		_24To59m.setMinAgeUnit(DurationUnit.MONTHS);
 		_24To59m.setMaxAge(59);
 		_24To59m.setMaxAgeUnit(DurationUnit.MONTHS);
+		_24To59m.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
+		parameterMappings.put("effectiveDate", "${endDate}");
 		
 		setColumnNames();
 		
@@ -208,6 +212,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		_0To60m.setMinAgeUnit(DurationUnit.MONTHS);
 		_0To60m.setMaxAge(60);
 		_0To60m.setMaxAgeUnit(DurationUnit.MONTHS);
+		_0To60m.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		VisitCohortDefinition visits = new VisitCohortDefinition();
 		visits.setVisitTypeList(vs.getAllVisitTypes(false));
@@ -217,8 +222,10 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		Map<String, Object> visitParameterMappings = new HashMap<String, Object>();
 		visitParameterMappings.put("startedOnOrAfter", "${startDate}");
 		visitParameterMappings.put("startedOnOrBefore", "${endDate}");
+		visitParameterMappings.put("effectiveDate", "${endDate}");
 		
 		CompositionCohortDefinition totalChildrenSeen = createCohortComposition(visits, _0To60m);
+		totalChildrenSeen.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// Children seen for the first time
 		SqlCohortDefinition childrenSeenFirstTime = new SqlCohortDefinition();
@@ -228,6 +235,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		childrenSeenFirstTime.setQuery(sql);
 		childrenSeenFirstTime.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		childrenSeenFirstTime.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		childrenSeenFirstTime.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// Children seen for the first time + MUAC measurement
 		Concept muacMeasurementConcept = inizService
@@ -239,6 +247,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		muacMeasured.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		
 		CompositionCohortDefinition childrenMeasuredForMuac = createCohortComposition(childrenSeenFirstTime, muacMeasured);
+		childrenMeasuredForMuac.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// Child seen for the first time + weighed / measured
 		NumericObsCohortDefinition weightMeasured = new NumericObsCohortDefinition();
@@ -247,6 +256,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		weightMeasured.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		weightMeasured.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition childrenMeasuredWeight = createCohortComposition(childrenSeenFirstTime, weightMeasured);
+		childrenMeasuredWeight.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// Children seen for the first time (115 < MUAC < 125)
 		NumericObsCohortDefinition muacMeasuredBetween115And125 = new NumericObsCohortDefinition();
@@ -260,6 +270,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		
 		CompositionCohortDefinition childrenMeasuredForMuacBetween115And125 = createCohortComposition(childrenSeenFirstTime,
 		    muacMeasuredBetween115And125);
+		childrenMeasuredForMuacBetween115And125.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// Children seen for the first time (MUAC < 115)
 		NumericObsCohortDefinition muacMeasuredLessThan115 = new NumericObsCohortDefinition();
@@ -271,17 +282,20 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		
 		CompositionCohortDefinition childrenMeasuredForMuacLessThan115 = createCohortComposition(childrenSeenFirstTime,
 		    muacMeasuredLessThan115);
+		childrenMeasuredForMuacLessThan115.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// adding columns
-		characteristicsDatasetDef.addColumn(aCol1, createCohortComposition(males, under6m), null);
-		characteristicsDatasetDef.addColumn(aCol2, createCohortComposition(females, under6m), null);
-		characteristicsDatasetDef.addColumn(aCol3, createCohortComposition(allGenders, under6m), null);
-		characteristicsDatasetDef.addColumn(aCol4, createCohortComposition(males, _6To23m), null);
-		characteristicsDatasetDef.addColumn(aCol5, createCohortComposition(females, _6To23m), null);
-		characteristicsDatasetDef.addColumn(aCol6, createCohortComposition(allGenders, _6To23m), null);
-		characteristicsDatasetDef.addColumn(aCol7, createCohortComposition(males, _24To59m), null);
-		characteristicsDatasetDef.addColumn(aCol8, createCohortComposition(females, _24To59m), null);
-		characteristicsDatasetDef.addColumn(aCol9, createCohortComposition(allGenders, _24To59m), null);
+		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
+		ageParameterMappings.put("effectiveDate", "${endDate}");
+		characteristicsDatasetDef.addColumn(aCol1, createCohortComposition(males, under6m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol2, createCohortComposition(females, under6m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol3, createCohortComposition(allGenders, under6m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol4, createCohortComposition(males, _6To23m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol5, createCohortComposition(females, _6To23m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol6, createCohortComposition(allGenders, _6To23m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol7, createCohortComposition(males, _24To59m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol8, createCohortComposition(females, _24To59m), ageParameterMappings);
+		characteristicsDatasetDef.addColumn(aCol9, createCohortComposition(allGenders, _24To59m), ageParameterMappings);
 		
 		// adding rows
 		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.total.children.seen"),
@@ -322,6 +336,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		firstVisitChildren.setValueList(Arrays.asList(inizService.getConceptFromKey("report.childCare.yesAnswer.concept")));
 		
 		CompositionCohortDefinition childrenOfFirstVisit = createCohortComposition(malnutritionChildren, firstVisitChildren);
+		childrenOfFirstVisit.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// cured
 		CodedObsCohortDefinition curedChildren = new CodedObsCohortDefinition();
@@ -332,6 +347,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		Concept curedConcept = inizService.getConceptFromKey("report.childCare.resultOfVisit.curedAnswer.concept");
 		curedChildren.setValueList(Arrays.asList(curedConcept));
 		CompositionCohortDefinition curedMalnutritionChildren = createCohortComposition(malnutritionChildren, curedChildren);
+		curedMalnutritionChildren.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// withdrawn
 		CodedObsCohortDefinition withdrawnChildren = new CodedObsCohortDefinition();
@@ -343,11 +359,14 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		withdrawnChildren.setValueList(Arrays.asList(withdrawalConcept));
 		CompositionCohortDefinition withdrawnMalnutritionChildren = createCohortComposition(malnutritionChildren,
 		    withdrawnChildren);
+		withdrawnMalnutritionChildren.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// adding columns
-		fateOfChildDatasetDef.addColumn(bCol1, under6m, null);
-		fateOfChildDatasetDef.addColumn(bCol2, _6To23m, null);
-		fateOfChildDatasetDef.addColumn(bCol3, _24To59m, null);
+		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
+		ageParameterMappings.put("effectiveDate", "${endDate}");
+		fateOfChildDatasetDef.addColumn(bCol1, under6m, ageParameterMappings);
+		fateOfChildDatasetDef.addColumn(bCol2, _6To23m, ageParameterMappings);
+		fateOfChildDatasetDef.addColumn(bCol3, _24To59m, ageParameterMappings);
 		
 		// adding rows
 		fateOfChildDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.first.visit.children"),
@@ -374,6 +393,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		dose1.setOperator1(RangeComparator.EQUAL);
 		dose1.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		dose1.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		dose1.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// dose 2
 		NumericObsCohortDefinition dose2 = new NumericObsCohortDefinition();
@@ -382,6 +402,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		dose2.setOperator1(RangeComparator.EQUAL);
 		dose2.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		dose2.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		dose2.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// dose 3
 		NumericObsCohortDefinition dose3 = new NumericObsCohortDefinition();
@@ -390,6 +411,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		dose3.setOperator1(RangeComparator.EQUAL);
 		dose3.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		dose3.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		dose3.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// distribution of Vitamin A
 		CodedObsCohortDefinition vitaminA = new CodedObsCohortDefinition();
@@ -399,6 +421,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		vitaminA.setQuestion(vaccinationsQuestion);
 		Concept vitaminAConcept = inizService.getConceptFromKey("report.childCare.vitaminA.concept");
 		vitaminA.setValueList(Arrays.asList(vitaminAConcept));
+		vitaminA.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// albendazole
 		CodedObsCohortDefinition albendazole = new CodedObsCohortDefinition();
@@ -408,6 +431,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		albendazole.setQuestion(vaccinationsQuestion);
 		Concept albendazoleConcept = inizService.getConceptFromKey("report.childCare.albendazole.concept");
 		albendazole.setValueList(Arrays.asList(albendazoleConcept));
+		albendazole.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// adding columns
 		vitaminASupplimentationDatasetDef.addColumn(cCol1, createCohortComposition(under6m, dose1), parameterMappings);
@@ -473,6 +497,10 @@ public class ChildCareReportManager extends ActivatedReportManager {
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
+		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
+		if (size > 0) {
+			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		}
 		return compCD;
 	}
 }
