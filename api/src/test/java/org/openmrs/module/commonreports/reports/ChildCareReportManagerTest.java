@@ -89,11 +89,10 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 		for (DataSet ds : data.getDataSets().values()) {
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				DataSetRow row = itr.next();
-				System.out.println(row);
-//				for (DataSetColumn column : row.getColumnValues().keySet()) {
-//					assertThat(column.getName(), ((Cohort) row.getColumnValue(column)).getSize(),
-//					    is(columnValuePairs.get(column.getName())));
-//				}
+				for (DataSetColumn column : row.getColumnValues().keySet()) {
+					assertThat(column.getName(), ((Cohort) row.getColumnValue(column)).getSize(),
+					    is(columnValuePairs.get(column.getName())));
+				}
 			}
 		}
 	}
