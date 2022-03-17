@@ -29,8 +29,7 @@ public class PatientsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		// change to false
-		return inizService.getBooleanFromKey("report.patients.active", true);
+		return inizService.getBooleanFromKey("report.patients.active", false);
 	}
 	
 	@Override

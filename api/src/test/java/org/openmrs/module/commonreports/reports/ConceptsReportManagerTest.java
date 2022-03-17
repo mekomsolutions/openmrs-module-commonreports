@@ -34,9 +34,9 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ConceptReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class ConceptsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public ConceptReportManagerTest() throws SQLException {
+	public ConceptsReportManagerTest() throws SQLException {
 		super();
 		// TODO Auto-generated constructor stub
 	}

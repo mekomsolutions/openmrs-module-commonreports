@@ -98,27 +98,27 @@
 		concept_set="409" creator="1" date_created="2004-08-12 00:00:00.0"
 		sort_weight="2" />
 
-	<conditions condition_id="1" patient_id="1" status="CONFIRMED" concept_id="409"
+	<conditions condition_id="1" patient_id="1" condition_coded="409" concept_id="409" status="CONFIRMED"
 		creator="1" date_created="2015-01-12 00:00:00" voided="false"
 		uuid="2cc6880e-2c46-11e4-9038-a6c5e4d22fb7" condition_non_coded="NON-CODED-CONDITION2"
 		onset_date="2015-01-12 00:00:00" end_date="2017-03-12 00:00:00" />
 
-	<conditions condition_id="2" patient_id="2" status="CONFIRMED" concept_id="409"
+	<conditions condition_id="2" patient_id="2" condition_coded="409" concept_id="409" status="CONFIRMED"
 		creator="1" date_created="2015-01-12 00:00:00" uuid="2cc5840e-2c84-11e4-9038-a6c5e4d22fb7"
 		voided="false" condition_non_coded="NON-CODED-CONDITION2" onset_date="2015-01-12 00:00:00"
 		end_date="2017-03-12 00:00:00" />
 
-	<conditions condition_id="3" patient_id="3" status="CONFIRMED" concept_id="409"
+	<conditions condition_id="3" patient_id="3" condition_coded="409" concept_id="409" status="CONFIRMED"
 		creator="1" date_created="2014-03-12 00:00:00" voided="false"
 		uuid="2ss6880e-2c46-11e4-9038-a6c5e4d22fb7" onset_date="2014-03-12 00:00:00"
 		end_date="2017-03-12 00:00:00" />
 
-	<conditions condition_id="4" patient_id="4" status="CONFIRMED" concept_id="409"
+	<conditions condition_id="4" patient_id="4" condition_coded="408" concept_id="409" status="CONFIRMED"
 		creator="1" date_created="2014-01-12 00:00:00" uuid="2ss6880e-2c46-11e4-5844-a6c5e4d22fb7"
 		voided="false" condition_non_coded="NON-CODED-CONDITION" onset_date="2014-01-12 00:00:00"
 		end_date="2016-03-12 00:00:00" />
 
-	<conditions condition_id="5" patient_id="5" status="CONFIRMED" concept_id="409"
+	<conditions condition_id="5" patient_id="5" condition_coded="408" concept_id="409" status="CONFIRMED"
 		creator="1" date_created="2015-01-12 00:00:00" voided="false"
 		uuid="9ff6880e-2c46-11e4-5844-a6c5e4d22fb7" condition_non_coded="NON-CODED-CONDITION"
 		onset_date="2016-01-12 00:00:00" end_date="2016-05-12 00:00:00" />

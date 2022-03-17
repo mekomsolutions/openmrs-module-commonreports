@@ -4,6 +4,7 @@ select
     patient_id,
     status,
     concept_id,
+    condition_coded,
     condition_non_coded,
     onset_date,
     additional_detail,

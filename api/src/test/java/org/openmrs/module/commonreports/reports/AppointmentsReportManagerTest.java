@@ -31,9 +31,9 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class AppointmentReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class AppointmentsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public AppointmentReportManagerTest() throws SQLException {
+	public AppointmentsReportManagerTest() throws SQLException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -53,9 +53,7 @@ public class AppointmentReportManagerTest extends BaseModuleContextSensitiveMysq
 	
 	@Before
 	public void setUp() throws Exception {
-		executeDataSet("org/openmrs/module/commonreports/include/appointmentTestDataset.xml");
-		
-		// executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/appointmentsTestDataset.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);

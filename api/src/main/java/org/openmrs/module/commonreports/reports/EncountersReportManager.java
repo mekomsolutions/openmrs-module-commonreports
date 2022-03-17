@@ -24,14 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrdersReportManager extends ActivatedReportManager {
+public class EncountersReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.orders.active", false);
+		return inizService.getBooleanFromKey("report.encounters.active", false);
 	}
 	
 	@Override
@@ -41,27 +41,26 @@ public class OrdersReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getUuid() {
-		return "69f3dc43-0ca6-423f-8b60-53e38429270d";
+		return "320d3c2a-93d2-4bba-887b-f9cb04778dde";
 	}
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.orders.reportName");
+		return MessageUtil.translate("commonreports.report.encounters.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.orders.reportDescription");
+		return MessageUtil.translate("commonreports.report.encounters.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
-		return new Parameter("dateActivated", "Date Activated", Date.class, null,
-		        DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
+		return new Parameter("startDate", "Start Date", Date.class, null, DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
 	}
 	
 	private Parameter getEndDateParameter() {
 		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		return new Parameter("dateStopped", "date Stopped", Date.class, null, DateUtil.parseDate(today, "yyyy-MM-dd"));
+		return new Parameter("endDate", "End Date", Date.class, null, DateUtil.parseDate(today, "yyyy-MM-dd"));
 	}
 	
 	private String getSqlString(String resourceName) {
@@ -98,17 +97,17 @@ public class OrdersReportManager extends ActivatedReportManager {
 		rd.setUuid(getUuid());
 		
 		SqlDataSetDefinition sqlDsd = new SqlDataSetDefinition();
-		sqlDsd.setName(MessageUtil.translate("commonreports.report.orders.datasetName"));
-		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.orders.datasetDescription"));
+		sqlDsd.setName(MessageUtil.translate("commonreports.report.encounters.datasetName"));
+		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.encounters.datasetDescription"));
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/orders.sql");
+		String sql = getSqlString("org/openmrs/module/commonreports/sql/encounters.sql");
 		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
 		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
-		parameterMappings.put("dateActivated", "${dateActivated}");
-		parameterMappings.put("dateStopped", "${dateStopped}");
+		parameterMappings.put("startDate", "${startDate}");
+		parameterMappings.put("endDate", "${endDate}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
 		
@@ -117,7 +116,7 @@ public class OrdersReportManager extends ActivatedReportManager {
 	
 	@Override
 	public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
-		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("b7382e3f-7314-4cf7-9a6b-a4053c6519f5",
+		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("7975c2c9-5055-42c3-8d90-fa7bcce79361",
 		    reportDefinition);
 		return Arrays.asList(reportDesign);
 	}

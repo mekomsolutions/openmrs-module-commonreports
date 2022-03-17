@@ -22,17 +22,18 @@ import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.openmrs.annotation.OpenmrsProfile;
 
 @Component
-public class EncounterReportManager extends ActivatedReportManager {
+@OpenmrsProfile(openmrsPlatformVersion = "2.2.* - 2.5.*")
+public class ConditionsReportManager2_2 extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
 	
 	@Override
 	public boolean isActivated() {
-		//change to false
-		return inizService.getBooleanFromKey("report.encounter.active", true);
+		return inizService.getBooleanFromKey("report.conditions.active", false);
 	}
 	
 	@Override
@@ -42,21 +43,21 @@ public class EncounterReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getUuid() {
-		return "320d3c2a-93d2-4bba-887b-f9cb04778dde";
+		return "e193acbb-4f12-43be-97b2-25ed70a3face";
 	}
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.encounter.reportName");
+		return MessageUtil.translate("commonreports.report.conditions.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.encounter.reportDescription");
+		return MessageUtil.translate("commonreports.report.conditions.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
-		return new Parameter("startDate", "Start Date", Date.class, null, DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
+		return new Parameter("onsetDate", "Onset Date", Date.class, null, DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
 	}
 	
 	private Parameter getEndDateParameter() {
@@ -98,16 +99,16 @@ public class EncounterReportManager extends ActivatedReportManager {
 		rd.setUuid(getUuid());
 		
 		SqlDataSetDefinition sqlDsd = new SqlDataSetDefinition();
-		sqlDsd.setName(MessageUtil.translate("commonreports.report.encounter.datasetName"));
-		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.encounter.datasetDescription"));
+		sqlDsd.setName(MessageUtil.translate("commonreports.report.conditions.datasetName"));
+		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.conditions.datasetDescription"));
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/encounter.sql");
+		String sql = getSqlString("org/openmrs/module/commonreports/sql/conditions.sql");
 		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
 		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
-		parameterMappings.put("startDate", "${startDate}");
+		parameterMappings.put("onsetDate", "${onsetDate}");
 		parameterMappings.put("endDate", "${endDate}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
@@ -117,7 +118,7 @@ public class EncounterReportManager extends ActivatedReportManager {
 	
 	@Override
 	public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
-		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("7975c2c9-5055-42c3-8d90-fa7bcce79361",
+		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("ffadf928-16a7-462e-ba59-49af495d9ca0",
 		    reportDefinition);
 		return Arrays.asList(reportDesign);
 	}

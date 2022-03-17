@@ -31,7 +31,6 @@ public class ObsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		//change to false
 		return inizService.getBooleanFromKey("report.obs.active", true);
 	}
 	

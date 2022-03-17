@@ -22,8 +22,10 @@ import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.openmrs.annotation.OpenmrsProfile;
 
 @Component
+@OpenmrsProfile(modules = { "emrapi:1.5 - 1.2*" })
 public class ConditionsReportManager extends ActivatedReportManager {
 	
 	@Autowired
@@ -31,8 +33,7 @@ public class ConditionsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		//change to false
-		return inizService.getBooleanFromKey("report.conditions.active", true);
+		return inizService.getBooleanFromKey("report.conditions.active", false);
 	}
 	
 	@Override

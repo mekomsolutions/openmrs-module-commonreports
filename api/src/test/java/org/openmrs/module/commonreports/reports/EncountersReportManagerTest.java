@@ -37,9 +37,9 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
-public class EncounterReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class EncountersReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public EncounterReportManagerTest() throws SQLException {
+	public EncountersReportManagerTest() throws SQLException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -54,14 +54,11 @@ public class EncounterReportManagerTest extends BaseModuleContextSensitiveMysqlB
 	private ReportDefinitionService rds;
 	
 	@Autowired
-	@Qualifier("encounterReportManager")
+	@Qualifier("encountersReportManager")
 	private ActivatedReportManager manager;
 	
 	@Before
 	public void setUp() throws Exception {
-		// executeDataSet("org/openmrs/module/commonreports/include/encounterTestDataset.xml");
-		
-		// executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
 		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;

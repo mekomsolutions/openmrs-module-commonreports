@@ -31,8 +31,7 @@ public class AppointmentsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		//change to false
-		return inizService.getBooleanFromKey("report.appointments.active", true);
+		return inizService.getBooleanFromKey("report.appointments.active", false);
 	}
 	
 	@Override
