@@ -100,7 +100,6 @@ public class EncountersReportManagerTest extends BaseModuleContextSensitiveMysql
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					
 					assertEquals(row1columnValuePairs.get("encounter_id"),

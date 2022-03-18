@@ -93,7 +93,6 @@ public class AppointmentsReportManagerTest extends BaseModuleContextSensitiveMys
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("patient_appointment_id"),
 					    Integer.parseInt(row.getColumnValue("patient_appointment_id").toString()));
@@ -304,6 +303,7 @@ public class AppointmentsReportManagerTest extends BaseModuleContextSensitiveMys
 		map.put("appointment_service_type_uuid", "678906e5-9fbb-4f20-866b-0ece24564578");
 		map.put("patient_appointment_provider", null);
 		map.put("patient_appointment_provider_response", null);
+		
 		return map;
 	}
 }

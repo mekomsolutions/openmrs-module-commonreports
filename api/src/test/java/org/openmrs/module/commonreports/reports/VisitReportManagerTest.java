@@ -53,8 +53,6 @@ public class VisitReportManagerTest extends BaseModuleContextSensitiveMysqlBacke
 	
 	@Before
 	public void setUp() throws Exception {
-		// executeDataSet("org/openmrs/module/commonreports/include/encounterTestDataset.xml");
-		
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
@@ -96,7 +94,6 @@ public class VisitReportManagerTest extends BaseModuleContextSensitiveMysqlBacke
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("visit_id"),
 					    Integer.parseInt(row.getColumnValue("visit_id").toString()));

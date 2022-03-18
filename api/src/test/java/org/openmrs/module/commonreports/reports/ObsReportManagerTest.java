@@ -95,7 +95,6 @@ public class ObsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedT
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("obs_id"),
 					    Integer.parseInt(row.getColumnValue("obs_id").toString()));
@@ -236,7 +235,6 @@ public class ObsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedT
 		map.put("encounter_id", 3);
 		map.put("encounter_voided", false);
 		map.put("encounter_type_name", "Emergency");
-		
 		map.put("encounter_type_description", "Emergency visit");
 		map.put("encounter_type_uuid", "07000be2-26b6-4cce-8b40-866d8435b613");
 		map.put("encounter_type_retired", false);
@@ -284,7 +282,6 @@ public class ObsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedT
 		map.put("encounter_id", 3);
 		map.put("encounter_voided", false);
 		map.put("encounter_type_name", "Emergency");
-		
 		map.put("encounter_type_description", "Emergency visit");
 		map.put("encounter_type_uuid", "07000be2-26b6-4cce-8b40-866d8435b613");
 		map.put("encounter_type_retired", false);

@@ -91,7 +91,6 @@ public class ProgramsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("patient_program_id"),
 					    Integer.parseInt(row.getColumnValue("patient_program_id").toString()));
@@ -106,7 +105,6 @@ public class ProgramsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 					assertEquals(row1columnValuePairs.get("creator"),
 					    Integer.parseInt(row.getColumnValue("creator").toString()));
 					assertEquals(row1columnValuePairs.get("date_created"), row.getColumnValue("date_created").toString());
-					
 					assertEquals(row1columnValuePairs.get("changed_by"),
 					    Integer.parseInt(row.getColumnValue("changed_by").toString()));
 					assertEquals(row1columnValuePairs.get("date_changed"), row.getColumnValue("date_changed").toString());
@@ -114,7 +112,6 @@ public class ProgramsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 					assertEquals(row1columnValuePairs.get("program_name"), row.getColumnValue("program_name"));
 					assertEquals(row1columnValuePairs.get("program_description"), row.getColumnValue("program_description"));
 					assertEquals(row1columnValuePairs.get("program_uuid"), row.getColumnValue("program_uuid"));
-					
 					assertEquals(row1columnValuePairs.get("program_concept_id"),
 					    Integer.parseInt(row.getColumnValue("program_concept_id").toString()));
 					
@@ -134,14 +131,12 @@ public class ProgramsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 					assertEquals(row4columnValuePairs.get("creator"),
 					    Integer.parseInt(row.getColumnValue("creator").toString()));
 					assertEquals(row4columnValuePairs.get("date_created"), row.getColumnValue("date_created").toString());
-					
 					assertEquals(row4columnValuePairs.get("changed_by"), (row.getColumnValue("changed_by")));
 					assertEquals(row4columnValuePairs.get("date_changed"), row.getColumnValue("date_changed"));
 					assertEquals(row4columnValuePairs.get("uuid"), row.getColumnValue("uuid"));
 					assertEquals(row4columnValuePairs.get("program_name"), row.getColumnValue("program_name"));
 					assertEquals(row4columnValuePairs.get("program_description"), row.getColumnValue("program_description"));
 					assertEquals(row4columnValuePairs.get("program_uuid"), row.getColumnValue("program_uuid"));
-					
 					assertEquals(row4columnValuePairs.get("program_concept_id"),
 					    Integer.parseInt(row.getColumnValue("program_concept_id").toString()));
 					

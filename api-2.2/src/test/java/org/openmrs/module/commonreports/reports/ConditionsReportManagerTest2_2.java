@@ -104,7 +104,6 @@ public class ConditionsReportManagerTest2_2 extends BaseModuleContextSensitiveMy
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("condition_id"),
 					    Integer.parseInt(row.getColumnValue("condition_id").toString()));
@@ -115,37 +114,13 @@ public class ConditionsReportManagerTest2_2 extends BaseModuleContextSensitiveMy
 					    Integer.parseInt(row.getColumnValue("concept_id").toString()));
 					assertEquals(row1columnValuePairs.get("condition_coded"),
 					    Integer.parseInt(row.getColumnValue("condition_coded").toString()));
-					/*
-					 * assertEquals(row1columnValuePairs.get("previous_condition_id"),
-					 * Integer.parseInt(row.getColumnValue("previous_condition_id").toString()));
-					 */
 					assertEquals(row1columnValuePairs.get("onset_date"), row.getColumnValue("onset_date").toString());
 					assertEquals(row1columnValuePairs.get("end_date"), row.getColumnValue("end_date").toString());
 					assertEquals(row1columnValuePairs.get("condition_non_coded"), row.getColumnValue("condition_non_coded"));
-					/*
-					 * assertEquals(row1columnValuePairs.get("end_reason"),
-					 * row.getColumnValue("end_reason"));
-					 * assertEquals(row1columnValuePairs.get("additional_detail"),
-					 * row.getColumnValue("additional_detail"));
-					 */
 					assertEquals(row1columnValuePairs.get("date_created"), row.getColumnValue("date_created").toString());
-					/*
-					 * assertEquals(row1columnValuePairs.get("date_voided"),
-					 * row.getColumnValue("date_voided"));
-					 */
 					assertEquals(row1columnValuePairs.get("creator"),
 					    Integer.parseInt(row.getColumnValue("creator").toString()));
 					assertEquals(row1columnValuePairs.get("uuid"), row.getColumnValue("uuid"));
-					/*
-					 * assertEquals(row1columnValuePairs.get("voided"),
-					 * row.getColumnValue("voided"));
-					 */
-					/* assertEquals(row1columnValuePairs.get("voided_by"),
-							Integer.parseInt(row.getColumnValue("voided_by").toString()));
-					*//*
-					                                        * assertEquals(row1columnValuePairs.get("void_reason"),
-					                                        * row.getColumnValue("void_reason"));
-					                                        */
 					assertEquals(row1columnValuePairs.get("end_reason"), row.getColumnValue("end_reason"));
 					
 				}
@@ -160,42 +135,19 @@ public class ConditionsReportManagerTest2_2 extends BaseModuleContextSensitiveMy
 					    Integer.parseInt(row.getColumnValue("concept_id").toString()));
 					assertEquals(row4columnValuePairs.get("condition_coded"),
 					    Integer.parseInt(row.getColumnValue("condition_coded").toString()));
-					/*
-					 * assertEquals(row4columnValuePairs.get("previous_condition_id"),
-					 * Integer.parseInt(row.getColumnValue("previous_condition_id").toString()));
-					 */
 					assertEquals(row4columnValuePairs.get("onset_date"), row.getColumnValue("onset_date").toString());
 					assertEquals(row4columnValuePairs.get("end_date"), row.getColumnValue("end_date").toString());
 					assertEquals(row4columnValuePairs.get("condition_non_coded"), row.getColumnValue("condition_non_coded"));
-					/*
-					 * assertEquals(row4columnValuePairs.get("end_reason"),
-					 * row.getColumnValue("end_reason"));
-					 * assertEquals(row4columnValuePairs.get("additional_detail"),
-					 * row.getColumnValue("additional_detail"));
-					 */
+					
 					assertEquals(row4columnValuePairs.get("date_created"), row.getColumnValue("date_created").toString());
-					/*
-					 * assertEquals(row4columnValuePairs.get("date_voided"),
-					 * row.getColumnValue("date_voided"));
-					 */
 					assertEquals(row4columnValuePairs.get("creator"),
 					    Integer.parseInt(row.getColumnValue("creator").toString()));
 					assertEquals(row4columnValuePairs.get("uuid"), row.getColumnValue("uuid"));
-					/*
-					 * assertEquals(row4columnValuePairs.get("voided"),
-					 * row.getColumnValue("voided"));
-					 */
-					/* assertEquals(row4columnValuePairs.get("voided_by"),
-							Integer.parseInt(row.getColumnValue("voided_by").toString()));
-					*//*
-					                                        * assertEquals(row4columnValuePairs.get("void_reason"),
-					                                        * row.getColumnValue("void_reason"));
-					                                        */
 					assertEquals(row4columnValuePairs.get("end_reason"), row.getColumnValue("end_reason"));
 				}
 				
 			}
-			// assertEquals(55, rowNumber);
+			assertEquals(5, rowNumber);
 		}
 		
 	}
@@ -203,26 +155,17 @@ public class ConditionsReportManagerTest2_2 extends BaseModuleContextSensitiveMy
 	private Map<String, Object> getRow1ColumnValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		
 		map.put("condition_id", 1);
 		map.put("patient_id", 1);
 		map.put("status", "CONFIRMED");
 		map.put("concept_id", 409);
 		map.put("condition_coded", 409);
-		
-		// map.put("previous_condition_id", 101);
 		map.put("onset_date", "2015-01-12 00:00:00.0");
 		map.put("end_date", "2017-03-12 00:00:00.0");
 		map.put("condition_non_coded", "NON-CODED-CONDITION2");
-		// map.put("additional_detail", "Indianapolis");
-		// map.put("end_reason", "1050 Wishard Blvd.");
 		map.put("uuid", "2cc6880e-2c46-11e4-9038-a6c5e4d22fb7");
 		map.put("creator", 1);
-		// map.put("voided_by", 1);
 		map.put("date_created", "2015-01-12 00:00:00.0");
-		// map.put("date_voided", "2005-09-22 00:00:00.0");
-		// map.put("voided", false);
-		// map.put("void_reason", "null");
 		
 		return map;
 	}
@@ -230,34 +173,17 @@ public class ConditionsReportManagerTest2_2 extends BaseModuleContextSensitiveMy
 	private Map<String, Object> getRow4ColumnValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		/*
-		 * <conditions condition_id="4" patient_id="4" status="CONFIRMED"
-		 * concept_id="409"
-		 * creator="1" date_created="2014-01-12 00:00:00.0"
-		 * uuid="2ss6880e-2c46-11e4-5844-a6c5e4d22fb7"
-		 * voided="false" condition_non_coded="NON-CODED-CONDITION"
-		 * onset_date="2014-01-12 00:00:00.0"
-		 * end_date="2016-03-12 00:00:00.0" />
-		 */
-		
 		map.put("condition_id", 4);
 		map.put("patient_id", 4);
 		map.put("status", "CONFIRMED");
 		map.put("concept_id", 409);
 		map.put("condition_coded", 408);
-		// map.put("previous_condition_id", 101);
 		map.put("onset_date", "2014-01-12 00:00:00.0");
 		map.put("end_date", "2016-03-12 00:00:00.0");
 		map.put("condition_non_coded", "NON-CODED-CONDITION");
-		// map.put("additional_detail", "Indianapolis");
-		// map.put("end_reason", "1050 Wishard Blvd.");
 		map.put("uuid", "2ss6880e-2c46-11e4-5844-a6c5e4d22fb7");
 		map.put("creator", 1);
-		// map.put("voided_by", 1);
 		map.put("date_created", "2014-01-12 00:00:00.0");
-		// map.put("date_voided", "2005-09-22 00:00:00.0");
-		// map.put("voided", false);
-		// map.put("void_reason", "null");
 		
 		return map;
 	}

@@ -53,10 +53,6 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 	
 	@Before
 	public void setUp() throws Exception {
-		// executeDataSet("org/openmrs/module/commonreports/include/conditionTestDataset.xml");
-		
-		// executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
 		
@@ -94,7 +90,6 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("id"), Integer.parseInt(row.getColumnValue("id").toString()));
 					assertEquals(row1columnValuePairs.get("given_name"), row.getColumnValue("given_name"));

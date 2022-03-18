@@ -95,7 +95,6 @@ public class OrdersReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				rowNumber++;
 				DataSetRow row = itr.next();
-				System.out.println(row);
 				if (rowNumber == 1) {
 					assertEquals(row1columnValuePairs.get("order_id"),
 					    Integer.parseInt(row.getColumnValue("order_id").toString()));
@@ -109,7 +108,6 @@ public class OrdersReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 					    row.getColumnValue("order_type_java_class_name"));
 					assertEquals(row1columnValuePairs.get("concept_id"), row.getColumnValue("concept_id"));
 					assertEquals(row1columnValuePairs.get("orderer"), row.getColumnValue("orderer"));
-					
 					assertEquals(row1columnValuePairs.get("order_type_name"), row.getColumnValue("order_type_name"));
 					assertEquals(row1columnValuePairs.get("care_setting_name"), row.getColumnValue("care_setting_name"));
 					assertEquals(row1columnValuePairs.get("care_setting_type"), row.getColumnValue("care_setting_type"));
@@ -134,7 +132,6 @@ public class OrdersReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 					    row.getColumnValue("order_type_java_class_name"));
 					assertEquals(row7columnValuePairs.get("concept_id"), row.getColumnValue("concept_id"));
 					assertEquals(row7columnValuePairs.get("orderer"), row.getColumnValue("orderer"));
-					
 					assertEquals(row7columnValuePairs.get("order_type_name"), row.getColumnValue("order_type_name"));
 					assertEquals(row7columnValuePairs.get("care_setting_name"), row.getColumnValue("care_setting_name"));
 					assertEquals(row7columnValuePairs.get("care_setting_type"), row.getColumnValue("care_setting_type"));
