@@ -40,9 +40,9 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DiagnosesReportManagerTest2_2 extends BaseModuleContextSensitiveMysqlBackedTest {
+public class DiagnosesReportManager2_2Test extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public DiagnosesReportManagerTest2_2() throws SQLException {
+	public DiagnosesReportManager2_2Test() throws SQLException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
