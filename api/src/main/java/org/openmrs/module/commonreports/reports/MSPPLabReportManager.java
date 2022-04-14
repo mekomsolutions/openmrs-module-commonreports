@@ -22,14 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LabReportManager extends ActivatedReportManager {
+public class MSPPLabReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.lab.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.lab.active", false);
 	}
 	
 	@Override
@@ -44,12 +44,12 @@ public class LabReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.lab.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.lab.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.lab.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.lab.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
@@ -97,7 +97,7 @@ public class LabReportManager extends ActivatedReportManager {
 		sqlDsd.setName("Lab SQL Dataset");
 		sqlDsd.setDescription("Lab SQL Dataset");
 		
-		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/lab.sql");
+		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/MSPPlab.sql");
 		String sql = applyMetadataReplacements(rawSql);
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
@@ -125,21 +125,22 @@ public class LabReportManager extends ActivatedReportManager {
 	private String applyMetadataReplacements(String rawSql) {
 		String s = rawSql
 		        .replace(":serialSputumBacilloscopy",
-		            "'" + inizService.getValueFromKey("report.lab.serialSputumBacilloscopy") + "'")
-		        .replace(":positive", "'" + inizService.getValueFromKey("report.lab.positive") + "'")
-		        .replace(":negative", "'" + inizService.getValueFromKey("report.lab.negative") + "'")
-		        .replace(":indeterminate", "'" + inizService.getValueFromKey("report.lab.indeterminate") + "'")
-		        .replace(":zero", "'" + inizService.getValueFromKey("report.lab.zero") + "'")
-		        .replace(":onePlus", "'" + inizService.getValueFromKey("report.lab.onePlus") + "'")
-		        .replace(":twoPlus", "'" + inizService.getValueFromKey("report.lab.twoPlus") + "'")
-		        .replace(":threePlus", "'" + inizService.getValueFromKey("report.lab.threePlus") + "'")
-		        .replace(":fourPlus", "'" + inizService.getValueFromKey("report.lab.fourPlus") + "'")
-		        .replace(":malaria", "'" + inizService.getValueFromKey("report.lab.malaria") + "'")
-		        .replace(":completeBloodCount", "'" + inizService.getValueFromKey("report.lab.completeBloodCount") + "'")
-		        .replace(":sicklingTest", "'" + inizService.getValueFromKey("report.lab.sicklingTest") + "'")
-		        .replace(":bloodGroup", "'" + inizService.getValueFromKey("report.lab.bloodGroup") + "'")
-		        .replace(":urinalysis", "'" + inizService.getValueFromKey("report.lab.urinalysis") + "'")
-		        .replace(":prenatalVisitType", "'" + inizService.getValueFromKey("report.lab.prenatalVisitType") + "'");
+		            "'" + inizService.getValueFromKey("report.MSPP.lab.serialSputumBacilloscopy") + "'")
+		        .replace(":positive", "'" + inizService.getValueFromKey("report.MSPP.lab.positive") + "'")
+		        .replace(":negative", "'" + inizService.getValueFromKey("report.MSPP.lab.negative") + "'")
+		        .replace(":indeterminate", "'" + inizService.getValueFromKey("report.MSPP.lab.indeterminate") + "'")
+		        .replace(":zero", "'" + inizService.getValueFromKey("report.MSPP.lab.zero") + "'")
+		        .replace(":onePlus", "'" + inizService.getValueFromKey("report.MSPP.lab.onePlus") + "'")
+		        .replace(":twoPlus", "'" + inizService.getValueFromKey("report.MSPP.lab.twoPlus") + "'")
+		        .replace(":threePlus", "'" + inizService.getValueFromKey("report.MSPP.lab.threePlus") + "'")
+		        .replace(":fourPlus", "'" + inizService.getValueFromKey("report.MSPP.lab.fourPlus") + "'")
+		        .replace(":malaria", "'" + inizService.getValueFromKey("report.MSPP.lab.malaria") + "'")
+		        .replace(":completeBloodCount",
+		            "'" + inizService.getValueFromKey("report.MSPP.lab.completeBloodCount") + "'")
+		        .replace(":sicklingTest", "'" + inizService.getValueFromKey("report.MSPP.lab.sicklingTest") + "'")
+		        .replace(":bloodGroup", "'" + inizService.getValueFromKey("report.MSPP.lab.bloodGroup") + "'")
+		        .replace(":urinalysis", "'" + inizService.getValueFromKey("report.MSPP.lab.urinalysis") + "'")
+		        .replace(":prenatalVisitType", "'" + inizService.getValueFromKey("report.MSPP.lab.prenatalVisitType") + "'");
 		return s;
 	}
 	

@@ -28,9 +28,9 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class MSPPVaccinationReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public VaccinationReportManagerTest() throws SQLException {
+	public MSPPVaccinationReportManagerTest() throws SQLException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -51,7 +51,7 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 	@Before
 	public void setUp() throws Exception {
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		executeDataSet("org/openmrs/module/commonreports/include/vaccinationTestDataset.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/MSPPvaccinationTestDataset.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
@@ -86,50 +86,50 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 		
 		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Vaccination").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
 			// one row
 			Cohort _0mTo1yFemalesReceivedBCG = (Cohort) row
-			        .getColumnValue("BCG Vaccination." + VaccinationReportManager.col1);
+			        .getColumnValue("BCG Vaccination." + MSPPVaccinationReportManager.col1);
 			assertNotNull(_0mTo1yFemalesReceivedBCG);
 			assertEquals(1, _0mTo1yFemalesReceivedBCG.getSize());
 			
-			Cohort _0mTo1yMalesReceivedBCG = (Cohort) row.getColumnValue("BCG Vaccination." + VaccinationReportManager.col3);
+			Cohort _0mTo1yMalesReceivedBCG = (Cohort) row
+			        .getColumnValue("BCG Vaccination." + MSPPVaccinationReportManager.col3);
 			assertNotNull(_0mTo1yMalesReceivedBCG);
 			assertEquals(1, _0mTo1yMalesReceivedBCG.getSize());
 			
 			Cohort _0mTo1yFemalesReceivedPenta3 = (Cohort) row
-			        .getColumnValue("Pentavalent Vaccination 3." + VaccinationReportManager.col1);
+			        .getColumnValue("Pentavalent Vaccination 3." + MSPPVaccinationReportManager.col1);
 			assertNotNull(_0mTo1yFemalesReceivedPenta3);
 			assertEquals(1, _0mTo1yFemalesReceivedPenta3.getSize());
 			
 			Cohort _prenatalFemalesReceivedPenta3 = (Cohort) row
-			        .getColumnValue("Pentavalent Vaccination 3." + VaccinationReportManager.col5);
+			        .getColumnValue("Pentavalent Vaccination 3." + MSPPVaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedPenta3);
 			assertEquals(1, _prenatalFemalesReceivedPenta3.getSize());
 			
 			Cohort _malesReceivedPenta3 = (Cohort) row
-			        .getColumnValue("Pentavalent Vaccination 3." + VaccinationReportManager.col4);
+			        .getColumnValue("Pentavalent Vaccination 3." + MSPPVaccinationReportManager.col4);
 			assertNotNull(_malesReceivedPenta3);
 			assertEquals(0, _malesReceivedPenta3.getSize());
 			
 			Cohort _prenatalFemalesReceivedOPV2 = (Cohort) row
-			        .getColumnValue("Oral Polio Vaccination 2." + VaccinationReportManager.col5);
+			        .getColumnValue("Oral Polio Vaccination 2." + MSPPVaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedOPV2);
 			assertEquals(1, _prenatalFemalesReceivedOPV2.getSize());
 			
 			Cohort _femalesReceivedIPV = (Cohort) row
-			        .getColumnValue("Polio Vaccine-Inactivated Vaccination." + VaccinationReportManager.col1);
+			        .getColumnValue("Polio Vaccine-Inactivated Vaccination." + MSPPVaccinationReportManager.col1);
 			assertNotNull(_femalesReceivedIPV);
 			assertEquals(1, _femalesReceivedIPV.getSize());
 			
 			Cohort _femalesReceivedRota2 = (Cohort) row
-			        .getColumnValue("Rotavirus Vaccination 2." + VaccinationReportManager.col1);
+			        .getColumnValue("Rotavirus Vaccination 2." + MSPPVaccinationReportManager.col1);
 			assertNotNull(_femalesReceivedRota2);
 			assertEquals(1, _femalesReceivedRota2.getSize());
 			
 			Cohort _prenatalFemalesReceivedDT = (Cohort) row
-			        .getColumnValue("Diphtheria Tetanus Vaccination 11." + VaccinationReportManager.col5);
+			        .getColumnValue("Diphtheria Tetanus Vaccination 11." + MSPPVaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedDT);
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
 		}
@@ -140,19 +140,19 @@ public class VaccinationReportManagerTest extends BaseModuleContextSensitiveMysq
 			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
 			// one row
-			Cohort _0mTo1yFemalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol1);
+			Cohort _0mTo1yFemalesECV = (Cohort) row.getColumnValue("ECV." + MSPPVaccinationReportManager.ecvCol1);
 			assertNotNull(_0mTo1yFemalesECV);
 			assertEquals(1, _0mTo1yFemalesECV.getSize());
 			
-			Cohort _1To2yFemalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol2);
+			Cohort _1To2yFemalesECV = (Cohort) row.getColumnValue("ECV." + MSPPVaccinationReportManager.ecvCol2);
 			assertNotNull(_1To2yFemalesECV);
 			assertEquals(0, _1To2yFemalesECV.getSize());
 			
-			Cohort _0mTo1yMalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol3);
+			Cohort _0mTo1yMalesECV = (Cohort) row.getColumnValue("ECV." + MSPPVaccinationReportManager.ecvCol3);
 			assertNotNull(_0mTo1yMalesECV);
 			assertEquals(0, _0mTo1yMalesECV.getSize());
 			
-			Cohort _1To2yMalesECV = (Cohort) row.getColumnValue("ECV." + VaccinationReportManager.ecvCol4);
+			Cohort _1To2yMalesECV = (Cohort) row.getColumnValue("ECV." + MSPPVaccinationReportManager.ecvCol4);
 			assertNotNull(_1To2yMalesECV);
 			assertEquals(0, _1To2yMalesECV.getSize());
 		}

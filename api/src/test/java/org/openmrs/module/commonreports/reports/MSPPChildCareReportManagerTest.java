@@ -29,9 +29,9 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class MSPPChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public ChildCareReportManagerTest() throws SQLException {
+	public MSPPChildCareReportManagerTest() throws SQLException {
 		super();
 	}
 	
@@ -45,13 +45,12 @@ public class ChildCareReportManagerTest extends BaseModuleContextSensitiveMysqlB
 	private ReportDefinitionService rds;
 	
 	@Autowired
-	@Qualifier("childCareReportManager")
-	private ActivatedReportManager manager;
+	private MSPPChildCareReportManager manager;
 	
 	@Before
 	public void setUp() throws Exception {
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		executeDataSet("org/openmrs/module/commonreports/include/childCareTestDataset.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/MSPPchildCareTestDataset.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);

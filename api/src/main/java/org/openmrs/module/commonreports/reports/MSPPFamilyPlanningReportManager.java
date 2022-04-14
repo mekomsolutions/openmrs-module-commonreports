@@ -22,14 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FamilyPlanningReportManager extends ActivatedReportManager {
+public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.familyPlanning.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.familyPlanning.active", false);
 	}
 	
 	@Override
@@ -44,12 +44,12 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.familyPlanning.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.familyPlanning.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.familyPlanning.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.familyPlanning.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
@@ -94,10 +94,10 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		rd.setUuid(getUuid());
 		
 		SqlDataSetDefinition sqlDsd = new SqlDataSetDefinition();
-		sqlDsd.setName(MessageUtil.translate("commonreports.report.familyPlanning.datasetName"));
-		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.familyPlanning.datasetDescription"));
+		sqlDsd.setName(MessageUtil.translate("commonreports.report.MSPP.familyPlanning.datasetName"));
+		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.MSPP.familyPlanning.datasetDescription"));
 		
-		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/familyPlanning.sql");
+		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/MSPPfamilyPlanning.sql");
 		String sql = applyMetadataReplacements(rawSql);
 		
 		sqlDsd.setSqlQuery(sql);
@@ -119,22 +119,26 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		
 		Properties designProperties = new Properties();
 		
-		designProperties.put("newUser.label", MessageUtil.translate("commonreports.report.familyPlanning.newUser.label"));
+		designProperties.put("newUser.label",
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.newUser.label"));
 		designProperties.put("existentUser.label",
-		    MessageUtil.translate("commonreports.report.familyPlanning.existentUser.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.existentUser.label"));
 		designProperties.put("LT25years.label",
-		    MessageUtil.translate("commonreports.report.familyPlanning.LT25years.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.LT25years.label"));
 		designProperties.put("GT25years.label",
-		    MessageUtil.translate("commonreports.report.familyPlanning.GT25years.label"));
-		designProperties.put("method.label", MessageUtil.translate("commonreports.report.familyPlanning.method.label"));
-		designProperties.put("females.label", MessageUtil.translate("commonreports.report.familyPlanning.females.label"));
-		designProperties.put("males.label", MessageUtil.translate("commonreports.report.familyPlanning.males.label"));
-		designProperties.put("PC.label", MessageUtil.translate("commonreports.report.familyPlanning.PC.label"));
-		designProperties.put("PP.label", MessageUtil.translate("commonreports.report.familyPlanning.PP.label"));
-		designProperties.put("depo.label", MessageUtil.translate("commonreports.report.familyPlanning.depo.label"));
-		designProperties.put("implant.label", MessageUtil.translate("commonreports.report.familyPlanning.implant.label"));
-		designProperties.put("condoms.label", MessageUtil.translate("commonreports.report.familyPlanning.condoms.label"));
-		designProperties.put("total.label", MessageUtil.translate("commonreports.report.familyPlanning.total.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.GT25years.label"));
+		designProperties.put("method.label", MessageUtil.translate("commonreports.report.MSPP.familyPlanning.method.label"));
+		designProperties.put("females.label",
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.females.label"));
+		designProperties.put("males.label", MessageUtil.translate("commonreports.report.MSPP.familyPlanning.males.label"));
+		designProperties.put("PC.label", MessageUtil.translate("commonreports.report.MSPP.familyPlanning.PC.label"));
+		designProperties.put("PP.label", MessageUtil.translate("commonreports.report.MSPP.familyPlanning.PP.label"));
+		designProperties.put("depo.label", MessageUtil.translate("commonreports.report.MSPP.familyPlanning.depo.label"));
+		designProperties.put("implant.label",
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.implant.label"));
+		designProperties.put("condoms.label",
+		    MessageUtil.translate("commonreports.report.MSPP.familyPlanning.condoms.label"));
+		designProperties.put("total.label", MessageUtil.translate("commonreports.report.MSPP.familyPlanning.total.label"));
 		
 		reportDesign.setProperties(designProperties);
 		return Arrays.asList(reportDesign);
@@ -143,9 +147,9 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 	private String applyMetadataReplacements(String rawSql) {
 		String s = rawSql
 		        .replace(":FPAdministred",
-		            inizService.getConceptFromKey("report.familyPlanning.FPAdministred").getConceptId() + "")
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.FPAdministred").getConceptId() + "")
 		        .replace(":familyPlanning",
-		            inizService.getConceptFromKey("report.familyPlanning.familyPlanning").getConceptId() + "")
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.familyPlanning").getConceptId() + "")
 		        .replace(":femaleLT25",
 		            "person.gender = 'F' AND round(DATEDIFF(obs.obs_datetime, person.birthdate)/365.25, 1) < 25")
 		        .replace(":femaleGT25",
@@ -156,19 +160,21 @@ public class FamilyPlanningReportManager extends ActivatedReportManager {
 		            "person.gender = 'M' AND round(DATEDIFF(obs.obs_datetime, person.birthdate)/365.25, 1) >= 25")
 		        
 		        .replace(":typeOfUser",
-		            inizService.getConceptFromKey("report.familyPlanning.typeOfUser").getConceptId() + "")
-		        .replace(":new", inizService.getConceptFromKey("report.familyPlanning.new").getConceptId() + "")
-		        .replace(":existent", inizService.getConceptFromKey("report.familyPlanning.existent").getConceptId() + "")
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.typeOfUser").getConceptId() + "")
+		        .replace(":new", inizService.getConceptFromKey("report.MSPP.familyPlanning.new").getConceptId() + "")
+		        .replace(":existent",
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.existent").getConceptId() + "")
 		        
 		        .replace(":microgynon",
-		            inizService.getConceptFromKey("report.familyPlanning.microgynon").getConceptId() + "")
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.microgynon").getConceptId() + "")
 		        
-		        .replace(":microlut", inizService.getConceptFromKey("report.familyPlanning.microlut").getConceptId() + "")
+		        .replace(":microlut",
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.microlut").getConceptId() + "")
 		        
 		        .replace(":depoProveraInjection",
-		            inizService.getConceptFromKey("report.familyPlanning.depoProveraInjection").getConceptId() + "")
-		        .replace(":jadel", inizService.getConceptFromKey("report.familyPlanning.jadel").getConceptId() + "")
-		        .replace(":condom", inizService.getConceptFromKey("report.familyPlanning.condom").getConceptId() + "");
+		            inizService.getConceptFromKey("report.MSPP.familyPlanning.depoProveraInjection").getConceptId() + "")
+		        .replace(":jadel", inizService.getConceptFromKey("report.MSPP.familyPlanning.jadel").getConceptId() + "")
+		        .replace(":condom", inizService.getConceptFromKey("report.MSPP.familyPlanning.condom").getConceptId() + "");
 		return s;
 	}
 	

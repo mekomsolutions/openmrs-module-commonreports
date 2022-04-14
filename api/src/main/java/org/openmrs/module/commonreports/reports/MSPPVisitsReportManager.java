@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VisitsReportManager extends ActivatedReportManager {
+public class MSPPVisitsReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	@Qualifier("visitService")
@@ -36,7 +36,7 @@ public class VisitsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.visits.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.visits.active", false);
 	}
 	
 	@Override
@@ -51,12 +51,12 @@ public class VisitsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.visits.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.visits.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.visits.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.visits.reportDescription");
 	}
 	
 	@Override
@@ -81,7 +81,7 @@ public class VisitsReportManager extends ActivatedReportManager {
 		sqlDsd.setName(getName());
 		sqlDsd.setDescription("");
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/visits.sql");
+		String sql = getSqlString("org/openmrs/module/commonreports/sql/MSPPvisits.sql");
 		sql = applyMetadataReplacements(sql);
 		
 		sqlDsd.setSqlQuery(sql);
@@ -103,15 +103,15 @@ public class VisitsReportManager extends ActivatedReportManager {
 		Properties designProperties = new Properties();
 		designProperties.put("repeatingSections", "sheet:1,row:7,dataset:" + getName());
 		designProperties.put("columnTranslationLocale", Context.getLocale().toString());
-		designProperties.put("reportName.label", MessageUtil.translate("commonreports.report.visits.reportName"));
-		designProperties.put("date.range.label", MessageUtil.translate("commonreports.report.visits.date.range.label"));
-		designProperties.put("to.label", MessageUtil.translate("commonreports.report.visits.to.label"));
+		designProperties.put("reportName.label", MessageUtil.translate("commonreports.report.MSPP.visits.reportName"));
+		designProperties.put("date.range.label", MessageUtil.translate("commonreports.report.MSPP.visits.date.range.label"));
+		designProperties.put("to.label", MessageUtil.translate("commonreports.report.MSPP.visits.to.label"));
 		designProperties.put("natureOfVisits.label",
-		    MessageUtil.translate("commonreports.report.visits.natureOfVisits.label"));
-		designProperties.put("newVisits.label", MessageUtil.translate("commonreports.report.visits.newVisits.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.visits.natureOfVisits.label"));
+		designProperties.put("newVisits.label", MessageUtil.translate("commonreports.report.MSPP.visits.newVisits.label"));
 		designProperties.put("subsequentVisits.label",
-		    MessageUtil.translate("commonreports.report.visits.subsequentVisits.label"));
-		designProperties.put("categories.label", MessageUtil.translate("commonreports.report.visits.categories.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.visits.subsequentVisits.label"));
+		designProperties.put("categories.label", MessageUtil.translate("commonreports.report.MSPP.visits.categories.label"));
 		reportDesign.setProperties(designProperties);
 		return Arrays.asList(reportDesign);
 	}
@@ -150,13 +150,14 @@ public class VisitsReportManager extends ActivatedReportManager {
 	
 	private Map<String, String> getMetadataReplacements() {
 		Map<String, String> map = new HashMap<String, String>();
-		String prenatalVisitTypeUuid = inizService.getValueFromKey("report.visits.prenatal.visitType.uuid");
-		String familyPlanningVisitTypeUuid = inizService.getValueFromKey("report.visits.familyPlanning.visitType.uuid");
-		String[] properties = { "commonreports.report.visits.category1.label", "commonreports.report.visits.category2.label",
-		        "commonreports.report.visits.category3.label", "commonreports.report.visits.category4.label",
-		        "commonreports.report.visits.category5.label", "commonreports.report.visits.category6.label",
-		        "commonreports.report.visits.category7.label", "commonreports.report.visits.category8.label",
-		        "commonreports.report.visits.category9.label", "commonreports.report.visits.total.label" };
+		String prenatalVisitTypeUuid = inizService.getValueFromKey("report.MSPP.visits.prenatal.visitType.uuid");
+		String familyPlanningVisitTypeUuid = inizService.getValueFromKey("report.MSPP.visits.familyPlanning.visitType.uuid");
+		String[] properties = { "commonreports.report.MSPP.visits.category1.label",
+		        "commonreports.report.MSPP.visits.category2.label", "commonreports.report.MSPP.visits.category3.label",
+		        "commonreports.report.MSPP.visits.category4.label", "commonreports.report.MSPP.visits.category5.label",
+		        "commonreports.report.MSPP.visits.category6.label", "commonreports.report.MSPP.visits.category7.label",
+		        "commonreports.report.MSPP.visits.category8.label", "commonreports.report.MSPP.visits.category9.label",
+		        "commonreports.report.MSPP.visits.total.label" };
 		
 		for (String prop : properties) {
 			map.put(prop, MessageUtil.translate(prop));

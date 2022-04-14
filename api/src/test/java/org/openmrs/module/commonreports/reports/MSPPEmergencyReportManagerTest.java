@@ -28,7 +28,7 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class EmergencyReportManagerTest extends BaseModuleContextSensitiveTest {
+public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private InitializerService iniz;
@@ -44,13 +44,12 @@ public class EmergencyReportManagerTest extends BaseModuleContextSensitiveTest {
 	private ConceptService cs;
 	
 	@Autowired
-	@Qualifier("emergencyReportManager")
-	private ActivatedReportManager manager;
+	private MSPPEmergencyReportManager manager;
 	
 	@Before
 	public void setup() throws Exception {
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		executeDataSet("org/openmrs/module/commonreports/include/emergenciesReportTestDataSet.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/MSPPemergenciesReportTestDataSet.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);

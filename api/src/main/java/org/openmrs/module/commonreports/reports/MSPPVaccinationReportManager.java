@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component(CommonReportsConstants.COMPONENT_REPORTMANAGER_VACCINATION)
-public class VaccinationReportManager extends ActivatedReportManager {
+public class MSPPVaccinationReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
@@ -46,7 +46,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.vaccination.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.vaccination.active", false);
 	}
 	
 	@Override
@@ -61,12 +61,12 @@ public class VaccinationReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.vaccination.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.vaccination.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.vaccination.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.vaccination.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
@@ -78,11 +78,11 @@ public class VaccinationReportManager extends ActivatedReportManager {
 	}
 	
 	public String getVaccinationName() {
-		return MessageUtil.translate("commonreports.report.vaccination.all.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.vaccination.all.reportName");
 	}
 	
 	public String getECVName() {
-		return MessageUtil.translate("commonreports.report.ecv.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.ecv.reportName");
 	}
 	
 	public static String col1 = "";
@@ -133,9 +133,12 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		
+		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
+		ageParameterMappings.put("effectiveDate", "${endDate}");
+		
 		// Vaccinations
 		String[] vaccinationConceptsListWithSequence = inizService
-		        .getValueFromKey("report.vaccination.vaccinationConceptsListWithSequence").split(",");
+		        .getValueFromKey("report.MSPP.vaccination.vaccinationConceptsListWithSequence").split(",");
 		
 		for (String member : vaccinationConceptsListWithSequence) {
 			
@@ -144,9 +147,9 @@ public class VaccinationReportManager extends ActivatedReportManager {
 			if (!NumberUtils.isNumber(lastOne)) {
 				
 				String sqlQuery = "SELECT person_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId() + ");";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
@@ -159,12 +162,12 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				String vacName = member.substring(0, member.lastIndexOf(":"));
 				
 				String sqlQuery = "SELECT person_id FROM obs where ( obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
-				        + ") AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
+				        + ") AND concept_id =" + inizService
+				                .getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept").getConceptId()
 				        + " AND value_numeric =" + lastIndex + ")";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
@@ -178,7 +181,7 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		}
 		
 		// ECV
-		String[] ecvList = inizService.getValueFromKey("report.vaccination.ecvList").split(",");
+		String[] ecvList = inizService.getValueFromKey("report.MSPP.vaccination.ecvList").split(",");
 		String ecvQuery = "SELECT DISTINCT person_id FROM obs where 1=1";
 		
 		for (String member : ecvList) {
@@ -187,10 +190,10 @@ public class VaccinationReportManager extends ActivatedReportManager {
 			if (!NumberUtils.isNumber(lastOne)) {
 				ecvQuery = ecvQuery
 				        + " AND person_id IN (SELECT person_id FROM obs where obs_group_id IN (SELECT obs_group_id FROM obs where concept_id="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
 				        + " and value_coded=" + conceptService.getConceptByUuid(member).getConceptId()
 				        + ") AND concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime <= :onOrBefore )";
 				
 			} else {
@@ -199,12 +202,12 @@ public class VaccinationReportManager extends ActivatedReportManager {
 				
 				ecvQuery = ecvQuery
 				        + " AND person_id IN ( SELECT person_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where obs_group_id IN ( SELECT obs_group_id FROM obs where concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinations").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
 				        + " and value_coded = " + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + " ) AND concept_id = "
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationDateConcept").getConceptId()
-				        + " and value_datetime <= :onOrBefore ) AND concept_id ="
-				        + inizService.getConceptFromKey("report.vaccination.vaccinationSequenceNumberConcept").getConceptId()
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
+				        + " and value_datetime <= :onOrBefore ) AND concept_id =" + inizService
+				                .getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept").getConceptId()
 				        + " and value_numeric = " + lastIndex + "  AND :onOrAfter = :onOrAfter)";
 			}
 		}
@@ -228,50 +231,52 @@ public class VaccinationReportManager extends ActivatedReportManager {
 		_0mTo1y.setMinAgeUnit(DurationUnit.MONTHS);
 		_0mTo1y.setMaxAge(11);
 		_0mTo1y.setMaxAgeUnit(DurationUnit.MONTHS);
+		_0mTo1y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		AgeCohortDefinition _1To2y = new AgeCohortDefinition();
 		_1To2y.setMinAge(12);
 		_1To2y.setMinAgeUnit(DurationUnit.MONTHS);
 		_1To2y.setMaxAge(23);
 		_1To2y.setMaxAgeUnit(DurationUnit.MONTHS);
+		_1To2y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		VisitCohortDefinition _prenatal = new VisitCohortDefinition();
 		_prenatal.setVisitTypeList(Arrays.asList(Context.getVisitService()
-		        .getVisitTypeByUuid(inizService.getValueFromKey("report.vaccination.prenatalVisitType"))));
+		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.vaccination.prenatalVisitType"))));
 		
-		vaccination.addColumn(col1, createCohortComposition(_0mTo1y, females), null);
-		vaccination.addColumn(col2, createCohortComposition(_1To2y, females), null);
-		vaccination.addColumn(col3, createCohortComposition(_0mTo1y, males), null);
-		vaccination.addColumn(col4, createCohortComposition(_1To2y, males), null);
+		vaccination.addColumn(col1, createCohortComposition(_0mTo1y, females), ageParameterMappings);
+		vaccination.addColumn(col2, createCohortComposition(_1To2y, females), ageParameterMappings);
+		vaccination.addColumn(col3, createCohortComposition(_0mTo1y, males), ageParameterMappings);
+		vaccination.addColumn(col4, createCohortComposition(_1To2y, males), ageParameterMappings);
 		vaccination.addColumn(col5, createCohortComposition(_prenatal, females), null);
 		
-		ecv.addColumn(col1, createCohortComposition(_0mTo1y, females), null);
-		ecv.addColumn(col2, createCohortComposition(_1To2y, females), null);
-		ecv.addColumn(col3, createCohortComposition(_0mTo1y, males), null);
-		ecv.addColumn(col4, createCohortComposition(_1To2y, males), null);
+		ecv.addColumn(col1, createCohortComposition(_0mTo1y, females), ageParameterMappings);
+		ecv.addColumn(col2, createCohortComposition(_1To2y, females), ageParameterMappings);
+		ecv.addColumn(col3, createCohortComposition(_0mTo1y, males), ageParameterMappings);
+		ecv.addColumn(col4, createCohortComposition(_1To2y, males), ageParameterMappings);
 		
 		return rd;
 	}
 	
 	private void setColumnNames() {
-		col1 = MessageUtil.translate("commonreports.report.vaccination.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.females.label");
-		col2 = MessageUtil.translate("commonreports.report.vaccination.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.females.label");
-		col3 = MessageUtil.translate("commonreports.report.vaccination.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
-		col4 = MessageUtil.translate("commonreports.report.vaccination.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
-		col5 = MessageUtil.translate("commonreports.report.vaccination.females.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.prenatal.label");
-		ecvCol1 = MessageUtil.translate("commonreports.report.vaccination.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.females.label");
-		ecvCol2 = MessageUtil.translate("commonreports.report.vaccination.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.females.label");
-		ecvCol3 = MessageUtil.translate("commonreports.report.vaccination.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
-		ecvCol4 = MessageUtil.translate("commonreports.report.vaccination.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.vaccination.males.label");
+		col1 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.females.label");
+		col2 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.females.label");
+		col3 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.males.label");
+		col4 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.males.label");
+		col5 = MessageUtil.translate("commonreports.report.MSPP.vaccination.females.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.prenatal.label");
+		ecvCol1 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.females.label");
+		ecvCol2 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.females.label");
+		ecvCol3 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.males.label");
+		ecvCol4 = MessageUtil.translate("commonreports.report.MSPP.vaccination.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.vaccination.males.label");
 	}
 	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {

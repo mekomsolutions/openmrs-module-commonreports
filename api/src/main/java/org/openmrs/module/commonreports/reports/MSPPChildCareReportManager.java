@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChildCareReportManager extends ActivatedReportManager {
+public class MSPPChildCareReportManager extends ActivatedReportManager {
 	
 	private String aCol1 = "";
 	
@@ -87,7 +87,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.childCare.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.childCare.active", false);
 	}
 	
 	@Override
@@ -97,12 +97,12 @@ public class ChildCareReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.childCare.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.childCare.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.childCare.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.childCare.reportDescription");
 	}
 	
 	@Override
@@ -174,12 +174,13 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		    under6m, _6To23m, _24To59m, parameterMappings);
 		
 		// Adding datasets to the report
-		reportDef.addDataSetDefinition(MessageUtil.translate("commonreports.report.childCare.characteristics.dataset.name"),
+		reportDef.addDataSetDefinition(
+		    MessageUtil.translate("commonreports.report.MSPP.childCare.characteristics.dataset.name"),
 		    Mapped.mapStraightThrough(characteristicsDatasetDefinition));
-		reportDef.addDataSetDefinition(MessageUtil.translate("commonreports.report.childCare.fateOfChild.dataset.name"),
+		reportDef.addDataSetDefinition(MessageUtil.translate("commonreports.report.MSPP.childCare.fateOfChild.dataset.name"),
 		    Mapped.mapStraightThrough(fateOfChildDatasetDef));
 		reportDef.addDataSetDefinition(
-		    MessageUtil.translate("commonreports.report.childCare.vitaminASupplimentation.dataset.name"),
+		    MessageUtil.translate("commonreports.report.MSPP.childCare.vitaminASupplimentation.dataset.name"),
 		    Mapped.mapStraightThrough(vitaminASupplimentationDatasetDef));
 		
 		return reportDef;
@@ -239,7 +240,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		
 		// Children seen for the first time + MUAC measurement
 		Concept muacMeasurementConcept = inizService
-		        .getConceptFromKey("report.childCare.muacMeasurement.numericQuestion.concept");
+		        .getConceptFromKey("report.MSPP.childCare.muacMeasurement.numericQuestion.concept");
 		
 		NumericObsCohortDefinition muacMeasured = new NumericObsCohortDefinition();
 		muacMeasured.setQuestion(muacMeasurementConcept);
@@ -251,8 +252,8 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		
 		// Child seen for the first time + weighed / measured
 		NumericObsCohortDefinition weightMeasured = new NumericObsCohortDefinition();
-		weightMeasured
-		        .setQuestion(inizService.getConceptFromKey("report.childCare.weightMeasurement.numericQuestion.concept"));
+		weightMeasured.setQuestion(
+		    inizService.getConceptFromKey("report.MSPP.childCare.weightMeasurement.numericQuestion.concept"));
 		weightMeasured.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		weightMeasured.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition childrenMeasuredWeight = createCohortComposition(childrenSeenFirstTime, weightMeasured);
@@ -298,19 +299,21 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		characteristicsDatasetDef.addColumn(aCol9, createCohortComposition(allGenders, _24To59m), ageParameterMappings);
 		
 		// adding rows
-		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.total.children.seen"),
+		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.MSPP.childCare.total.children.seen"),
 		    totalChildrenSeen, visitParameterMappings);
 		characteristicsDatasetDef.addRow(
-		    MessageUtil.translate("commonreports.report.childCare.children.seen.forThe.firstTime"), childrenSeenFirstTime,
-		    parameterMappings);
-		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.children.measuredFor.muac"),
-		    childrenMeasuredForMuac, parameterMappings);
-		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.children.measuredFor.weight"),
-		    childrenMeasuredWeight, parameterMappings);
+		    MessageUtil.translate("commonreports.report.MSPP.childCare.children.seen.forThe.firstTime"),
+		    childrenSeenFirstTime, parameterMappings);
 		characteristicsDatasetDef.addRow(
-		    MessageUtil.translate("commonreports.report.childCare.children.with.muac.between115And125"),
+		    MessageUtil.translate("commonreports.report.MSPP.childCare.children.measuredFor.muac"), childrenMeasuredForMuac,
+		    parameterMappings);
+		characteristicsDatasetDef.addRow(
+		    MessageUtil.translate("commonreports.report.MSPP.childCare.children.measuredFor.weight"), childrenMeasuredWeight,
+		    parameterMappings);
+		characteristicsDatasetDef.addRow(
+		    MessageUtil.translate("commonreports.report.MSPP.childCare.children.with.muac.between115And125"),
 		    childrenMeasuredForMuacBetween115And125, parameterMappings);
-		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.with.muac.lessThan115"),
+		characteristicsDatasetDef.addRow(MessageUtil.translate("commonreports.report.MSPP.childCare.with.muac.lessThan115"),
 		    childrenMeasuredForMuacLessThan115, parameterMappings);
 		
 		return characteristicsDatasetDef;
@@ -321,9 +324,10 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		CohortCrossTabDataSetDefinition fateOfChildDatasetDef = new CohortCrossTabDataSetDefinition();
 		fateOfChildDatasetDef.addParameters(getParameters());
 		
-		Concept resultOfVisitQuestion = inizService.getConceptFromKey("report.childCare.resultOfVisitQuestion.concept");
+		Concept resultOfVisitQuestion = inizService.getConceptFromKey("report.MSPP.childCare.resultOfVisitQuestion.concept");
 		
-		VisitType vt = vs.getVisitTypeByUuid(inizService.getValueFromKey("report.childCare.malnutrition.visitType.uuid"));
+		VisitType vt = vs
+		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.childCare.malnutrition.visitType.uuid"));
 		VisitCohortDefinition malnutritionChildren = new VisitCohortDefinition();
 		malnutritionChildren.setVisitTypeList(Arrays.asList(vt));
 		
@@ -332,8 +336,9 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		firstVisitChildren.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		firstVisitChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		firstVisitChildren.setOperator(SetComparator.IN);
-		firstVisitChildren.setQuestion(inizService.getConceptFromKey("report.childCare.firstVisitQuestion.concept"));
-		firstVisitChildren.setValueList(Arrays.asList(inizService.getConceptFromKey("report.childCare.yesAnswer.concept")));
+		firstVisitChildren.setQuestion(inizService.getConceptFromKey("report.MSPP.childCare.firstVisitQuestion.concept"));
+		firstVisitChildren
+		        .setValueList(Arrays.asList(inizService.getConceptFromKey("report.MSPP.childCare.yesAnswer.concept")));
 		
 		CompositionCohortDefinition childrenOfFirstVisit = createCohortComposition(malnutritionChildren, firstVisitChildren);
 		childrenOfFirstVisit.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
@@ -344,7 +349,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		curedChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		curedChildren.setOperator(SetComparator.IN);
 		curedChildren.setQuestion(resultOfVisitQuestion);
-		Concept curedConcept = inizService.getConceptFromKey("report.childCare.resultOfVisit.curedAnswer.concept");
+		Concept curedConcept = inizService.getConceptFromKey("report.MSPP.childCare.resultOfVisit.curedAnswer.concept");
 		curedChildren.setValueList(Arrays.asList(curedConcept));
 		CompositionCohortDefinition curedMalnutritionChildren = createCohortComposition(malnutritionChildren, curedChildren);
 		curedMalnutritionChildren.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
@@ -355,7 +360,8 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		withdrawnChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		withdrawnChildren.setOperator(SetComparator.IN);
 		withdrawnChildren.setQuestion(resultOfVisitQuestion);
-		Concept withdrawalConcept = inizService.getConceptFromKey("report.childCare.resultOfVisit.withdrawalAnswer.concept");
+		Concept withdrawalConcept = inizService
+		        .getConceptFromKey("report.MSPP.childCare.resultOfVisit.withdrawalAnswer.concept");
 		withdrawnChildren.setValueList(Arrays.asList(withdrawalConcept));
 		CompositionCohortDefinition withdrawnMalnutritionChildren = createCohortComposition(malnutritionChildren,
 		    withdrawnChildren);
@@ -369,7 +375,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		fateOfChildDatasetDef.addColumn(bCol3, _24To59m, ageParameterMappings);
 		
 		// adding rows
-		fateOfChildDatasetDef.addRow(MessageUtil.translate("commonreports.report.childCare.first.visit.children"),
+		fateOfChildDatasetDef.addRow(MessageUtil.translate("commonreports.report.MSPP.childCare.first.visit.children"),
 		    childrenOfFirstVisit, parameterMappings);
 		fateOfChildDatasetDef.addRow(curedConcept.getDisplayString(), curedMalnutritionChildren, parameterMappings);
 		fateOfChildDatasetDef.addRow(withdrawalConcept.getDisplayString(), withdrawnMalnutritionChildren, parameterMappings);
@@ -382,9 +388,9 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		CohortCrossTabDataSetDefinition vitaminASupplimentationDatasetDef = new CohortCrossTabDataSetDefinition();
 		vitaminASupplimentationDatasetDef.addParameters(getParameters());
 		
-		Concept dosageQuestion = inizService.getConceptFromKey("report.childCare.dose.numericQuestion.concept");
+		Concept dosageQuestion = inizService.getConceptFromKey("report.MSPP.childCare.dose.numericQuestion.concept");
 		
-		Concept vaccinationsQuestion = inizService.getConceptFromKey("report.childCare.vaccinationsQuestion.concept");
+		Concept vaccinationsQuestion = inizService.getConceptFromKey("report.MSPP.childCare.vaccinationsQuestion.concept");
 		
 		// dose 1
 		NumericObsCohortDefinition dose1 = new NumericObsCohortDefinition();
@@ -419,7 +425,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		vitaminA.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		vitaminA.setOperator(SetComparator.IN);
 		vitaminA.setQuestion(vaccinationsQuestion);
-		Concept vitaminAConcept = inizService.getConceptFromKey("report.childCare.vitaminA.concept");
+		Concept vitaminAConcept = inizService.getConceptFromKey("report.MSPP.childCare.vitaminA.concept");
 		vitaminA.setValueList(Arrays.asList(vitaminAConcept));
 		vitaminA.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
@@ -429,7 +435,7 @@ public class ChildCareReportManager extends ActivatedReportManager {
 		albendazole.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		albendazole.setOperator(SetComparator.IN);
 		albendazole.setQuestion(vaccinationsQuestion);
-		Concept albendazoleConcept = inizService.getConceptFromKey("report.childCare.albendazole.concept");
+		Concept albendazoleConcept = inizService.getConceptFromKey("report.MSPP.childCare.albendazole.concept");
 		albendazole.setValueList(Arrays.asList(albendazoleConcept));
 		albendazole.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
@@ -451,47 +457,47 @@ public class ChildCareReportManager extends ActivatedReportManager {
 	}
 	
 	private void setColumnNames() {
-		aCol1 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.males.label");
-		aCol2 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.females.label");
-		aCol3 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.total.label");
-		aCol4 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.males.label");
-		aCol5 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.females.label");
-		aCol6 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.total.label");
-		aCol7 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.males.label");
-		aCol8 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.females.label");
-		aCol9 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.total.label");
+		aCol1 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.males.label");
+		aCol2 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.females.label");
+		aCol3 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.total.label");
+		aCol4 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.males.label");
+		aCol5 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.females.label");
+		aCol6 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.total.label");
+		aCol7 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.males.label");
+		aCol8 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.females.label");
+		aCol9 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.total.label");
 		
-		bCol1 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label");
-		bCol2 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label");
-		bCol3 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label");
+		bCol1 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label");
+		bCol2 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label");
+		bCol3 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label");
 		
-		cCol1 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose1.label");
-		cCol2 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose2.label");
-		cCol3 = MessageUtil.translate("commonreports.report.childCare.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose3.label");
-		cCol4 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose1.label");
-		cCol5 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose2.label");
-		cCol6 = MessageUtil.translate("commonreports.report.childCare.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose3.label");
-		cCol7 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose1.label");
-		cCol8 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose2.label");
-		cCol9 = MessageUtil.translate("commonreports.report.childCare.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.childCare.dose3.label");
+		cCol1 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose1.label");
+		cCol2 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose2.label");
+		cCol3 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose3.label");
+		cCol4 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose1.label");
+		cCol5 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose2.label");
+		cCol6 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose3.label");
+		cCol7 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose1.label");
+		cCol8 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose2.label");
+		cCol9 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose3.label");
 	}
 	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {

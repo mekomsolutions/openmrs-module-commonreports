@@ -3,10 +3,8 @@ package org.openmrs.module.commonreports.reports;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-
+import java.util.List;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.DatabaseConfig;
@@ -18,7 +16,9 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.api.ConceptService;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
+import org.openmrs.module.commonreports.reports.MSPPLabReportManager;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -32,18 +32,20 @@ import org.openmrs.module.reporting.report.definition.service.ReportDefinitionSe
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
+import static java.math.BigDecimal.ONE;
+import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-public class VisitsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class MSPPLabReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public VisitsReportManagerTest() throws SQLException {
+	public MSPPLabReportManagerTest() throws SQLException {
 		super();
 	}
 	
@@ -57,7 +59,11 @@ public class VisitsReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 	private ReportDefinitionService rds;
 	
 	@Autowired
-	private VisitsReportManager manager;
+	@Qualifier("conceptService")
+	private ConceptService cs;
+	
+	@Autowired
+	private MSPPLabReportManager manager;
 	
 	@Override
 	public void executeDataSet(IDataSet dataset) {
@@ -84,7 +90,7 @@ public class VisitsReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 	public void setUp() throws Exception {
 		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		executeDataSet("org/openmrs/module/commonreports/include/visitsReportTestDataset.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/MSPPlabTestDataset.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
@@ -97,41 +103,27 @@ public class VisitsReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 	}
 	
 	@Test
-	public void setupReport_shouldCreateExcelDesign() throws Exception {
+	public void setupReport_shouldCreateExcelTemplateDesign() throws Exception {
 		// setup
 		
 		// replay
 		ReportManagerUtil.setupReport(manager);
 		
 		// verif
-		ReportDesign design = rs.getReportDesignByUuid("4e1c1f7a-bbfe-44ec-a36a-3005e3fc50bd");
+		ReportDesign design = rs.getReportDesignByUuid("988d3408-9aac-4b6f-9cab-77c3f02beef5");
 		
-		Assert.assertEquals("sheet:1,row:7,dataset:" + manager.getName(), design.getProperties().get("repeatingSections"));
 		Assert.assertEquals(1, design.getResources().size());
 		
 		ReportDefinition def = design.getReportDefinition();
-		Assert.assertEquals("8613f380-8f39-492f-b46b-9802482bc315", def.getUuid());
-		
+		Assert.assertEquals("14f9b6a6-e176-467c-83ee-6281e743834d", def.getUuid());
 	}
 	
 	@Test
 	public void testReport() throws Exception {
 		// setup
-		Map<String, String> expectedValuesMap = new HashMap<String, String>();
-		expectedValuesMap.put("Children under one year old", "null:null");
-		expectedValuesMap.put("Children aged 1 to 4 years old", "1.0:null");
-		expectedValuesMap.put("Children aged 5 to 9 years old", "1.0:null");
-		expectedValuesMap.put("Children aged 10 to 14", "4.0:null");
-		expectedValuesMap.put("Children aged 10 to 14", "4.0:null");
-		expectedValuesMap.put("Young adults aged 20 to 24", "3.0:1.0");
-		expectedValuesMap.put("Pregnant women", "null:3.0");
-		expectedValuesMap.put("Family planing clients", "null:2.0");
-		expectedValuesMap.put("Other adults", "3.0:null");
-		expectedValuesMap.put("Total", "12.0:6.0");
-		
 		EvaluationContext context = new EvaluationContext();
-		context.addParameterValue("startDate", DateUtil.parseDate("2021-03-10", "yyyy-MM-dd"));
-		context.addParameterValue("endDate", DateUtil.parseDate("2021-06-20", "yyyy-MM-dd"));
+		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
+		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();
@@ -140,14 +132,24 @@ public class VisitsReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 		// verify
 		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			String entry = (String) row.getColumnValue("Categories");
-			
-			assertTrue(entry, expectedValuesMap.containsKey(entry));
-			assertEquals(entry, expectedValuesMap.get(entry).split(":")[0],
-			    String.valueOf(row.getColumnValue("New_visits")));
-			assertEquals(entry, expectedValuesMap.get(entry).split(":")[1],
-			    String.valueOf(row.getColumnValue("Subsequent_visits")));
+			assertEquals(ONE, row.getColumnValue("sputum"));
+			assertEquals(ONE, row.getColumnValue("sputumPositive"));
+			assertEquals(ONE, row.getColumnValue("malariaRapid"));
+			assertEquals(ONE, row.getColumnValue("malariaRapidPositive"));
+			assertEquals(ONE, row.getColumnValue("malariaMicro"));
+			assertEquals(ONE, row.getColumnValue("malariaMicroPositive"));
+			assertEquals(BigDecimal.valueOf(2), row.getColumnValue("malariaTotal"));
+			assertEquals(BigDecimal.valueOf(2), row.getColumnValue("malariaPositive"));
+			assertEquals(ONE, row.getColumnValue("CBC"));
+			assertEquals(ONE, row.getColumnValue("sickling"));
+			assertEquals(ONE, row.getColumnValue("sicklingPositive"));
+			assertEquals(ONE, row.getColumnValue("bloodGroup"));
+			assertEquals(ONE, row.getColumnValue("urinalysis"));
+			assertEquals(ONE, row.getColumnValue("otherSickling"));
+			assertEquals(ONE, row.getColumnValue("otherSicklingPositive"));
+			assertEquals(ONE, row.getColumnValue("otherbloodGroup"));
 		}
+		
 	}
 	
 	private void updateDatabase(String filename) throws Exception {

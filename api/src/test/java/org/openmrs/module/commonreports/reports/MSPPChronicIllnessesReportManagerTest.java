@@ -28,7 +28,7 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class ChronicIllnessesReportManagerTest extends BaseModuleContextSensitiveTest {
+public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSensitiveTest {
 	
 	@Autowired
 	private InitializerService iniz;
@@ -44,13 +44,12 @@ public class ChronicIllnessesReportManagerTest extends BaseModuleContextSensitiv
 	private ConceptService cs;
 	
 	@Autowired
-	@Qualifier("chronicIllnessesReportManager")
-	private ActivatedReportManager manager;
+	private MSPPChronicIllnessesReportManager manager;
 	
 	@Before
 	public void setup() throws Exception {
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
-		executeDataSet("org/openmrs/module/commonreports/include/chronicIllnesses.xml");
+		executeDataSet("org/openmrs/module/commonreports/include/MSPPchronicIllnesses.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
 		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);

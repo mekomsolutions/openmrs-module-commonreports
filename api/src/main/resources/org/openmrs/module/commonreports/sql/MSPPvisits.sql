@@ -2,18 +2,18 @@ SELECT tab1.`Category` 'Categories',
                        tab4.`New visits` 'New_visits',
                                          tab4.`Subsequent visits` 'Subsequent_visits'
 FROM
-  (SELECT ":commonreports.report.visits.category1.label" AS 'Category'
-   UNION ALL SELECT ":commonreports.report.visits.category2.label"
-   UNION ALL SELECT ":commonreports.report.visits.category3.label"
-   UNION ALL SELECT ":commonreports.report.visits.category4.label"
-   UNION ALL SELECT ":commonreports.report.visits.category5.label"
-   UNION ALL SELECT ":commonreports.report.visits.category6.label"
-   UNION ALL SELECT ":commonreports.report.visits.category7.label"
-   UNION ALL SELECT ":commonreports.report.visits.category8.label"
-   UNION ALL SELECT ":commonreports.report.visits.category9.label"
-   UNION ALL SELECT ":commonreports.report.visits.total.label") tab1
+  (SELECT ":commonreports.report.MSPP.visits.category1.label" AS 'Category'
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category2.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category3.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category4.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category5.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category6.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category7.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category8.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category9.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.total.label") tab1
 LEFT OUTER JOIN
-  (SELECT COALESCE(tab3.`Category`, ":commonreports.report.visits.total.label") 'Category',
+  (SELECT COALESCE(tab3.`Category`, ":commonreports.report.MSPP.visits.total.label") 'Category',
                                                   SUM(tab3.`New visits`) 'New visits',
                                                                                   SUM(tab3.`Subsequent visits`) 'Subsequent visits'
    FROM
@@ -22,24 +22,24 @@ LEFT OUTER JOIN
                                                                nullif(sum(tab2.`Subsequent visits`), 0) 'Subsequent visits'
       FROM
         (SELECT (CASE
-                     WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 1 THEN ":commonreports.report.visits.category1.label"
+                     WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 1 THEN ":commonreports.report.MSPP.visits.category1.label"
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 1
-                          AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 5 THEN ":commonreports.report.visits.category2.label"
+                          AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 5 THEN ":commonreports.report.MSPP.visits.category2.label"
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 5
-                          AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 10 THEN ":commonreports.report.visits.category3.label"
+                          AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 10 THEN ":commonreports.report.MSPP.visits.category3.label"
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 10
-                          AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 15 THEN ":commonreports.report.visits.category4.label"
+                          AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 15 THEN ":commonreports.report.MSPP.visits.category4.label"
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 15
                           AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 20
                           AND v.visit_type_id <> :prenatalVisitTypeId
-                          AND v.visit_type_id <> :familyPlanningVisitTypeId THEN ":commonreports.report.visits.category5.label"
+                          AND v.visit_type_id <> :familyPlanningVisitTypeId THEN ":commonreports.report.MSPP.visits.category5.label"
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 20
                           AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 25
                           AND v.visit_type_id <> :prenatalVisitTypeId
-                          AND v.visit_type_id <> :familyPlanningVisitTypeId THEN ":commonreports.report.visits.category6.label"
-                     WHEN v.visit_type_id = :prenatalVisitTypeId THEN ":commonreports.report.visits.category7.label"
-                     WHEN v.visit_type_id = :familyPlanningVisitTypeId THEN ":commonreports.report.visits.category8.label"
-                     ELSE ":commonreports.report.visits.category9.label"
+                          AND v.visit_type_id <> :familyPlanningVisitTypeId THEN ":commonreports.report.MSPP.visits.category6.label"
+                     WHEN v.visit_type_id = :prenatalVisitTypeId THEN ":commonreports.report.MSPP.visits.category7.label"
+                     WHEN v.visit_type_id = :familyPlanningVisitTypeId THEN ":commonreports.report.MSPP.visits.category8.label"
+                     ELSE ":commonreports.report.MSPP.visits.category9.label"
                  END) 'Category',
                       IF(IFNULL(prev_visit.visit_id, 'null') = 'null', '1', ' ') 'New visits',
                                                                                  IF(IFNULL(prev_visit.visit_id, 'null') = 'null', ' ', '1') 'Subsequent visits'

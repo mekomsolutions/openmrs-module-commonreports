@@ -34,14 +34,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component(CommonReportsConstants.COMPONENT_REPORTMANAGER_ANTENATAL)
-public class AntenatalReportManager extends ActivatedReportManager {
+public class MSPPAntenatalReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.antenatal.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.antenatal.active", false);
 	}
 	
 	@Override
@@ -56,12 +56,12 @@ public class AntenatalReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.antenatal.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.antenatal.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.antenatal.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.antenatal.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
@@ -73,11 +73,11 @@ public class AntenatalReportManager extends ActivatedReportManager {
 	}
 	
 	public String getGestationName() {
-		return MessageUtil.translate("commonreports.report.antenatalGestation.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.reportName");
 	}
 	
 	public String getRisksName() {
-		return MessageUtil.translate("commonreports.report.antenatalRisks.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.reportName");
 	}
 	
 	public static String col1 = "";
@@ -126,7 +126,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		
-		String[] gestationDurations = inizService.getValueFromKey("report.antenatal.gestationDuration").split(",");
+		String[] gestationDurations = inizService.getValueFromKey("report.MSPP.antenatal.gestationDuration").split(",");
 		for (String member : gestationDurations) {
 			
 			if (member.equals("Total")) {
@@ -135,8 +135,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 				gestationDuration.setOperator(SetComparator.IN);
 				gestationDuration
-				        .setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
-				gestationDuration.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
+				        .setGroupingConcept(inizService.getConceptFromKey("report.MSPP.antenatal.estimatedGestationalAge"));
+				gestationDuration.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.numberOfWeeks"));
 				
 				antenatalGestation.addRow(member, gestationDuration, parameterMappings);
 			} else {
@@ -147,8 +147,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 				
 				NumericObsCohortDefinition gestationDuration = new NumericObsCohortDefinition();
 				gestationDuration
-				        .setGroupingConcept(inizService.getConceptFromKey("report.antenatal.estimatedGestationalAge"));
-				gestationDuration.setQuestion(inizService.getConceptFromKey("report.antenatal.numberOfWeeks"));
+				        .setGroupingConcept(inizService.getConceptFromKey("report.MSPP.antenatal.estimatedGestationalAge"));
+				gestationDuration.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.numberOfWeeks"));
 				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 				gestationDuration.setValue1(Double.parseDouble(firstNumber));
@@ -157,7 +157,7 @@ public class AntenatalReportManager extends ActivatedReportManager {
 				gestationDuration.setOperator2(RangeComparator.LESS_EQUAL);
 				
 				antenatalGestation.addRow(
-				    member + " " + MessageUtil.translate("commonreports.report.antenatalGestation.gestationWeeks"),
+				    member + " " + MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.gestationWeeks"),
 				    gestationDuration, parameterMappings);
 				
 			}
@@ -174,44 +174,44 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		riskyPregnancy.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		riskyPregnancy.setOperator(SetComparator.IN);
 		
-		riskyPregnancy.setQuestion(inizService.getConceptFromKey("report.antenatal.riskyPregnancy"));
-		riskyPregnancy.setValueList(Arrays.asList(inizService.getConceptFromKey("report.antenatal.yes")));
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.riskyPregnancy"), riskyPregnancy,
-		    parameterMappings);
+		riskyPregnancy.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.riskyPregnancy"));
+		riskyPregnancy.setValueList(Arrays.asList(inizService.getConceptFromKey("report.MSPP.antenatal.yes")));
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.riskyPregnancy"),
+		    riskyPregnancy, parameterMappings);
 		
 		// Iron def ANC visit Pregnancies
 		CodedObsCohortDefinition anemia = new CodedObsCohortDefinition();
 		anemia.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		anemia.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		anemia.setOperator(SetComparator.IN);
-		anemia.setQuestion(inizService.getConceptFromKey("report.antenatal.codedDiagnosis"));
-		anemia.setValueList(Arrays.asList(inizService.getConceptFromKey("report.antenatal.anemiaIronDeficiency")));
+		anemia.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.codedDiagnosis"));
+		anemia.setValueList(Arrays.asList(inizService.getConceptFromKey("report.MSPP.antenatal.anemiaIronDeficiency")));
 		
 		VisitCohortDefinition _prenatal = new VisitCohortDefinition();
 		_prenatal.setVisitTypeList(Arrays.asList(Context.getVisitService()
-		        .getVisitTypeByUuid(inizService.getValueFromKey("report.antenatal.prenatalVisitType"))));
+		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.antenatal.prenatalVisitType"))));
 		CompositionCohortDefinition ccd = new CompositionCohortDefinition();
 		ccd.initializeFromElements(_prenatal, anemia, female);
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.ironDefANC"), ccd,
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.ironDefANC"), ccd,
 		    parameterMappings);
 		
 		// Prenatal visit + Fer Folate Co prescribed
 		SqlCohortDefinition sqd = new SqlCohortDefinition("select patient_id from orders where concept_id="
-		        + inizService.getConceptFromKey("report.antenatal.ferrousFolate").getConceptId()
+		        + inizService.getConceptFromKey("report.MSPP.antenatal.ferrousFolate").getConceptId()
 		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
-		        + inizService.getValueFromKey("report.antenatal.drugOrder")
+		        + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
 		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
 		
 		sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition ccd1 = new CompositionCohortDefinition();
 		ccd1.initializeFromElements(_prenatal, sqd, female);
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalIron"), ccd1,
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.prenatalIron"), ccd1,
 		    parameterMappings);
 		
 		// Prenatal visit treated for Fe def (Same as above--> Prenatal visit + Fer
 		// Folate Co prescribed)
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalIronDef"), ccd1,
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.prenatalIronDef"), ccd1,
 		    parameterMappings);
 		
 		// Mothers with a birth plan
@@ -221,17 +221,17 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		birthPlan.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		birthPlan.setOperator(SetComparator.IN);
 		
-		birthPlan.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
+		birthPlan.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		
 		List<Concept> visitNumbers = new ArrayList<Concept>();
-		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.one"));
-		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.two"));
-		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.three"));
-		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.four"));
-		visitNumbers.add(inizService.getConceptFromKey("report.antenatal.fivePlus"));
+		visitNumbers.add(inizService.getConceptFromKey("report.MSPP.antenatal.one"));
+		visitNumbers.add(inizService.getConceptFromKey("report.MSPP.antenatal.two"));
+		visitNumbers.add(inizService.getConceptFromKey("report.MSPP.antenatal.three"));
+		visitNumbers.add(inizService.getConceptFromKey("report.MSPP.antenatal.four"));
+		visitNumbers.add(inizService.getConceptFromKey("report.MSPP.antenatal.fivePlus"));
 		
 		birthPlan.setValueList(visitNumbers);
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.motherBirthPlan"), birthPlan,
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.motherBirthPlan"), birthPlan,
 		    parameterMappings);
 		
 		// Prenatal visit + malaria test positive + chloroquine co prescribed
@@ -240,48 +240,48 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		malaria.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		malaria.setOperator(SetComparator.IN);
 		
-		malaria.setQuestion(inizService.getConceptFromKey("report.antenatal.malaria"));
+		malaria.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.malaria"));
 		
 		List<Concept> malariaPositiveConceptSet = new ArrayList<Concept>();
-		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.antenatal.positive"));
-		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.antenatal.onePlus"));
-		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.antenatal.twoPlus"));
-		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.antenatal.threePlus"));
-		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.antenatal.fourPlus"));
+		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.MSPP.antenatal.positive"));
+		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.MSPP.antenatal.onePlus"));
+		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.MSPP.antenatal.twoPlus"));
+		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.MSPP.antenatal.threePlus"));
+		malariaPositiveConceptSet.add(inizService.getConceptFromKey("report.MSPP.antenatal.fourPlus"));
 		
 		malaria.setValueList(malariaPositiveConceptSet);
 		
 		SqlCohortDefinition sql = new SqlCohortDefinition("select patient_id from orders where concept_id="
-		        + inizService.getConceptFromKey("report.antenatal.chloroquine").getConceptId()
+		        + inizService.getConceptFromKey("report.MSPP.antenatal.chloroquine").getConceptId()
 		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
-		        + inizService.getValueFromKey("report.antenatal.drugOrder")
+		        + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
 		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
 		sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition ccd2 = new CompositionCohortDefinition();
 		ccd2.initializeFromElements(_prenatal, sql, malaria, female);
 		antenatalRisks.addRow(
-		    MessageUtil.translate("commonreports.report.antenatalRisks.prenatalMalariaPositiveChloroquine"), ccd2,
+		    MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.prenatalMalariaPositiveChloroquine"), ccd2,
 		    parameterMappings);
 		
 		// Prenatal + MUAC =<21cm
 		NumericObsCohortDefinition muac = new NumericObsCohortDefinition();
 		muac.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		muac.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-		muac.setQuestion(inizService.getConceptFromKey("report.antenatal.midUpperArmCircumference"));
+		muac.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.midUpperArmCircumference"));
 		muac.setOperator1(RangeComparator.GREATER_EQUAL);
 		muac.setValue1(0.0);
 		muac.setOperator2(RangeComparator.LESS_EQUAL);
 		muac.setValue2(21.0);
 		CompositionCohortDefinition ccd3 = new CompositionCohortDefinition();
 		ccd3.initializeFromElements(_prenatal, muac, female);
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.prenatalMUAC=<21cm"), ccd3,
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.prenatalMUAC=<21cm"), ccd3,
 		    parameterMappings);
 		
 		// Women + fer folate co prescribed
 		VisitService vs = Context.getVisitService();
 		List<VisitType> lVT = new ArrayList<VisitType>();
-		String[] otherVisitTypes = inizService.getValueFromKey("report.antenatal.otherVisitTypes").split(",");
+		String[] otherVisitTypes = inizService.getValueFromKey("report.MSPP.antenatal.otherVisitTypes").split(",");
 		
 		for (String member : otherVisitTypes) {
 			lVT.add(vs.getVisitTypeByUuid(member));
@@ -291,15 +291,15 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		_other.setVisitTypeList(lVT);
 		
 		SqlCohortDefinition sqdc = new SqlCohortDefinition("select patient_id from orders where concept_id="
-		        + inizService.getConceptFromKey("report.antenatal.ferrousFolate").getConceptId()
+		        + inizService.getConceptFromKey("report.MSPP.antenatal.ferrousFolate").getConceptId()
 		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
-		        + inizService.getValueFromKey("report.antenatal.drugOrder")
+		        + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
 		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
 		sqdc.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		sqdc.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		CompositionCohortDefinition ccd5 = new CompositionCohortDefinition();
 		ccd5.initializeFromElements(_other, sqdc, female);
-		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.antenatalRisks.womenIron"), ccd5,
+		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.womenIron"), ccd5,
 		    parameterMappings);
 		
 		setColumnNames();
@@ -310,8 +310,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		firstVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		firstVisit.setOperator(SetComparator.IN);
 		
-		firstVisit.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
-		firstVisit.addValue(inizService.getConceptFromKey("report.antenatal.one"));
+		firstVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
+		firstVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.one"));
 		antenatalGestation.addColumn(col1, createCohortComposition(firstVisit), null);
 		
 		// Second Visit column
@@ -319,8 +319,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		secondVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		secondVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		secondVisit.setOperator(SetComparator.IN);
-		secondVisit.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
-		secondVisit.addValue(inizService.getConceptFromKey("report.antenatal.two"));
+		secondVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
+		secondVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.two"));
 		antenatalGestation.addColumn(col2, createCohortComposition(secondVisit), null);
 		
 		// Third Visit column
@@ -328,8 +328,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		thirdVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		thirdVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		thirdVisit.setOperator(SetComparator.IN);
-		thirdVisit.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
-		thirdVisit.addValue(inizService.getConceptFromKey("report.antenatal.three"));
+		thirdVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
+		thirdVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.three"));
 		antenatalGestation.addColumn(col3, createCohortComposition(thirdVisit), null);
 		
 		// Fourth Visit column
@@ -337,8 +337,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		fourthVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		fourthVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		fourthVisit.setOperator(SetComparator.IN);
-		fourthVisit.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
-		fourthVisit.addValue(inizService.getConceptFromKey("report.antenatal.four"));
+		fourthVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
+		fourthVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.four"));
 		antenatalGestation.addColumn(col4, createCohortComposition(fourthVisit), null);
 		
 		// Fifth Visit column
@@ -346,8 +346,8 @@ public class AntenatalReportManager extends ActivatedReportManager {
 		fifthVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		fifthVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		fifthVisit.setOperator(SetComparator.IN);
-		fifthVisit.setQuestion(inizService.getConceptFromKey("report.antenatal.visitNumber"));
-		fifthVisit.addValue(inizService.getConceptFromKey("report.antenatal.fivePlus"));
+		fifthVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
+		fifthVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.fivePlus"));
 		antenatalGestation.addColumn(col5, createCohortComposition(fifthVisit), null);
 		
 		// Total Visit column
@@ -366,13 +366,13 @@ public class AntenatalReportManager extends ActivatedReportManager {
 	
 	private void setColumnNames() {
 		
-		col1 = MessageUtil.translate("commonreports.report.antenatalGestation.firstVisit.label");
-		col2 = MessageUtil.translate("commonreports.report.antenatalGestation.secondVisit.label");
-		col3 = MessageUtil.translate("commonreports.report.antenatalGestation.thirdVisit.label");
-		col4 = MessageUtil.translate("commonreports.report.antenatalGestation.fourthVisit.label");
-		col5 = MessageUtil.translate("commonreports.report.antenatalGestation.fifthVisit.label");
-		col6 = MessageUtil.translate("commonreports.report.antenatalGestation.total.label");
-		risksCol1 = MessageUtil.translate("commonreports.report.antenatalRisks.all.label");
+		col1 = MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.firstVisit.label");
+		col2 = MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.secondVisit.label");
+		col3 = MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.thirdVisit.label");
+		col4 = MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.fourthVisit.label");
+		col5 = MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.fifthVisit.label");
+		col6 = MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.total.label");
+		risksCol1 = MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.all.label");
 		
 	}
 	

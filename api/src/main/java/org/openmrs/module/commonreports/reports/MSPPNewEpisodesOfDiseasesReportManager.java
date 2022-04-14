@@ -27,14 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
+public class MSPPNewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 	
 	@Autowired
 	private InitializerService inizService;
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.newEpisodesOfDiseases.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.newEpisodesOfDiseases.active", false);
 	}
 	
 	@Override
@@ -49,12 +49,12 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
@@ -102,8 +102,8 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 		sqlDsd.setName(getName());
 		sqlDsd.setDescription("");
 		
-		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/newEpisodesOfDiseases.sql");
-		Concept allMaladies = inizService.getConceptFromKey("report.newEpisodesOfDiseases.diagnosisList.conceptSet");
+		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/MSPPnewEpisodesOfDiseases.sql");
+		Concept allMaladies = inizService.getConceptFromKey("report.MSPP.newEpisodesOfDiseases.diagnosisList.conceptSet");
 		
 		String sql = applyMetadataReplacements(rawSql, allMaladies);
 		
@@ -126,39 +126,42 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 		
 		Properties designProperties = new Properties();
 		designProperties.put("repeatingSections", "sheet:1,row:4,dataset:" + getName());
-		designProperties.put("title.label", MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.title.label"));
+		designProperties.put("title.label",
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.title.label"));
 		designProperties.put("maladies.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.maladies.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.maladies.label"));
 		designProperties.put("ageCategory1.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory1.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory1.label"));
 		designProperties.put("ageCategory2.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory2.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory2.label"));
 		designProperties.put("ageCategory3.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory3.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory3.label"));
 		designProperties.put("ageCategory4.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory4.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory4.label"));
 		designProperties.put("ageCategory5.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory5.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory5.label"));
 		designProperties.put("ageCategory6.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory6.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory6.label"));
 		designProperties.put("ageCategory7.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory7.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory7.label"));
 		designProperties.put("ageCategory8.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.ageCategory8.label"));
-		designProperties.put("total.label", MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.total.label"));
-		designProperties.put("males.label", MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.males.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.ageCategory8.label"));
+		designProperties.put("total.label",
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.total.label"));
+		designProperties.put("males.label",
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.males.label"));
 		designProperties.put("females.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.females.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.females.label"));
 		designProperties.put("totalReferredCases.label",
-		    MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.totalReferredCases.label"));
+		    MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.totalReferredCases.label"));
 		
 		reportDesign.setProperties(designProperties);
 		return Arrays.asList(reportDesign);
 	}
 	
 	private String applyMetadataReplacements(String rawSql, Concept conceptSet) {
-		Concept questionsConcept = inizService.getConceptFromKey("report.newEpisodesOfDiseases.questions.conceptSet");
-		Concept referralConcept = inizService.getConceptFromKey("report.newEpisodesOfDiseases.referral.concept");
+		Concept questionsConcept = inizService.getConceptFromKey("report.MSPP.newEpisodesOfDiseases.questions.conceptSet");
+		Concept referralConcept = inizService.getConceptFromKey("report.MSPP.newEpisodesOfDiseases.referral.concept");
 		String s = rawSql.replace(":selectStatements", constructSelectUnionAllStatements(conceptSet))
 		        .replace(":whenStatements", constructWhenThenStatements(conceptSet))
 		        .replace(":conceptIds",
@@ -169,7 +172,7 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 	}
 	
 	private String constructWhenThenStatements(Concept con) {
-		Concept allDiagnosesSet = inizService.getConceptFromKey("report.newEpisodesOfDiseases.allDiagnoses.conceptSet");
+		Concept allDiagnosesSet = inizService.getConceptFromKey("report.MSPP.newEpisodesOfDiseases.allDiagnoses.conceptSet");
 		List<Concept> allOtherDiagnoses = null;
 		
 		if (allDiagnosesSet != null) {
@@ -207,7 +210,8 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 		if (CollectionUtils.isNotEmpty(allOtherDiagnoses)) {
 			for (Concept otherDiagnosis : allOtherDiagnoses) {
 				st = st + " when o.value_coded = " + otherDiagnosis.getId() + " then '"
-				        + MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.allOtherDiagnoses.label") + "'";
+				        + MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.allOtherDiagnoses.label")
+				        + "'";
 			}
 		}
 		
@@ -225,9 +229,9 @@ public class NewEpisodesOfDiseasesReportManager extends ActivatedReportManager {
 			}
 		}
 		// Adding entry for all other diagnoses
-		if (inizService.getConceptFromKey("report.newEpisodesOfDiseases.allDiagnoses.conceptSet") != null) {
+		if (inizService.getConceptFromKey("report.MSPP.newEpisodesOfDiseases.allDiagnoses.conceptSet") != null) {
 			st = st + " UNION ALL select '"
-			        + MessageUtil.translate("commonreports.report.newEpisodesOfDiseases.allOtherDiagnoses.label") + "'";
+			        + MessageUtil.translate("commonreports.report.MSPP.newEpisodesOfDiseases.allOtherDiagnoses.label") + "'";
 		}
 		
 		return st;

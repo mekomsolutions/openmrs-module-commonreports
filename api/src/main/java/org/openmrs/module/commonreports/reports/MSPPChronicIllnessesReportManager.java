@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChronicIllnessesReportManager extends ActivatedReportManager {
+public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 	
 	private String col1 = "";
 	
@@ -66,7 +66,7 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.chronicIllnesses.active", false);
+		return inizService.getBooleanFromKey("report.MSPP.chronicIllnesses.active", false);
 	}
 	
 	@Override
@@ -81,12 +81,12 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.chronicIllnesses.reportName");
+		return MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.chronicIllnesses.reportDescription");
+		return MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
@@ -119,7 +119,7 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 		chronicIllnessesDsd.addParameters(getParameters());
 		rd.addDataSetDefinition(getName(), Mapped.mapStraightThrough(chronicIllnessesDsd));
 		
-		Concept illnesses = inizService.getConceptFromKey("report.chronicIllnesses.conceptSet");
+		Concept illnesses = inizService.getConceptFromKey("report.MSPP.chronicIllnesses.conceptSet");
 		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
@@ -132,7 +132,7 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 			diag.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			diag.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 			diag.setOperator(SetComparator.IN);
-			diag.setQuestion(inizService.getConceptFromKey("report.chronicIllnesses.diagnosisQuestion.concept"));
+			diag.setQuestion(inizService.getConceptFromKey("report.MSPP.chronicIllnesses.diagnosisQuestion.concept"));
 			
 			String conditionList = "";
 			if (!member.getSet()) {
@@ -168,11 +168,11 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 			
 			chronicIllnessesDsd.addRow(
 			    member.getDisplayString() + " - "
-			            + MessageUtil.translate("commonreports.report.chronicIllnesses.diagnoses.label"),
+			            + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.diagnoses.label"),
 			    newDiagnosis, parameterMappings);
 			chronicIllnessesDsd.addRow(
 			    member.getDisplayString() + " - "
-			            + MessageUtil.translate("commonreports.report.chronicIllnesses.conditions.label"),
+			            + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.conditions.label"),
 			    visitsWithConditions, parameterMappings);
 		}
 		
@@ -246,7 +246,7 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 		referral.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		referral.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
 		referral.setOperator(SetComparator.IN);
-		referral.setQuestion(inizService.getConceptFromKey("report.chronicIllnesses.referral.concept"));
+		referral.setQuestion(inizService.getConceptFromKey("report.MSPP.chronicIllnesses.referral.concept"));
 		chronicIllnessesDsd.addColumn(col13, createCohortComposition(referral, females), null);
 		chronicIllnessesDsd.addColumn(col14, createCohortComposition(referral, males), null);
 		
@@ -254,34 +254,34 @@ public class ChronicIllnessesReportManager extends ActivatedReportManager {
 	}
 	
 	private void setColumnNames() {
-		col1 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col2 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory1.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
-		col3 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col4 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory2.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
-		col5 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col6 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory3.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
-		col7 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory4.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col8 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory4.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
-		col9 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory5.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col10 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory5.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
-		col11 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory6.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col12 = MessageUtil.translate("commonreports.report.chronicIllnesses.ageCategory6.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
-		col13 = MessageUtil.translate("commonreports.report.chronicIllnesses.totalReferredCases.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.females.label");
-		col14 = MessageUtil.translate("commonreports.report.chronicIllnesses.totalReferredCases.label") + " - "
-		        + MessageUtil.translate("commonreports.report.chronicIllnesses.males.label");
+		col1 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col2 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory1.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
+		col3 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col4 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory2.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
+		col5 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col6 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory3.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
+		col7 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory4.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col8 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory4.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
+		col9 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory5.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col10 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory5.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
+		col11 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory6.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col12 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.ageCategory6.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
+		col13 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.totalReferredCases.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.females.label");
+		col14 = MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.totalReferredCases.label") + " - "
+		        + MessageUtil.translate("commonreports.report.MSPP.chronicIllnesses.males.label");
 	}
 	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
