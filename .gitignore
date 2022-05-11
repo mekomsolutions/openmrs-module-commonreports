@@ -22,6 +22,8 @@ api/.classpath
 api/.project
 api/.settings/*
 api/target/*
+api-2.2/bin/*
+api-2.2/.classpath
 omod/.classpath
 omod/.project
 omod/.settings/*
