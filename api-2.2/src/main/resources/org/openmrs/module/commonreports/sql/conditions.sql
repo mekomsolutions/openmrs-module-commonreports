@@ -19,7 +19,7 @@ select
     uuid
 from
     conditions
-WHERE
+where
     onset_date >= :onsetDate
     AND (
       end_date IS NULL
