@@ -240,6 +240,9 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		_1To2y.setMaxAgeUnit(DurationUnit.MONTHS);
 		_1To2y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
+		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
+		ageParameterMappings.put("effectiveDate", "${endDate}");
+		
 		VisitCohortDefinition _prenatal = new VisitCohortDefinition();
 		_prenatal.setVisitTypeList(Arrays.asList(Context.getVisitService()
 		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.vaccination.prenatalVisitType"))));
@@ -282,6 +285,10 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
+		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
+		if (size > 0) {
+			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		}
 		return compCD;
 	}
 	
