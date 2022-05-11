@@ -42,11 +42,6 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DiagnosesReportManager2_2Test extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public DiagnosesReportManager2_2Test() throws SQLException {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
 	@Autowired
 	private InitializerService iniz;
 	
@@ -62,7 +57,6 @@ public class DiagnosesReportManager2_2Test extends BaseModuleContextSensitiveMys
 	
 	@Before
 	public void setUp() throws Exception {
-		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		executeDataSet("org/openmrs/module/commonreports/include/diagnosesTestDataset2_2.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;

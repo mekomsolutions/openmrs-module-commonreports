@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.openmrs.annotation.OpenmrsProfile;
 
 @Component
-@OpenmrsProfile(openmrsPlatformVersion = "2.2.* - 2.5.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.2.* - 2.*")
 public class DiagnosesReportManager2_2 extends ActivatedReportManager {
 	
 	@Autowired

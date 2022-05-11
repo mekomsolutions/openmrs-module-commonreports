@@ -1,7 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.TimeZone;
 
@@ -26,13 +26,9 @@ import static com.wix.mysql.distribution.Version.v5_6_latest;
 
 public abstract class BaseModuleContextSensitiveMysqlBackedTest extends BaseModuleContextSensitiveTest {
 	
-	public BaseModuleContextSensitiveMysqlBackedTest() throws SQLException {
-		super();
-	}
-	
 	private static EmbeddedMysql embeddedMysql;
 	
-	private static String databaseUrl = "jdbc:mysql://localhost:3344/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8";
+	private static String databaseUrl = "jdbc:mysql://localhost:DATABASE_PORT/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8";
 	
 	private static String databaseUsername = "test";
 	
@@ -64,16 +60,14 @@ public abstract class BaseModuleContextSensitiveMysqlBackedTest extends BaseModu
 	}
 	
 	@BeforeClass
-	public static void setupMySqlDb() {
-		MysqldConfig config = MysqldConfig.aMysqldConfig(v5_6_latest).withPort(3344).withCharset(Charset.UTF8)
+	public static void setupMySqlDb() throws IOException {
+		MysqldConfig config = MysqldConfig.aMysqldConfig(v5_6_latest).withFreePort().withCharset(Charset.UTF8)
 		        .withTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC"))).withUser(databaseUsername, databaseUserPasswword)
 		        .build();
-		
 		SchemaConfig schemaConfig = SchemaConfig.aSchemaConfig("openmrs").build();
 		
 		embeddedMysql = EmbeddedMysql.anEmbeddedMysql(config).addSchema(schemaConfig).start();
-		
-		System.setProperty("databaseUrl", databaseUrl);
+		System.setProperty("databaseUrl", databaseUrl.replaceAll("DATABASE_PORT", String.valueOf(config.getPort())));
 		System.setProperty("databaseUsername", databaseUsername);
 		System.setProperty("databasePassword", databaseUserPasswword);
 		System.setProperty("databaseDialect", databaseDialect);

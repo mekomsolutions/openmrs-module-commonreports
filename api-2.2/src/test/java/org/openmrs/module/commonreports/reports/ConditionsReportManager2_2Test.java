@@ -1,8 +1,6 @@
 package org.openmrs.module.commonreports.reports;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -12,11 +10,8 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openmrs.Cohort;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
 import org.openmrs.module.commonreports.ActivatedReportManager;
-import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -31,21 +26,13 @@ import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 public class ConditionsReportManager2_2Test extends BaseModuleContextSensitiveMysqlBackedTest {
-	
-	public ConditionsReportManager2_2Test() throws SQLException {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	
 	@Autowired
 	private InitializerService iniz;
@@ -62,7 +49,6 @@ public class ConditionsReportManager2_2Test extends BaseModuleContextSensitiveMy
 	
 	@Before
 	public void setUp() throws Exception {
-		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		executeDataSet("org/openmrs/module/commonreports/include/conditionTestDataset2_2.xml");
 		
 		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;

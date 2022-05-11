@@ -75,6 +75,13 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+			<type>test-jar</type>
+		</dependency>
+		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>emrapi-api-2.2</artifactId>
 			<version>${emrapiVersion}</version>

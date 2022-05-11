@@ -14,18 +14,13 @@ SELECT
     person.birthdate AS birthdate,
     person.birthdate_estimated AS birthdate_estimated,
     CASE
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 < 1 THEN '0 - 1'
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 BETWEEN 1
-        AND 4 THEN '1 - 4'
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 BETWEEN 4
-        AND 9 THEN '5 - 9'
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 BETWEEN 10
-        AND 14 THEN '10 - 14'
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 BETWEEN 15
-        AND 19 THEN '15 - 19'
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 BETWEEN 20
-        AND 24 THEN '20 - 24'
-        WHEN Timestampdiff(day, person.birthdate, visit.date_started) / 365 > 24 THEN '25+'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) < 1 then '0 - 1'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) <= 4 then '1 - 4'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) <= 9 then '5 - 9'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) <= 14 then '10 - 14'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) <= 19 then '15 - 19'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) <= 24 then '20 - 24'
+        WHEN timestampdiff(year, person.birthdate, visit.date_started) > 24 then '25+'
         ELSE 'Invalid birthdate'
     END AS `age_at_visit_group_profile_1`,
     timestampdiff(day, person.birthdate, visit.date_started) / 365 AS age_at_visit,
