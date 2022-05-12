@@ -14,3 +14,14 @@ A bundle of reports that consume the [OpenMRS Reporting module](https://github.c
 * Haiti [MSPP: Antenatal](readme/MSPPantenatal.md) report.
 * Haiti [MSPP: Vaccination](readme/MSPPvaccination.md) report.
 * Haiti [MSPP: Child Care](readme/MSPPchildCareDiseases.md) report.
+
+
+* [Appointments](readme/appointments.md) report.
+* [Concepts](readme/concepts.md) report.
+* [Conditions](readme/conditions.md) report.
+* [Encounters](readme/encounters.md) report.
+* [Observations](readme/observations.md) report.
+* [Orders](readme/orders.md) report.
+* [Patients](readme/patients.md) report.
+* [Programs](readme/programs.md) report.
+* [Legacy Visits](readme/legacyVisits.md) report.
