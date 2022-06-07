@@ -97,17 +97,17 @@ public class OutpatientConsultationReportManagerTest extends BaseModuleContextSe
 			// one row
 			
 			// Ensure that the report contains 4 possible combinations
-			Cohort _5To15yMalesWithMalaria = (Cohort) row
-			        .getColumnValue("MALARIA." + OutpatientConsultationReportManager.col7);
-			assertNotNull(_5To15yMalesWithMalaria);
-			assertEquals(1, _5To15yMalesWithMalaria.getSize());
+			Cohort _1To5yMalesWithMalaria = (Cohort) row
+			        .getColumnValue("MALARIA." + OutpatientConsultationReportManager.col5);
+			assertNotNull(_1To5yMalesWithMalaria);
+			assertEquals(1, _1To5yMalesWithMalaria.getSize());
 			Cohort _25To50yFemalesWithMalaria = (Cohort) row
 			        .getColumnValue("MALARIA." + OutpatientConsultationReportManager.col12);
 			assertNotNull(_25To50yFemalesWithMalaria);
 			assertEquals(1, _25To50yFemalesWithMalaria.getSize());
-			Cohort _5To15yMalesWithFever = (Cohort) row.getColumnValue("FEVER." + OutpatientConsultationReportManager.col7);
-			assertNotNull(_5To15yMalesWithFever);
-			assertEquals(1, _5To15yMalesWithFever.getSize());
+			Cohort _1To5yMalesWithFever = (Cohort) row.getColumnValue("FEVER." + OutpatientConsultationReportManager.col5);
+			assertNotNull(_1To5yMalesWithFever);
+			assertEquals(1, _1To5yMalesWithFever.getSize());
 			Cohort _25To50yFemalesWithFever = (Cohort) row
 			        .getColumnValue("FEVER." + OutpatientConsultationReportManager.col12);
 			assertNotNull(_25To50yFemalesWithFever);

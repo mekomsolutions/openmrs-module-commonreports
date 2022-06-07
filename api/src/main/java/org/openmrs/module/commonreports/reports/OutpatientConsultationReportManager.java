@@ -168,69 +168,80 @@ public class OutpatientConsultationReportManager extends ActivatedReportManager 
 		GenderCohortDefinition females = new GenderCohortDefinition();
 		females.setFemaleIncluded(true);
 		
+		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
+		ageParameterMappings.put("effectiveDate", "${endDate}");
+		
 		AgeCohortDefinition _0To1m = new AgeCohortDefinition();
 		_0To1m.setMinAge(0);
 		_0To1m.setMinAgeUnit(DurationUnit.DAYS);
 		_0To1m.setMaxAge(1);
 		_0To1m.setMaxAgeUnit(DurationUnit.MONTHS);
-		opdConsult.addColumn(col1, createCohortComposition(_0To1m, males), null);
-		opdConsult.addColumn(col2, createCohortComposition(_0To1m, females), null);
+		_0To1m.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col1, createCohortComposition(_0To1m, males), ageParameterMappings);
+		opdConsult.addColumn(col2, createCohortComposition(_0To1m, females), ageParameterMappings);
 		
 		AgeCohortDefinition _1mTo1y = new AgeCohortDefinition();
 		_1mTo1y.setMinAge(1);
 		_1mTo1y.setMinAgeUnit(DurationUnit.MONTHS);
 		_1mTo1y.setMaxAge(11);
 		_1mTo1y.setMaxAgeUnit(DurationUnit.MONTHS);
-		opdConsult.addColumn(col3, createCohortComposition(_1mTo1y, males), null);
-		opdConsult.addColumn(col4, createCohortComposition(_1mTo1y, females), null);
+		_1mTo1y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col3, createCohortComposition(_1mTo1y, males), ageParameterMappings);
+		opdConsult.addColumn(col4, createCohortComposition(_1mTo1y, females), ageParameterMappings);
 		
 		AgeCohortDefinition _1To5y = new AgeCohortDefinition();
 		_1To5y.setMinAge(1);
 		_1To5y.setMinAgeUnit(DurationUnit.YEARS);
 		_1To5y.setMaxAge(4);
 		_1To5y.setMaxAgeUnit(DurationUnit.YEARS);
-		opdConsult.addColumn(col5, createCohortComposition(_1To5y, males), null);
-		opdConsult.addColumn(col6, createCohortComposition(_1To5y, females), null);
+		_1To5y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col5, createCohortComposition(_1To5y, males), ageParameterMappings);
+		opdConsult.addColumn(col6, createCohortComposition(_1To5y, females), ageParameterMappings);
 		
 		AgeCohortDefinition _5To15y = new AgeCohortDefinition();
 		_5To15y.setMinAge(5);
 		_5To15y.setMinAgeUnit(DurationUnit.YEARS);
 		_5To15y.setMaxAge(14);
 		_5To15y.setMaxAgeUnit(DurationUnit.YEARS);
-		opdConsult.addColumn(col7, createCohortComposition(_5To15y, males), null);
-		opdConsult.addColumn(col8, createCohortComposition(_5To15y, females), null);
+		_5To15y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col7, createCohortComposition(_5To15y, males), ageParameterMappings);
+		opdConsult.addColumn(col8, createCohortComposition(_5To15y, females), ageParameterMappings);
 		
 		AgeCohortDefinition _15To25y = new AgeCohortDefinition();
 		_15To25y.setMinAge(15);
 		_15To25y.setMinAgeUnit(DurationUnit.YEARS);
 		_15To25y.setMaxAge(24);
 		_15To25y.setMaxAgeUnit(DurationUnit.YEARS);
-		opdConsult.addColumn(col9, createCohortComposition(_15To25y, males), null);
-		opdConsult.addColumn(col10, createCohortComposition(_15To25y, females), null);
+		_15To25y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col9, createCohortComposition(_15To25y, males), ageParameterMappings);
+		opdConsult.addColumn(col10, createCohortComposition(_15To25y, females), ageParameterMappings);
 		
 		AgeCohortDefinition _25To50y = new AgeCohortDefinition();
 		_25To50y.setMinAge(25);
 		_25To50y.setMinAgeUnit(DurationUnit.YEARS);
 		_25To50y.setMaxAge(49);
 		_25To50y.setMaxAgeUnit(DurationUnit.YEARS);
-		opdConsult.addColumn(col11, createCohortComposition(_25To50y, males), null);
-		opdConsult.addColumn(col12, createCohortComposition(_25To50y, females), null);
+		_25To50y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col11, createCohortComposition(_25To50y, males), ageParameterMappings);
+		opdConsult.addColumn(col12, createCohortComposition(_25To50y, females), ageParameterMappings);
 		
 		AgeCohortDefinition _50To65y = new AgeCohortDefinition();
 		_50To65y.setMinAge(50);
 		_50To65y.setMinAgeUnit(DurationUnit.YEARS);
 		_50To65y.setMaxAge(64);
 		_50To65y.setMaxAgeUnit(DurationUnit.YEARS);
-		opdConsult.addColumn(col13, createCohortComposition(_50To65y, males), null);
-		opdConsult.addColumn(col14, createCohortComposition(_50To65y, females), null);
+		_50To65y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col13, createCohortComposition(_50To65y, males), ageParameterMappings);
+		opdConsult.addColumn(col14, createCohortComposition(_50To65y, females), ageParameterMappings);
 		
 		AgeCohortDefinition moreThan65y = new AgeCohortDefinition();
 		moreThan65y.setMinAge(65);
 		moreThan65y.setMinAgeUnit(DurationUnit.YEARS);
 		moreThan65y.setMaxAge(200);
 		moreThan65y.setMaxAgeUnit(DurationUnit.YEARS);
-		opdConsult.addColumn(col15, createCohortComposition(moreThan65y, males), null);
-		opdConsult.addColumn(col16, createCohortComposition(moreThan65y, females), null);
+		moreThan65y.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		opdConsult.addColumn(col15, createCohortComposition(moreThan65y, males), ageParameterMappings);
+		opdConsult.addColumn(col16, createCohortComposition(moreThan65y, females), ageParameterMappings);
 		
 		// Total column
 		GenderCohortDefinition total = new GenderCohortDefinition();
@@ -305,6 +316,10 @@ public class OutpatientConsultationReportManager extends ActivatedReportManager 
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
+		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
+		if (size > 0) {
+			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		}
 		return compCD;
 	}
 	
