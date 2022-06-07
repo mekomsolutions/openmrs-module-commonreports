@@ -133,9 +133,6 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		
-		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
-		ageParameterMappings.put("effectiveDate", "${endDate}");
-		
 		// Vaccinations
 		String[] vaccinationConceptsListWithSequence = inizService
 		        .getValueFromKey("report.MSPP.vaccination.vaccinationConceptsListWithSequence").split(",");
