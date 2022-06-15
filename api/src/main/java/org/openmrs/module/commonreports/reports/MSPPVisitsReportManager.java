@@ -1,5 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,7 +83,7 @@ public class MSPPVisitsReportManager extends ActivatedReportManager {
 		sqlDsd.setName(getName());
 		sqlDsd.setDescription("");
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/MSPPvisits.sql");
+		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/MSPPvisits.sql");
 		sql = applyMetadataReplacements(sql);
 		
 		sqlDsd.setSqlQuery(sql);
@@ -122,21 +124,6 @@ public class MSPPVisitsReportManager extends ActivatedReportManager {
 	
 	private Parameter getEndDateParameter() {
 		return new Parameter("endDate", "End Date", Date.class);
-	}
-	
-	private String getSqlString(String resourceName) {
-		
-		InputStream is = null;
-		try {
-			is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-			return IOUtils.toString(is, "UTF-8");
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to load resource: " + resourceName, e);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
-		}
 	}
 	
 	private String applyMetadataReplacements(String rawSql) {

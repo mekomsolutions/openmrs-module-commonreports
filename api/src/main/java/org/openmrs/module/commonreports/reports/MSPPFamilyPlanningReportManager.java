@@ -1,5 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,21 +62,6 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
-	private String getSqlString(String resourceName) {
-		
-		InputStream is = null;
-		try {
-			is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-			return IOUtils.toString(is, "UTF-8");
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to load resource: " + resourceName, e);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
-		}
-	}
-	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
@@ -97,7 +84,7 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		sqlDsd.setName(MessageUtil.translate("commonreports.report.MSPP.familyPlanning.datasetName"));
 		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.MSPP.familyPlanning.datasetDescription"));
 		
-		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/MSPPfamilyPlanning.sql");
+		String rawSql = getStringFromResource("org/openmrs/module/commonreports/sql/MSPPfamilyPlanning.sql");
 		String sql = applyMetadataReplacements(rawSql);
 		
 		sqlDsd.setSqlQuery(sql);

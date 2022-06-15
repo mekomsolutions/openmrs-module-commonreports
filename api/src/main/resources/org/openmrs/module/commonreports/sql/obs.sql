@@ -60,5 +60,6 @@ FROM
     AND concept_concept_name.locale_preferred = true
     AND concept_concept_name.locale = 'en'
 WHERE
-    obs_datetime >= :startDate
-    OR obs_datetime <= :endDate
+    (:startDate IS NULL OR obs_datetime >= :startDate)
+    AND
+    (:endDate IS NULL OR obs_datetime <= :endDate)

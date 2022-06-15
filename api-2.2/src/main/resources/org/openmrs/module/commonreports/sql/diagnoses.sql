@@ -16,6 +16,7 @@ select
     uuid
 from
     encounter_diagnosis
-where
-    date_created >= :startDate
-    OR date_created <= :endDate
+WHERE
+    (:startDate IS NULL OR date_created >= :startDate)
+    AND
+    (:endDate IS NULL OR date_created <= :endDate)

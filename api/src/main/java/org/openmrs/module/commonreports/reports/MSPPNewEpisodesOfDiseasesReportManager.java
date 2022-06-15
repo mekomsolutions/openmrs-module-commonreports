@@ -1,5 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,21 +67,6 @@ public class MSPPNewEpisodesOfDiseasesReportManager extends ActivatedReportManag
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
-	private String getSqlString(String resourceName) {
-		
-		InputStream is = null;
-		try {
-			is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-			return IOUtils.toString(is, "UTF-8");
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to load resource: " + resourceName, e);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
-		}
-	}
-	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
@@ -102,7 +89,7 @@ public class MSPPNewEpisodesOfDiseasesReportManager extends ActivatedReportManag
 		sqlDsd.setName(getName());
 		sqlDsd.setDescription("");
 		
-		String rawSql = getSqlString("org/openmrs/module/commonreports/sql/MSPPnewEpisodesOfDiseases.sql");
+		String rawSql = getStringFromResource("org/openmrs/module/commonreports/sql/MSPPnewEpisodesOfDiseases.sql");
 		Concept allMaladies = inizService.getConceptFromKey("report.MSPP.newEpisodesOfDiseases.diagnosisList.conceptSet");
 		
 		String sql = applyMetadataReplacements(rawSql, allMaladies);

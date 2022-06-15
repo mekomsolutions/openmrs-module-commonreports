@@ -1,5 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
+
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,21 +65,6 @@ public class OrdersReportManager extends ActivatedReportManager {
 		return new Parameter("dateStopped", "date Stopped", Date.class, null, DateUtil.parseDate(today, "yyyy-MM-dd"));
 	}
 	
-	private String getSqlString(String resourceName) {
-		
-		InputStream is = null;
-		try {
-			is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-			return IOUtils.toString(is, "UTF-8");
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to load resource: " + resourceName, e);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
-		}
-	}
-	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
@@ -100,7 +87,7 @@ public class OrdersReportManager extends ActivatedReportManager {
 		sqlDsd.setName(MessageUtil.translate("commonreports.report.orders.datasetName"));
 		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.orders.datasetDescription"));
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/orders.sql");
+		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/orders.sql");
 		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());

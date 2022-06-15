@@ -1,5 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,21 +59,6 @@ public class ProgramsReportManager extends ActivatedReportManager {
 		        DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
 	}
 	
-	private String getSqlString(String resourceName) {
-		
-		InputStream is = null;
-		try {
-			is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-			return IOUtils.toString(is, "UTF-8");
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to load resource: " + resourceName, e);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
-		}
-	}
-	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
@@ -93,7 +80,7 @@ public class ProgramsReportManager extends ActivatedReportManager {
 		sqlDsd.setName(MessageUtil.translate("commonreports.report.programs.datasetName"));
 		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.programs.datasetDescription"));
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/programs.sql");
+		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/programs.sql");
 		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());

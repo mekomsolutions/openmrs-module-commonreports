@@ -1,5 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
+import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,21 +50,6 @@ public class PatientsReportManager extends ActivatedReportManager {
 		return MessageUtil.translate("commonreports.report.patients.reportDescription");
 	}
 	
-	private String getSqlString(String resourceName) {
-		
-		InputStream is = null;
-		try {
-			is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
-			return IOUtils.toString(is, "UTF-8");
-		}
-		catch (Exception e) {
-			throw new IllegalArgumentException("Unable to load resource: " + resourceName, e);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
-		}
-	}
-	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
@@ -84,7 +71,7 @@ public class PatientsReportManager extends ActivatedReportManager {
 		sqlDsd.setName(MessageUtil.translate("commonreports.report.patients.datasetName"));
 		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.patients.datasetDescription"));
 		
-		String sql = getSqlString("org/openmrs/module/commonreports/sql/patients.sql");
+		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/patients.sql");
 		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
