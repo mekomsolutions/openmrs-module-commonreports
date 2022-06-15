@@ -35,4 +35,4 @@ FROM
     LEFT JOIN person person ON visit.patient_id = person.person_id
 WHERE
     date_started >= :startDate
-    AND date_stopped IS NULL OR date_stopped <= :endDate
+    AND (date_stopped IS NULL OR date_stopped <= :endDate)
