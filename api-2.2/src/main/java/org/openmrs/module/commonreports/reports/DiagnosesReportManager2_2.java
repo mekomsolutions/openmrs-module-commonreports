@@ -57,7 +57,7 @@ public class DiagnosesReportManager2_2 extends ActivatedReportManager {
 	}
 	
 	private Parameter getStartDateParameter() {
-		return new Parameter("startDate", "Start Date", Date.class, null, DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
+		return new Parameter("startDate", "Start Date", Date.class, null, new Date(0L));
 	}
 	
 	private Parameter getEndDateParameter() {
