@@ -48,5 +48,5 @@ from
     LEFT JOIN encounter_type encounter_type ON encounter.encounter_type = encounter_type.encounter_type_id
 WHERE
     date_activated >= :dateActivated
-    AND date_stopped IS NULL
-    OR date_stopped <= :dateStopped
+    AND (date_stopped IS NULL
+              OR date_stopped <= :dateStopped)
