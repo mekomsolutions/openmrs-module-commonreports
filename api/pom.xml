@@ -159,7 +159,6 @@
 			<version>${reportingcompatibilityVersion}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>idgen-api</artifactId>
