@@ -1,24 +1,27 @@
 select
-    condition_id,
-    previous_condition_id,
-    patient_id,
-    status,
-    concept_id,
-    condition_coded,
-    condition_non_coded,
-    onset_date,
-    additional_detail,
-    end_date,
-    end_reason,
-    creator,
-    date_created,
-    voided,
-    voided_by,
-    date_voided,
-    void_reason,
-    uuid
+  `condition_id`,
+  `additional_detail`,
+  `previous_version`,
+  `condition_coded`,
+  `condition_non_coded`,
+  `condition_coded_name`,
+  `clinical_status`,
+  `verification_status`,
+  `onset_date`,
+  `date_created`,
+  `voided`,
+  `date_voided`,
+  `void_reason`,
+  `uuid`,
+  `creator`,
+  `voided_by`,
+  `changed_by`,
+  `patient_id`,
+  `end_date`,
+  `date_changed`,
+  `encounter_id`
 from
-    conditions
+  conditions
 where
     onset_date >= :onsetDate
     AND (
