@@ -1,5 +1,5 @@
 SELECT
-    patient.patient_id AS id,
+    patient.patient_id AS patient_id,
     name.given_name AS given_name,
     name.middle_name AS middle_name,
     name.family_name AS family_name,

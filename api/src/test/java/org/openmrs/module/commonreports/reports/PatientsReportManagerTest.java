@@ -91,7 +91,8 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 				rowNumber++;
 				DataSetRow row = itr.next();
 				if (rowNumber == 1) {
-					assertEquals(row1columnValuePairs.get("id"), Integer.parseInt(row.getColumnValue("id").toString()));
+					assertEquals(row1columnValuePairs.get("patient_id"),
+					    Integer.parseInt(row.getColumnValue("patient_id").toString()));
 					assertEquals(row1columnValuePairs.get("given_name"), row.getColumnValue("given_name"));
 					assertEquals(row1columnValuePairs.get("middle_name"), row.getColumnValue("middle_name"));
 					assertEquals(row1columnValuePairs.get("family_name"), row.getColumnValue("family_name"));
@@ -116,7 +117,8 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 				
 				if (rowNumber == 7) {
 					
-					assertEquals(row7columnValuePairs.get("id"), Integer.parseInt(row.getColumnValue("id").toString()));
+					assertEquals(row7columnValuePairs.get("patient_id"),
+					    Integer.parseInt(row.getColumnValue("patient_id").toString()));
 					assertEquals(row7columnValuePairs.get("given_name"), row.getColumnValue("given_name"));
 					assertEquals(row7columnValuePairs.get("middle_name"), row.getColumnValue("middle_name"));
 					assertEquals(row7columnValuePairs.get("family_name"), row.getColumnValue("family_name"));
@@ -148,7 +150,7 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 	private Map<String, Object> getRow1ColumnValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("id", 2);
+		map.put("patient_id", 2);
 		map.put("given_name", "Horatio");
 		map.put("middle_name", "Test");
 		map.put("family_name", "Hornblower");
@@ -175,7 +177,7 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 	private Map<String, Object> getRow7ColumnValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("id", 6);
+		map.put("patient_id", 6);
 		map.put("given_name", "Johnny");
 		map.put("middle_name", "Test");
 		map.put("family_name", "Doe");
