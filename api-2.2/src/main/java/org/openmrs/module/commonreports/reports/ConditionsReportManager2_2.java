@@ -2,7 +2,6 @@ package org.openmrs.module.commonreports.reports;
 
 import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import org.apache.commons.io.IOUtils;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.common.DateUtil;
@@ -21,7 +18,6 @@ import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
-import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.openmrs.annotation.OpenmrsProfile;

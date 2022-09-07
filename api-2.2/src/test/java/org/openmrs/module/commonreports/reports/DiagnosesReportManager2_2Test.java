@@ -1,10 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,10 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openmrs.Cohort;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
 import org.openmrs.module.commonreports.ActivatedReportManager;
-import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;

@@ -95,9 +95,7 @@ public class ConditionsReportManager2_2Test extends BaseModuleContextSensitiveMy
 					    Integer.parseInt(row.getColumnValue("condition_id").toString()));
 					assertEquals(row1columnValuePairs.get("patient_id"),
 					    Integer.parseInt(row.getColumnValue("patient_id").toString()));
-					assertEquals(row1columnValuePairs.get("status"), row.getColumnValue("status"));
-					assertEquals(row1columnValuePairs.get("concept_id"),
-					    Integer.parseInt(row.getColumnValue("concept_id").toString()));
+					assertEquals(row1columnValuePairs.get("verification_status"), row.getColumnValue("verification_status"));
 					assertEquals(row1columnValuePairs.get("condition_coded"),
 					    Integer.parseInt(row.getColumnValue("condition_coded").toString()));
 					assertEquals(row1columnValuePairs.get("onset_date"), row.getColumnValue("onset_date").toString());
@@ -116,9 +114,7 @@ public class ConditionsReportManager2_2Test extends BaseModuleContextSensitiveMy
 					    Integer.parseInt(row.getColumnValue("condition_id").toString()));
 					assertEquals(row4columnValuePairs.get("patient_id"),
 					    Integer.parseInt(row.getColumnValue("patient_id").toString()));
-					assertEquals(row4columnValuePairs.get("status"), row.getColumnValue("status"));
-					assertEquals(row4columnValuePairs.get("concept_id"),
-					    Integer.parseInt(row.getColumnValue("concept_id").toString()));
+					assertEquals(row4columnValuePairs.get("verification_status"), row.getColumnValue("verification_status"));
 					assertEquals(row4columnValuePairs.get("condition_coded"),
 					    Integer.parseInt(row.getColumnValue("condition_coded").toString()));
 					assertEquals(row4columnValuePairs.get("onset_date"), row.getColumnValue("onset_date").toString());
@@ -143,8 +139,7 @@ public class ConditionsReportManager2_2Test extends BaseModuleContextSensitiveMy
 		
 		map.put("condition_id", 1);
 		map.put("patient_id", 1);
-		map.put("status", "CONFIRMED");
-		map.put("concept_id", 409);
+		map.put("verification_status", "CONFIRMED");
 		map.put("condition_coded", 409);
 		map.put("onset_date", "2015-01-12 00:00:00.0");
 		map.put("end_date", "2017-03-12 00:00:00.0");
@@ -161,8 +156,7 @@ public class ConditionsReportManager2_2Test extends BaseModuleContextSensitiveMy
 		
 		map.put("condition_id", 4);
 		map.put("patient_id", 4);
-		map.put("status", "CONFIRMED");
-		map.put("concept_id", 409);
+		map.put("verification_status", "CONFIRMED");
 		map.put("condition_coded", 408);
 		map.put("onset_date", "2014-01-12 00:00:00.0");
 		map.put("end_date", "2016-03-12 00:00:00.0");
