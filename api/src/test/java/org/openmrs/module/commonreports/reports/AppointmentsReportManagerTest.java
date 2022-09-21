@@ -232,11 +232,11 @@ public class AppointmentsReportManagerTest extends BaseModuleContextSensitiveMys
 		map.put("patient_appointment_id", 2);
 		map.put("patient_id", 1);
 		map.put("appointment_number", null);
-		map.put("start_date_time", "2108-08-15 12:00:00.0");
+		map.put("start_date_time", "2018-08-15 12:00:00.0");
 		map.put("location_id", null);
-		map.put("end_date_time", "2108-08-15 13:00:00.0");
+		map.put("end_date_time", "2018-08-15 13:00:00.0");
 		map.put("creator", 1);
-		map.put("date_created", "2108-08-10 15:57:09.0");
+		map.put("date_created", "2018-08-10 15:57:09.0");
 		map.put("changed_by", null);
 		map.put("date_changed", null);
 		map.put("uuid", "75504r42-3ca8-11e3-bf2b-0800271c1111");
@@ -269,17 +269,17 @@ public class AppointmentsReportManagerTest extends BaseModuleContextSensitiveMys
 	
 	private Map<String, Object> getRow4ColumnValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("patient_appointment_id", 5);
+		map.put("patient_appointment_id", 3);
 		map.put("patient_id", 1);
 		map.put("appointment_number", null);
-		map.put("start_date_time", "2108-08-15 13:00:00.0");
+		map.put("start_date_time", "2018-08-15 13:00:00.0");
 		map.put("location_id", null);
-		map.put("end_date_time", "2108-08-15 14:00:00.0");
+		map.put("end_date_time", "2018-08-15 14:00:00.0");
 		map.put("creator", 1);
-		map.put("date_created", "2108-08-10 15:57:09.0");
+		map.put("date_created", "2018-08-10 15:57:09.0");
 		map.put("changed_by", null);
 		map.put("date_changed", null);
-		map.put("uuid", "75504r42-3ca8-11e3-bf2b-0800271c13344");
+		map.put("uuid", "75504r42-3ca8-11e3-bf2b-0800271c12222");
 		map.put("appointment_service_id", 1);
 		map.put("appointment_service_type_id", null);
 		map.put("program_uuid", "Scheduled");
@@ -297,10 +297,10 @@ public class AppointmentsReportManagerTest extends BaseModuleContextSensitiveMys
 		map.put("appointment_service_max_appointments_limit", 4);
 		map.put("appointment_service_duration_mins", 30);
 		map.put("appointment_service_initial_appointment_status", null);
-		map.put("appointment_service_type_name", "serviceType1");
+		map.put("appointment_service_type_name", "serviceType2");
 		map.put("appointment_service_type_duration_mins", 30);
-		map.put("appointment_service_type_voided", false);
-		map.put("appointment_service_type_uuid", "678906e5-9fbb-4f20-866b-0ece24564578");
+		map.put("appointment_service_type_voided", true);
+		map.put("appointment_service_type_uuid", "678906e5-9fbb-4f20-866b-0ece24564878");
 		map.put("patient_appointment_provider", null);
 		map.put("patient_appointment_provider_response", null);
 		

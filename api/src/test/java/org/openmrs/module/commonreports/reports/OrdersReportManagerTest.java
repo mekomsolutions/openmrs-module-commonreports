@@ -174,7 +174,7 @@ public class OrdersReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 	private Map<String, Object> getRow7ColumnValues() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("order_id", 7);
+		map.put("order_id", 6);
 		map.put("patient_id", 2);
 		map.put("order_type_id", 2);
 		map.put("order_type_name", "Test order");
@@ -187,8 +187,8 @@ public class OrdersReportManagerTest extends BaseModuleContextSensitiveMysqlBack
 		map.put("care_setting_type", "OUTPATIENT");
 		map.put("care_setting_uuid", "6f0c9a92-6f24-11e3-af88-005056821db0");
 		map.put("instructions", null);
-		map.put("date_activated", "2008-10-19 09:24:10.0");
-		map.put("uuid", "2c96f25c-4949-4f72-9931-d808fbc226df");
+		map.put("date_activated", "2008-09-19 09:24:10.0");
+		map.put("uuid", "1c96f25c-4949-4f72-9931-d808fbc226de");
 		
 		return map;
 	}

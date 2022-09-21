@@ -2,8 +2,7 @@ package org.openmrs.module.commonreports.reports;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.time.ZoneId;
-import java.util.TimeZone;
+import java.util.stream.Stream;
 
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
@@ -17,20 +16,16 @@ import org.hibernate.dialect.MySQLDialect;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
-import com.wix.mysql.EmbeddedMysql;
-import com.wix.mysql.config.Charset;
-import com.wix.mysql.config.MysqldConfig;
-import com.wix.mysql.config.SchemaConfig;
-
-import static com.wix.mysql.distribution.Version.v5_6_latest;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.lifecycle.Startables;
 
 public abstract class BaseModuleContextSensitiveMysqlBackedTest extends BaseModuleContextSensitiveTest {
 	
-	private static EmbeddedMysql embeddedMysql;
+	private static MySQLContainer mysqlContainer = new MySQLContainer("mysql:5.6.51");
 	
 	private static String databaseUrl = "jdbc:mysql://localhost:DATABASE_PORT/openmrs?autoReconnect=true&sessionVariables=default_storage_engine%3DInnoDB&useUnicode=true&characterEncoding=UTF-8";
 	
-	private static String databaseUsername = "test";
+	private static String databaseUsername = "user";
 	
 	private static String databaseUserPasswword = "password";
 	
@@ -61,25 +56,25 @@ public abstract class BaseModuleContextSensitiveMysqlBackedTest extends BaseModu
 	
 	@BeforeClass
 	public static void setupMySqlDb() throws IOException {
-		MysqldConfig config = MysqldConfig.aMysqldConfig(v5_6_latest).withFreePort().withCharset(Charset.UTF8)
-		        .withTimeZone(TimeZone.getTimeZone(ZoneId.of("UTC"))).withUser(databaseUsername, databaseUserPasswword)
-		        .build();
-		SchemaConfig schemaConfig = SchemaConfig.aSchemaConfig("openmrs").build();
 		
-		embeddedMysql = EmbeddedMysql.anEmbeddedMysql(config).addSchema(schemaConfig).start();
-		System.setProperty("databaseUrl", databaseUrl.replaceAll("DATABASE_PORT", String.valueOf(config.getPort())));
+		mysqlContainer.withDatabaseName("openmrs");
+		mysqlContainer.withUsername(databaseUsername);
+		mysqlContainer.withPassword(databaseUserPasswword);
+		Startables.deepStart(Stream.of(mysqlContainer)).join();
+		
+		System.setProperty("databaseUrl",
+		    databaseUrl.replaceAll("DATABASE_PORT", String.valueOf(mysqlContainer.getMappedPort(3306))));
 		System.setProperty("databaseUsername", databaseUsername);
 		System.setProperty("databasePassword", databaseUserPasswword);
 		System.setProperty("databaseDialect", databaseDialect);
 		System.setProperty("databaseDriver", databaseDriver);
 		System.setProperty("useInMemoryDatabase", "false");
-		
 	}
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		if (null != embeddedMysql) {
-			embeddedMysql.stop();
+		if (null != mysqlContainer) {
+			mysqlContainer.stop();
 		}
 	}
 	
