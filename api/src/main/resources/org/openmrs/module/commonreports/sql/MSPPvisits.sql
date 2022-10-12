@@ -58,7 +58,7 @@ LEFT OUTER JOIN
          -- New or subsequent visit
 
          LEFT OUTER JOIN visit prev_visit ON prev_visit.patient_id = v.patient_id
-         AND prev_visit.date_started < v.date_started
+         AND prev_visit.date_started < v.date_started AND YEAR(prev_visit.date_started) = YEAR(:startDate)
          WHERE p.voided = 0
            AND date(v.date_started) BETWEEN :startDate AND :endDate
          GROUP BY v.visit_id) tab2
