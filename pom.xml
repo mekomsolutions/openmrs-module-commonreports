@@ -34,6 +34,7 @@
 	<modules>
 		<module>api</module>
 		<module>api-2.2</module>
+		<module>api-2.5</module>
 		<module>omod</module>
 	</modules>
 

@@ -6,16 +6,19 @@
 		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commonreports-api-2.2</artifactId>
+	<artifactId>commonreports-api-2.5</artifactId>
 	<packaging>jar</packaging>
-	<name>Common Reports API 2.2</name>
+	<name>Common Reports API 2.5</name>
 	<description>API project for Common Reports</description>
 
 	<properties>
 		<!-- override old openmrs-sdk maven parent pom properties -->
-		<openmrsPlatformVersion>2.2.0</openmrsPlatformVersion>
+		<openmrsPlatformVersion>2.5.0</openmrsPlatformVersion>
 		<metadatamappingVersion>1.2.1</metadatamappingVersion>
 		<initializerVersion>2.2.0</initializerVersion>
+		<reportingVersion>1.24.0</reportingVersion>
+		<mockito.version>1.10.19</mockito.version>
+		<powermock.version>1.7.3</powermock.version>
 
 	</properties>
 	<dependencies>
@@ -53,11 +56,26 @@
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
+					<groupId>org.powermock</groupId>
+					<artifactId>powermock-module-junit4</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.powermock</groupId>
+					<artifactId>powermock-api-mockito2</artifactId>
+				</exclusion>
+				<exclusion>
 					<artifactId>javassist</artifactId>
 					<groupId>javassist</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-reflect</artifactId>
+			<version>2.0.9</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.openmrs.web</groupId>
 			<artifactId>openmrs-web</artifactId>
@@ -88,15 +106,20 @@
 			<scope>provided</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>reporting-api</artifactId>
 			<version>${reportingVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-
-
+		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>reporting-api-2.4</artifactId>
+			<version>${reportingVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>reporting-api-2.0</artifactId>
@@ -109,13 +132,6 @@
 			<artifactId>reporting-api-tests</artifactId>
 			<version>${reportingVersion}</version>
 			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>providermanagement-api</artifactId>
-			<version>${providermanagementVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -183,48 +199,30 @@
             <version>${mysqlTestContainerVersion}</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>${mockito.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.powermock</groupId>
+		    <artifactId>powermock-api-mockito</artifactId>
+		    <version>${powermock.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.powermock</groupId>
+		    <artifactId>powermock-module-junit4</artifactId>
+		    <version>${powermock.version}</version>
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.xml</include>
-				</includes>
-				<filtering>true</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<excludes>
-					<exclude>**/*.properties</exclude>
-					<exclude>**/*.xml</exclude>
-				</excludes>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-		<pluginManagement>
-
-			<plugins>
-				<plugin>
-					<groupId>org.openmrs.maven.plugins</groupId>
-					<artifactId>maven-openmrs-plugin</artifactId>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
-	</build>
 
 </project>
