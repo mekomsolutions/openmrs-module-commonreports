@@ -21,7 +21,7 @@ import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.openmrs.annotation.OpenmrsProfile;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0.* - 2.1.*", modules = { "emrapi:1.5 - 1.2*" })
+@OpenmrsProfile(modules = { "emrapi:1.5 - 1.2*" })
 public class ConditionsReportManager extends ActivatedReportManager {
 	
 	@Autowired

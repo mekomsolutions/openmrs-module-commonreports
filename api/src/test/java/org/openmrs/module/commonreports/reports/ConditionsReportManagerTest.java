@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
+import org.openmrs.module.Module;
+import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.Domain;
@@ -41,7 +43,9 @@ public class ConditionsReportManagerTest extends BaseModuleContextSensitiveMysql
 	
 	public ConditionsReportManagerTest() throws SQLException {
 		super();
-		// TODO Auto-generated constructor stub
+		Module mod = new Module("", "emrapi", "", "", "", "1.6");
+		mod.setFile(new File(""));
+		ModuleFactory.getStartedModulesMap().put(mod.getModuleId(), mod);
 	}
 	
 	@Autowired
