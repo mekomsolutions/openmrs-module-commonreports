@@ -70,16 +70,7 @@
 	<!-- /Required Privileges -->
 
 	<!-- Conditional Resources -->
-	<conditionalResources>
-		<conditionalResource>
-			<path>/lib/commonreports-api-2.2.*</path>
-			<openmrsVersion>2.2.* - 2.4.*"</openmrsVersion>
-		</conditionalResource>
-		<conditionalResource>
-			<path>/lib/commonreports-api-2.5.*</path>
-			<openmrsVersion>2.5.* - 2.*"</openmrsVersion>
-		</conditionalResource>
-	</conditionalResources>
+	
 	<!-- /Conditional Resources -->
 
 </module>
