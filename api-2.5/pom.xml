@@ -9,7 +9,7 @@
 	<artifactId>commonreports-api-2.5</artifactId>
 	<packaging>jar</packaging>
 	<name>Common Reports API 2.5</name>
-	<description>API project for Common Reports</description>
+	<description>API 2.5 project for Common Reports</description>
 
 	<properties>
 		<!-- override old openmrs-sdk maven parent pom properties -->
@@ -98,7 +98,6 @@
 			<scope>test</scope>
 			<type>test-jar</type>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>metadatamapping-api</artifactId>
@@ -112,21 +111,18 @@
 			<version>${reportingVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>reporting-api-2.4</artifactId>
 			<version>${reportingVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>reporting-api-2.0</artifactId>
 			<version>${reportingVersion}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>reporting-api-tests</artifactId>
@@ -134,27 +130,23 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openmrs.contrib</groupId>
 			<artifactId>testutils</artifactId>
 			<version>${openmrsTestutilsVersion}</version>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.7</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>calculation-api</artifactId>
 			<version>${calculationVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>serialization.xstream-api</artifactId>
@@ -167,7 +159,6 @@
 			<version>${serialization.xstreamVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>initializer-api</artifactId>
@@ -192,15 +183,13 @@
 			<version>${reportingcompatibilityVersion}</version>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>mysql</artifactId>
-            <version>${mysqlTestContainerVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<version>${mysqlTestContainerVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
