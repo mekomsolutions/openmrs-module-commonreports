@@ -9,7 +9,7 @@
 	<artifactId>commonreports-api-2.2</artifactId>
 	<packaging>jar</packaging>
 	<name>Common Reports API 2.2</name>
-	<description>API project for Common Reports</description>
+	<description>API 2.2 project for Common Reports</description>
 
 	<properties>
 		<!-- override old openmrs-sdk maven parent pom properties -->
