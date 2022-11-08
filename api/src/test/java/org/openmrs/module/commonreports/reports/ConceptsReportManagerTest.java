@@ -1,29 +1,17 @@
 package org.openmrs.module.commonreports.reports;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
-import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.Cohort;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
 import org.openmrs.module.commonreports.ActivatedReportManager;
-import org.openmrs.module.commonreports.CommonReportsConstants;
-import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.loaders.Loader;
-import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
-import org.openmrs.module.reporting.dataset.DataSetColumn;
 import org.openmrs.module.reporting.dataset.DataSetRow;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.report.ReportData;
@@ -53,18 +41,6 @@ public class ConceptsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 	@Autowired
 	@Qualifier("conceptsReportManager")
 	private ActivatedReportManager manager;
-	
-	@Before
-	public void setUp() throws Exception {
-		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
-		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
-		
-		for (Loader loader : iniz.getLoaders()) {
-			if (loader.getDomainName().equals(Domain.JSON_KEY_VALUES.getName())) {
-				loader.load();
-			}
-		}
-	}
 	
 	@Test
 	public void setupReport_shouldSetUpReport() {

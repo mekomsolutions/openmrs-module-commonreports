@@ -29,7 +29,7 @@ public class ConditionsReportManager2_2 extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.conditions.active", false);
+		return inizService.getBooleanFromKey("report.conditions.active", true);
 	}
 	
 	@Override

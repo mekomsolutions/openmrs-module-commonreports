@@ -1,7 +1,6 @@
 package org.openmrs.module.commonreports.reports;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -12,15 +11,9 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.Cohort;
-import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.commonreports.ActivatedReportManager;
-import org.openmrs.module.commonreports.CommonReportsConstants;
-import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetRow;
@@ -49,9 +42,6 @@ public class ConditionsReportManagerTest extends BaseModuleContextSensitiveMysql
 	}
 	
 	@Autowired
-	private InitializerService iniz;
-	
-	@Autowired
 	private ReportService rs;
 	
 	@Autowired
@@ -65,14 +55,6 @@ public class ConditionsReportManagerTest extends BaseModuleContextSensitiveMysql
 	public void setUp() throws Exception {
 		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		executeDataSet("org/openmrs/module/commonreports/include/conditionTestDataset.xml");
-		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
-		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
-		
-		for (Loader loader : iniz.getLoaders()) {
-			if (loader.getDomainName().equals(Domain.JSON_KEY_VALUES.getName())) {
-				loader.load();
-			}
-		}
 	}
 	
 	@Test

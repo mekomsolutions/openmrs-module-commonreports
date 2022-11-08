@@ -1,7 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
 import static org.junit.Assert.assertEquals;
-import java.io.File;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,11 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
 import org.openmrs.module.commonreports.ActivatedReportManager;
-import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetRow;
@@ -28,17 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DiagnosesReportManager2_2Test extends BaseModuleContextSensitiveMysqlBackedTest {
-	
-	@Autowired
-	private InitializerService iniz;
 	
 	@Autowired
 	private ReportService rs;
@@ -53,15 +40,6 @@ public class DiagnosesReportManager2_2Test extends BaseModuleContextSensitiveMys
 	@Before
 	public void setUp() throws Exception {
 		executeDataSet("org/openmrs/module/commonreports/include/diagnosesTestDataset2_2.xml");
-		
-		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
-		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
-		
-		for (Loader loader : iniz.getLoaders()) {
-			if (loader.getDomainName().equals(Domain.JSON_KEY_VALUES.getName())) {
-				loader.load();
-			}
-		}
 	}
 	
 	@Test
@@ -158,21 +136,5 @@ public class DiagnosesReportManager2_2Test extends BaseModuleContextSensitiveMys
 		map.put("date_created", "2015-01-12 00:00:00.0");
 		
 		return map;
-	}
-	
-	private void updateDatabase(String filename) throws Exception {
-		Liquibase liquibase = getLiquibase(filename);
-		liquibase.update("Modify column datatype to longblob on reporting_report_design_resource table");
-		liquibase.getDatabase().getConnection().commit();
-	}
-	
-	private Liquibase getLiquibase(String filename) throws Exception {
-		Database liquibaseConnection = DatabaseFactory.getInstance()
-		        .findCorrectDatabaseImplementation(new JdbcConnection(getConnection()));
-		
-		liquibaseConnection.setDatabaseChangeLogTableName("LIQUIBASECHANGELOG");
-		liquibaseConnection.setDatabaseChangeLogLockTableName("LIQUIBASECHANGELOGLOCK");
-		
-		return new Liquibase(filename, new ClassLoaderResourceAccessor(getClass().getClassLoader()), liquibaseConnection);
 	}
 }

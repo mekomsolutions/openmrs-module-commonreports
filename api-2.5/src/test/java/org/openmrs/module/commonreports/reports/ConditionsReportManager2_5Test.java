@@ -1,7 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
 import static org.junit.Assert.assertEquals;
-import java.io.File;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,9 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.commonreports.ActivatedReportManager;
-import org.openmrs.module.initializer.Domain;
-import org.openmrs.module.initializer.api.InitializerService;
-import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetRow;
@@ -29,9 +26,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class ConditionsReportManager2_5Test extends BaseModuleContextSensitiveTest {
 	
 	@Autowired
-	private InitializerService iniz;
-	
-	@Autowired
 	private ReportService rs;
 	
 	@Autowired
@@ -44,15 +38,6 @@ public class ConditionsReportManager2_5Test extends BaseModuleContextSensitiveTe
 	@Before
 	public void setUp() throws Exception {
 		executeDataSet("org/openmrs/module/commonreports/include/conditionTestDataset2_5.xml");
-		
-		String path = getClass().getClassLoader().getResource("testAppDataDir").getPath() + File.separator;
-		System.setProperty("OPENMRS_APPLICATION_DATA_DIRECTORY", path);
-		
-		for (Loader loader : iniz.getLoaders()) {
-			if (loader.getDomainName().equals(Domain.JSON_KEY_VALUES.getName())) {
-				loader.load();
-			}
-		}
 	}
 	
 	@Test

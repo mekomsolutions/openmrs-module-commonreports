@@ -2,11 +2,9 @@ package org.openmrs.module.commonreports.reports;
 
 import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.common.MessageUtil;
@@ -15,7 +13,6 @@ import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
-import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +24,7 @@ public class PatientsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.patients.active", false);
+		return inizService.getBooleanFromKey("report.patients.active", true);
 	}
 	
 	@Override

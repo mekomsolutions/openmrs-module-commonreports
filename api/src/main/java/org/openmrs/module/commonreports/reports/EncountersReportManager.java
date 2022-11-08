@@ -32,7 +32,7 @@ public class EncountersReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.encounters.active", false);
+		return inizService.getBooleanFromKey("report.encounters.active", true);
 	}
 	
 	@Override

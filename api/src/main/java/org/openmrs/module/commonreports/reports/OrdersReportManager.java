@@ -32,7 +32,7 @@ public class OrdersReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.orders.active", false);
+		return inizService.getBooleanFromKey("report.orders.active", true);
 	}
 	
 	@Override

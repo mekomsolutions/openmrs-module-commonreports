@@ -31,7 +31,7 @@ public class ConceptsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.concepts.active", false);
+		return inizService.getBooleanFromKey("report.concepts.active", true);
 	}
 	
 	@Override

@@ -33,7 +33,7 @@ public class VisitReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.visits.table.active", false);
+		return inizService.getBooleanFromKey("report.visits.table.active", true);
 	}
 	
 	@Override

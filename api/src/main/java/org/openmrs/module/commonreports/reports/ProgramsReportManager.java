@@ -31,7 +31,7 @@ public class ProgramsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.programs.active", false);
+		return inizService.getBooleanFromKey("report.programs.active", true);
 	}
 	
 	@Override
