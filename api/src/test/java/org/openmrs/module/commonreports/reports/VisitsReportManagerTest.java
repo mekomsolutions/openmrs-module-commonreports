@@ -23,9 +23,9 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class VisitReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+public class VisitsReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
-	public VisitReportManagerTest() throws SQLException {
+	public VisitsReportManagerTest() throws SQLException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -37,7 +37,7 @@ public class VisitReportManagerTest extends BaseModuleContextSensitiveMysqlBacke
 	private ReportDefinitionService rds;
 	
 	@Autowired
-	@Qualifier("visitReportManager")
+	@Qualifier("visitsReportManager")
 	private ActivatedReportManager manager;
 	
 	@Before
