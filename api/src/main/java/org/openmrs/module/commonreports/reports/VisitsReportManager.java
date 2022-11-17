@@ -48,12 +48,12 @@ public class VisitsReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return MessageUtil.translate("commonreports.report.visits.table.reportName");
+		return MessageUtil.translate("commonreports.report.visits.reportName");
 	}
 	
 	@Override
 	public String getDescription() {
-		return MessageUtil.translate("commonreports.report.visits.table.reportDescription");
+		return MessageUtil.translate("commonreports.report.visits.reportDescription");
 	}
 	
 	private Parameter getStartDateParameter() {
