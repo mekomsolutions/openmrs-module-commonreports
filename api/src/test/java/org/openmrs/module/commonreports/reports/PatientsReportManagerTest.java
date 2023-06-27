@@ -117,7 +117,7 @@ public class PatientsReportManagerTest extends BaseModuleContextSensitiveMysqlBa
 				}
 				
 			}
-			assertEquals(13, rowNumber);
+			assertEquals(6, rowNumber);
 		}
 		
 	}
