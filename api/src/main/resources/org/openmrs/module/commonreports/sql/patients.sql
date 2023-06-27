@@ -25,3 +25,4 @@ FROM
     LEFT JOIN person_name name ON person.person_id = name.person_id
     LEFT JOIN person_address address ON person.person_id = address.person_id
     LEFT JOIN patient_identifier identifier ON patient.patient_id = identifier.patient_id
+    GROUP BY patient_id
