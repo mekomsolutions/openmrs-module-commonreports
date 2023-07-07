@@ -4,4 +4,4 @@ build:
   bash_commands: "mvn clean install -DskipTests"
 deploy:
   # Do not deploy via OCD3. Publishing is done via GitHub Actions.
-  bash_commands: "exit 0"
+  bash_commands: "mvn clean deploy -DskipTests -DaltDeploymentRepository=mks-nexus::default::https://nexus.mekomsolutions.net/repository/maven-snapshots"
