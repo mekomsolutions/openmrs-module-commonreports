@@ -10,7 +10,6 @@ import java.util.Map;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.api.InitializerService;
