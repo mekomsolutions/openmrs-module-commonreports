@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
-import org.openmrs.api.LocationService;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -34,9 +33,6 @@ public class OutpatientConsultationReportManager extends ActivatedReportManager 
 	
 	@Autowired
 	private InitializerService inizService;
-	
-	@Autowired
-	private LocationService locationService;
 	
 	@Override
 	public boolean isActivated() {
@@ -72,10 +68,7 @@ public class OutpatientConsultationReportManager extends ActivatedReportManager 
 	}
 	
 	private Parameter getLocationParameter() {
-		Parameter param = new Parameter("locationList", "Visit Location", Location.class, List.class,
-		        locationService.getAllLocations(false));
-		param.setRequired(false);
-		return param;
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
 	}
 	
 	public static String col1 = "";
@@ -159,7 +152,7 @@ public class OutpatientConsultationReportManager extends ActivatedReportManager 
 			CodedObsCohortDefinition diag = new CodedObsCohortDefinition();
 			diag.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			diag.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			diag.addParameter(getLocationParameter());
+			diag.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 			diag.setOperator(SetComparator.IN);
 			diag.setQuestion(inizService.getConceptFromKey("report.opdconsult.diagnosisQuestion.concept"));
 			
