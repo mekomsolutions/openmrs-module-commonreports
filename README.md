@@ -23,7 +23,7 @@ It bundles two groups of reports:
 ### Opt-in Reports
 #### Cambodia
 * [MoH HC1](https://docs.google.com/spreadsheets/d/1AD59mP88wzTeV9pe3YyrBri4X7AFNnnqik4l1pTSaUs/edit?usp=sharing) '_I. Outpatient Consultation (OPD)_' report
-* [MPA Guidelines](https://drive.google.com/file/d/0B5RYtMgBysYHOTk1cFpBNVpDdEE/view?usp=sharing) for Health Center Development 2008 ~ 2015 '_Outpatient Record Book_'
+* [MPA Guidelines]([https://drive.google.com/file/d/0B5RYtMgBysYHOTk1cFpBNVpDdEE/view?usp=sharing](https://drive.google.com/file/d/0B5RYtMgBysYHOTk1cFpBNVpDdEE/view?resourcekey=0-aywPbI3lhr8bVV2Kvw5XFA)) for Health Center Development 2008 ~ 2015 '_Outpatient Record Book_'
 #### Haiti
 * [MSPP: New Episodes of Diseases](readme/newEpisodesOfDiseases.md) report
 * [MSPP: Lab](readme/MSPPlab.md) report
