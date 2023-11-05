@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.openmrs.Cohort;
 import org.openmrs.api.ConceptService;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
+import org.openmrs.module.commonreports.renderer.CohortCrossTabDataSetCsvReportRenderer;
 import org.openmrs.module.commonreports.reports.OutpatientConsultationReportManager;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -77,6 +79,8 @@ public class OutpatientConsultationReportManagerTest extends BaseModuleContextSe
 		
 		// verif
 		Assert.assertNotNull(rs.getReportDesignByUuid("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d"));
+		
+		assertEquals(rs.getReportDesignByUuid("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d").getRendererType(), CohortCrossTabDataSetCsvReportRenderer.class);
 		
 	}
 	
@@ -151,6 +155,32 @@ public class OutpatientConsultationReportManagerTest extends BaseModuleContextSe
 			assertThat(allWithMalaria, is(notNullValue()));
 			assertThat(allWithMalaria.getSize(), is(2));
 		}
+	}
+	
+	@Test
+	public void testReportRenderer() throws Exception {
+		
+		// Setup
+		EvaluationContext context = new EvaluationContext();
+		context.addParameterValue("startDate", DateUtil.parseDate("2008-08-01", "yyyy-MM-dd"));
+		context.addParameterValue("endDate", DateUtil.parseDate("2009-09-30", "yyyy-MM-dd"));
+		
+		ReportDefinition rd = manager.constructReportDefinition();
+		ReportData data = rds.evaluate(rd, context);
+		
+		CohortCrossTabDataSetCsvReportRenderer renderer = new CohortCrossTabDataSetCsvReportRenderer();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+		// Replay
+		renderer.render(data, "", out);
+        
+		// Verify
+		String expectedFormat = "\"\",\"0-28 days - Males\",\"0-28 days - Females\",\"1-12 months - Males\",\"1-12 months - Females\",\"1-4 years - Males\",\"1-4 years - Females\",\"5-14 years - Males\",\"5-14 years - Females\",\"15-24 years - Males\",\"15-24 years - Females\",\"25-49 years - Males\",\"25-49 years - Females\",\"50-64 years - Males\",\"50-64 years - Females\",\"_> 65 years - Males\",\"_> 65 years - Females\",\"Total - Males\",\"Total - Females\",\"Total\",\"Referred To - Males\",\"Referred To - Females\"\r\n" + 
+        		"\"MALARIA\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"2\",\"0\",\"1\"\r\n" + 
+        		"\"FEVER\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"1\",\"0\",\"0\"\r\n" + 
+        		"\"DIABETES\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"1\",\"0\",\"0\"\r\n";
+		
+		assertThat(out.toString(), is(expectedFormat));
 	}
 	
 }

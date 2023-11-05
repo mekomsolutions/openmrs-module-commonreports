@@ -11,6 +11,8 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
+import org.openmrs.module.commonreports.renderer.CohortCrossTabDataSetCsvReportRenderer;
+import org.openmrs.module.commonreports.renderer.PatientHistoryXmlReportRenderer;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
@@ -325,7 +327,11 @@ public class OutpatientConsultationReportManager extends ActivatedReportManager 
 	
 	@Override
 	public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
-		return Arrays
-		        .asList(ReportManagerUtil.createCsvReportDesign("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d", reportDefinition));
+		ReportDesign reportDesign = new ReportDesign();
+		reportDesign.setName("CSV");
+		reportDesign.setUuid("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d");
+		reportDesign.setReportDefinition(reportDefinition);
+		reportDesign.setRendererType(CohortCrossTabDataSetCsvReportRenderer.class);
+		return Arrays.asList(reportDesign);
 	}
 }
