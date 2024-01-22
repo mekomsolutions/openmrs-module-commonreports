@@ -118,13 +118,13 @@ public class DisbursementReportManager extends ActivatedReportManager {
 	private Map<String, String> getMetadataReplacements() {
 		Map<String, String> map = new HashMap<String, String>();
 		
-		map.put("familyPlanningVisitTypeId", inizService.getValueFromKey("report.disbursement.ccs.encounter.type.uuid"));
-		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.ncd.encounter.type.uuid"));
-		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.yes.concept.uuid"));
-		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.positive.concept.uuid"));
-		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.via.diagnosis.question.concept.uuid"));
-		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.followup.question.concept.uuid"));
-		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.started.on.medication.question.concept.uuid"));
+		map.put("ccsEncounterType", inizService.getValueFromKey("report.disbursement.ccs.encounter.type.uuid"));
+		map.put("ncdEncounterTypeUuid", inizService.getValueFromKey("report.disbursement.ncd.encounter.type.uuid"));
+		map.put("yesConceptUuid", inizService.getValueFromKey("report.disbursement.yes.concept.uuid"));
+		map.put("positiveConceptUuid", inizService.getValueFromKey("report.disbursement.positive.concept.uuid"));
+		map.put("viaDiagnosisQuestionConceptUuid", inizService.getValueFromKey("report.disbursement.via.diagnosis.question.concept.uuid"));
+		map.put("followupQuestionConceptUuid", inizService.getValueFromKey("report.disbursement.followup.question.concept.uuid"));
+		map.put("startedMedicationQuestionConceptUuid", inizService.getValueFromKey("report.disbursement.started.medication.question.concept.uuid"));
 		
 		return map;
 	}
