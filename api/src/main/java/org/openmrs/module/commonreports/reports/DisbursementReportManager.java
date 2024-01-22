@@ -29,7 +29,7 @@ public class DisbursementReportManager extends ActivatedReportManager {
 	
 	@Override
 	public boolean isActivated() {
-		return inizService.getBooleanFromKey("report.disbursement.active", true);
+		return inizService.getBooleanFromKey("report.disbursement.active", false);
 	}
 	
 	@Override
@@ -85,6 +85,7 @@ public class DisbursementReportManager extends ActivatedReportManager {
 		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.disbursement.table.datasetDescription"));
 		
 		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/disbursement.sql");
+		applyMetadataReplacements(sql);
 		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
@@ -103,6 +104,29 @@ public class DisbursementReportManager extends ActivatedReportManager {
 		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("77b6c2cb-4b96-47d8-bcde-b1b7f16f5670",
 		    reportDefinition);
 		return Arrays.asList(reportDesign);
+	}
+	
+	private String applyMetadataReplacements(String rawSql) {
+		Map<String, String> metadataReplacements = getMetadataReplacements();
+		
+		for (String key : metadataReplacements.keySet()) {
+			rawSql = rawSql.replaceAll(":" + key, metadataReplacements.get(key));
+		}
+		return rawSql;
+	}
+	
+	private Map<String, String> getMetadataReplacements() {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		map.put("familyPlanningVisitTypeId", inizService.getValueFromKey("report.disbursement.ccs.encounter.type.uuid"));
+		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.ncd.encounter.type.uuid"));
+		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.yes.concept.uuid"));
+		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.positive.concept.uuid"));
+		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.via.diagnosis.question.concept.uuid"));
+		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.followup.question.concept.uuid"));
+		map.put("prenatalVisitTypeId", inizService.getValueFromKey("report.disbursement.started.on.medication.question.concept.uuid"));
+		
+		return map;
 	}
 	
 }
