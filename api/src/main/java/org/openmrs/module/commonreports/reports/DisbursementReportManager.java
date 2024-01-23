@@ -58,8 +58,8 @@ public class DisbursementReportManager extends ActivatedReportManager {
 	}
 	
 	private Parameter getEndDateParameter() {
-		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		return new Parameter("endDate", "End Date", Date.class, null, DateUtil.parseDate(today, "yyyy-MM-dd"));
+		String endDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		return new Parameter("endDate", "End Date", Date.class, null, DateUtil.parseDate(endDate, "yyyy-MM-dd"));
 	}
 	
 	@Override
@@ -122,9 +122,12 @@ public class DisbursementReportManager extends ActivatedReportManager {
 		map.put("ncdEncounterTypeUuid", inizService.getValueFromKey("report.disbursement.ncd.encounter.type.uuid"));
 		map.put("yesConceptUuid", inizService.getValueFromKey("report.disbursement.yes.concept.uuid"));
 		map.put("positiveConceptUuid", inizService.getValueFromKey("report.disbursement.positive.concept.uuid"));
-		map.put("viaDiagnosisQuestionConceptUuid", inizService.getValueFromKey("report.disbursement.via.diagnosis.question.concept.uuid"));
-		map.put("followupQuestionConceptUuid", inizService.getValueFromKey("report.disbursement.followup.question.concept.uuid"));
-		map.put("startedMedicationQuestionConceptUuid", inizService.getValueFromKey("report.disbursement.started.medication.question.concept.uuid"));
+		map.put("viaDiagnosisQuestionConceptUuid",
+		    inizService.getValueFromKey("report.disbursement.via.diagnosis.question.concept.uuid"));
+		map.put("followupQuestionConceptUuid",
+		    inizService.getValueFromKey("report.disbursement.followup.question.concept.uuid"));
+		map.put("startedMedicationQuestionConceptUuid",
+		    inizService.getValueFromKey("report.disbursement.started.medication.question.concept.uuid"));
 		
 		return map;
 	}
