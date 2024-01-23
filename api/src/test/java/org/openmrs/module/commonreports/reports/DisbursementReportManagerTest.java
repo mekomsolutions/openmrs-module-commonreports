@@ -93,10 +93,10 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 		getConnection().commit();
 		
 		// verify
-		boolean indicator1 = true;
-		boolean indicator2 = true;
-		boolean indicator3 = true;
-		boolean indicator4 = true;
+		boolean indicator1 = false;
+		boolean indicator2 = false;
+		boolean indicator3 = false;
+		boolean indicator4 = false;
 		for (DataSet ds : data.getDataSets().values()) {
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				DataSetRow row = itr.next();
