@@ -88,8 +88,8 @@ public class DisbursementReportManager extends ActivatedReportManager {
 		rd.setUuid(getUuid());
 		
 		SqlDataSetDefinition sqlDsd = new SqlDataSetDefinition();
-		sqlDsd.setName(MessageUtil.translate("commonreports.report.disbursement.table.datasetName"));
-		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.disbursement.table.datasetDescription"));
+		sqlDsd.setName(MessageUtil.translate("commonreports.report.disbursement.datasetName"));
+		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.disbursement.datasetDescription"));
 		
 		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/disbursement.sql");
 		applyMetadataReplacements(sql);
