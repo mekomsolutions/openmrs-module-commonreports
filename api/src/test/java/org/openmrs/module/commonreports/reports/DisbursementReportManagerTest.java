@@ -95,7 +95,7 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				DataSetRow row = itr.next();
 				
-				if (row.getColumnValue("Indicator").equals("Registered patients aged 40 and above that have had their NCD screenign for the first time")) {
+				if (row.getColumnValue("Indicator").equals("Registered patients aged 40 and above that have had their NCD screening for the first time")) {
 					assertEquals("7", row.getColumnValue("Value"));
 					indicator1 = true;
 				}
@@ -103,13 +103,13 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 					assertEquals("8", row.getColumnValue("Value"));
 					indicator2 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("80% (of registered patients with a Follow-up date) were given medication with at least a 4 weeks prescription")) {
-					assertEquals("Yes", row.getColumnValue("Value"));
-					indicator4 = true;
-				}
 				if (row.getColumnValue("Indicator").equals("80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred")) {
 					assertEquals("Yes", row.getColumnValue("Value"));
 					indicator3 = true;
+				}
+				if (row.getColumnValue("Indicator").equals("80% (of registered patients with a Follow-up date) were given medication with at least a 4 weeks prescription")) {
+					assertEquals("Yes", row.getColumnValue("Value"));
+					indicator4 = true;
 				}
 			}
 			assertTrue(indicator1 && indicator2 && indicator3 && indicator4);

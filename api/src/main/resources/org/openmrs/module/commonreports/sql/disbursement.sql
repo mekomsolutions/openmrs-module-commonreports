@@ -1,6 +1,6 @@
 -- Patients aged 40 and above with NCD form filled out for the first time
 SELECT 
-    'Registered patients aged 40 and above that have had their NCD screenign for the first time' AS 'Indicator', 
+    'Registered patients aged 40 and above that have had their NCD screening for the first time' AS 'Indicator', 
     CAST(COUNT(DISTINCT p.person_id) AS CHAR) AS 'Value'
 FROM 
     encounter e 
