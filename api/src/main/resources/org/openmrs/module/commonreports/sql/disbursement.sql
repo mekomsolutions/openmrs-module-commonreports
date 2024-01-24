@@ -130,7 +130,7 @@ SELECT
     '80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred' AS 'Indicator',
     CASE 
         WHEN SUM(CASE 
-            WHEN medication_table.medication_duration_in_weeks >= 3 THEN 1 
+            WHEN medication_table.medication_duration_in_weeks >= 4 THEN 1 
             ELSE 0 
         END) >= 0.8 * COUNT(*) THEN 'Yes'
         ELSE 'No'
@@ -150,8 +150,11 @@ LEFT OUTER JOIN
     (
         SELECT 
             CASE 
+                WHEN c.uuid LIKE '1822AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN (d_o.duration / 672)
                 WHEN c.uuid LIKE '1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN (d_o.duration / 7)
                 WHEN c.uuid LIKE '1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN d_o.duration
+                WHEN c.uuid LIKE '1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN (d_o.duration * 4.34524)
+                WHEN c.uuid LIKE '1734AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN (d_o.duration * 52.1429)
                 ELSE 0
             END AS 'medication_duration_in_weeks',
             o.encounter_id
