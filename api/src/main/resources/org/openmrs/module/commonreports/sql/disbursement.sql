@@ -1,13 +1,14 @@
 -- Patients aged 40 and above with NCD form filled out for the first time
 SELECT 
-    'Patients aged 40 and above with NCD form filled out for the first time' AS 'Indicator', 
+    'Registered patients aged 40 and above that have had their NCD screenign for the first time' AS 'Indicator', 
     CAST(COUNT(DISTINCT p.person_id) AS CHAR) AS 'Value'
 FROM 
     encounter e 
 INNER JOIN 
     person p ON e.patient_id = p.person_id
 WHERE 
-    e.encounter_datetime > :startDate
+    e.location_id in (:locationList)
+    AND e.encounter_datetime > :startDate
     AND e.encounter_datetime < :endDate
     AND e.encounter_type = (
         SELECT encounter_type_id 
@@ -30,14 +31,15 @@ UNION ALL
 
 -- Women aged 30 to 49 years with CCS form filled out for the first time
 SELECT 
-    'Women aged 30 to 49 years with CCS form filled out for the first time' AS 'Indicator', 
+    'Registered women aged 30 to 49 years that have had their CCS screening for the first time' AS 'Indicator', 
     CAST(COUNT(DISTINCT p.person_id) AS CHAR) AS 'Value'
 FROM 
     encounter e 
 INNER JOIN 
     person p ON e.patient_id = p.person_id
 WHERE 
-    e.encounter_datetime > :startDate
+    e.location_id in (:locationList)
+    AND e.encounter_datetime > :startDate
     AND e.encounter_datetime < :endDate
     AND e.encounter_type = (
         SELECT encounter_type_id 
@@ -60,7 +62,7 @@ UNION ALL
 
 -- 80% (of women aged 30 to 49 years with CCS form filled out for the first time) were VIA positive, and referred
 SELECT 
-    '80% (of women aged 30 to 49 years with CCS form filled out for the first time) were VIA positive and referred' AS 'Indicator',
+    '80% (of registered patients with a Follow-up date) were given medication with at least a 3 weeks prescription' AS 'Indicator',
     CASE 
         WHEN SUM(CASE 
             WHEN o_v_p.value_coded = (
@@ -101,7 +103,8 @@ LEFT OUTER JOIN
         WHERE uuid LIKE '758b9dd8-b6d0-4ac2-b245-0e7bffb4693a'
     )
 WHERE 
-    e.encounter_datetime > :startDate
+    e.location_id in (:locationList)
+    AND e.encounter_datetime > :startDate
     AND e.encounter_datetime < :endDate
     AND e.encounter_type = (
         SELECT encounter_type_id 
@@ -124,14 +127,10 @@ UNION ALL
 
 -- 80% have a Follow-up date and were given medication at least 3 weeks ago
 SELECT
-    '80% have a Follow-up date and were given medication at least 3 weeks ago' AS 'Indicator',
+    '80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred' AS 'Indicator',
     CASE 
         WHEN SUM(CASE 
-            WHEN o_m.value_coded = (
-                SELECT concept_id 
-                FROM concept 
-                WHERE uuid LIKE '1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-            ) THEN 1 
+            WHEN medication_table.medication_duration_in_weeks >= 3 THEN 1 
             ELSE 0 
         END) >= 0.8 * COUNT(*) THEN 'Yes'
         ELSE 'No'
@@ -147,21 +146,22 @@ INNER JOIN
         FROM concept 
         WHERE uuid LIKE 'e9c145c1-f4e9-4c34-b237-da069939dc38'
     )
-INNER JOIN 
-    obs o_m ON e.encounter_id = o_m.encounter_id 
-    AND o_m.concept_id = (
-        SELECT concept_id 
-        FROM concept 
-        WHERE uuid LIKE '805c3a0b-cd38-4ed6-b4f8-f3af0fc118ad'
-    ) 
-    AND o_m.value_coded = (
-        SELECT concept_id 
-        FROM concept 
-        WHERE uuid LIKE '1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-    )    
-WHERE 
+LEFT OUTER JOIN
     (
-        (o_f.value_datetime >= :startDate AND o_f.value_datetime <= :endDate) 
-        AND (o_m.obs_datetime < DATE_SUB(:endDate, INTERVAL 3 WEEK)) 
-        OR (o_f.value_datetime >= :startDate AND o_f.value_datetime <= :endDate)
-    );
+        SELECT 
+            CASE 
+                WHEN c.uuid LIKE '1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN (d_o.duration / 7)
+                WHEN c.uuid LIKE '1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN d_o.duration
+                ELSE 0
+            END AS 'medication_duration_in_weeks',
+            o.encounter_id
+        FROM 
+            drug_order d_o
+        INNER JOIN 
+            orders o ON d_o.order_id = o.order_id
+        INNER JOIN 
+            concept c ON d_o.duration_units = c.concept_id
+    ) medication_table ON medication_table.encounter_id = e.encounter_id
+WHERE 
+    e.location_id in (:locationList)
+    AND o_f.value_datetime BETWEEN :startDate AND :endDate

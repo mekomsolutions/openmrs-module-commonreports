@@ -1,25 +1,16 @@
 package org.openmrs.module.commonreports.reports;
 
-import static java.math.BigDecimal.ONE;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-
-import org.hibernate.cfg.Environment;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.Cohort;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.LocationService;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -32,7 +23,6 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -46,6 +36,10 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 	
 	@Autowired
 	private ReportDefinitionService rds;
+	
+	@Autowired
+	@Qualifier("locationService")
+	private LocationService ls;
 	
 	@Autowired
 	@Qualifier("conceptService")
@@ -86,12 +80,12 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2023-12-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2024-04-28", "yyyy-MM-dd"));
+		context.addParameterValue("locationList", Collections.singletonList(ls.getLocation(1)));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
-		getConnection().commit();
-		
+
 		// verify
 		boolean indicator1 = false;
 		boolean indicator2 = false;
@@ -101,21 +95,21 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				DataSetRow row = itr.next();
 				
-				if (row.getColumnValue("Indicator").equals("Patients aged 40 and above with NCD form filled out for the first time")) {
+				if (row.getColumnValue("Indicator").equals("Registered patients aged 40 and above that have had their NCD screenign for the first time")) {
 					assertEquals("7", row.getColumnValue("Value"));
 					indicator1 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("Women aged 30 to 49 years with CCS form filled out for the first time")) {
+				if (row.getColumnValue("Indicator").equals("Registered women aged 30 to 49 years that have had their CCS screening for the first time")) {
 					assertEquals("8", row.getColumnValue("Value"));
 					indicator2 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("80% (of women aged 30 to 49 years with CCS form filled out for the first time) had their first CCS screening, were VIA positive and referred")) {
+				if (row.getColumnValue("Indicator").equals("80% (of registered patients with a Follow-up date) were given medication with at least a 3 weeks prescription")) {
+					assertEquals("Yes", row.getColumnValue("Value"));
+					indicator4 = true;
+				}
+				if (row.getColumnValue("Indicator").equals("80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred")) {
 					assertEquals("Yes", row.getColumnValue("Value"));
 					indicator3 = true;
-				}
-				if (row.getColumnValue("Indicator").equals("80% have a Follow-up date and were given medication at least 3 weeks ago")) {
-					assertEquals("No", row.getColumnValue("Value"));
-					indicator4 = true;
 				}
 			}
 			assertTrue(indicator1 && indicator2 && indicator3 && indicator4);

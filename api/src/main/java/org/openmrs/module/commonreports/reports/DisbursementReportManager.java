@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.openmrs.Location;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.common.DateUtil;
@@ -62,11 +64,16 @@ public class DisbursementReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class, null, DateUtil.parseDate(endDate, "yyyy-MM-dd"));
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -93,6 +100,7 @@ public class DisbursementReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("startDate", "${startDate}");
 		parameterMappings.put("endDate", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
 		
