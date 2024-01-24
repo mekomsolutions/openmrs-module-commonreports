@@ -103,7 +103,7 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 					assertEquals("8", row.getColumnValue("Value"));
 					indicator2 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("80% (of registered patients with a Follow-up date) were given medication with at least a 3 weeks prescription")) {
+				if (row.getColumnValue("Indicator").equals("80% (of registered patients with a Follow-up date) were given medication with at least a 4 weeks prescription")) {
 					assertEquals("Yes", row.getColumnValue("Value"));
 					indicator4 = true;
 				}

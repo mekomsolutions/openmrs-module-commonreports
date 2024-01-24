@@ -62,7 +62,7 @@ UNION ALL
 
 -- 80% (of women aged 30 to 49 years with CCS form filled out for the first time) were VIA positive, and referred
 SELECT 
-    '80% (of registered patients with a Follow-up date) were given medication with at least a 3 weeks prescription' AS 'Indicator',
+    '80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred' AS 'Indicator',
     CASE 
         WHEN SUM(CASE 
             WHEN o_v_p.value_coded = (
@@ -125,9 +125,9 @@ WHERE
 
 UNION ALL
 
--- 80% have a Follow-up date and were given medication at least 3 weeks ago
+-- 80% have a Follow-up date and were given medication at least 4 weeks ago
 SELECT
-    '80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred' AS 'Indicator',
+    '80% (of registered patients with a Follow-up date) were given medication with at least a 4 weeks prescription' AS 'Indicator',
     CASE 
         WHEN SUM(CASE 
             WHEN medication_table.medication_duration_in_weeks >= 4 THEN 1 
