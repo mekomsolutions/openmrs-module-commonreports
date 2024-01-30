@@ -8,8 +8,8 @@ INNER JOIN
     person p ON e.patient_id = p.person_id
 WHERE 
     e.location_id in (:locationList)
-    AND e.encounter_datetime > :startDate
-    AND e.encounter_datetime < :endDate
+    AND DATE(e.encounter_datetime) >= :startDate
+    AND DATE(e.encounter_datetime) <= :endDate
     AND e.encounter_type = (
         SELECT encounter_type_id 
         FROM encounter_type s_et 
@@ -24,7 +24,7 @@ WHERE
             FROM encounter_type ss_et 
             WHERE ss_et.uuid LIKE '422b7e0c-b8f3-4748-8e60-d6684315f141'
         ) 
-        AND s_e.encounter_datetime <= :startDate
+        AND DATE(s_e.encounter_datetime) <= :startDate
     )
 
 UNION ALL
@@ -39,8 +39,8 @@ INNER JOIN
     person p ON e.patient_id = p.person_id
 WHERE 
     e.location_id in (:locationList)
-    AND e.encounter_datetime > :startDate
-    AND e.encounter_datetime < :endDate
+    AND DATE(e.encounter_datetime) >= :startDate
+    AND DATE(e.encounter_datetime) <= :endDate
     AND e.encounter_type = (
         SELECT encounter_type_id 
         FROM encounter_type s_et 
@@ -55,7 +55,7 @@ WHERE
             FROM encounter_type ss_et 
             WHERE ss_et.uuid LIKE '3fd606b6-4c9d-4077-a532-c1ac58644ad2'
         ) 
-        AND s_e.encounter_datetime <= :startDate
+        AND DATE(s_e.encounter_datetime) <= :startDate
     )
 
 UNION ALL
@@ -73,7 +73,7 @@ SELECT
             AND o_f.concept_id = (
                 SELECT concept_id 
                 FROM concept 
-                WHERE uuid LIKE '758b9dd8-b6d0-4ac2-b245-0e7bffb4693a'
+                WHERE uuid LIKE 'c158e3b2-edf9-4e0e-9e95-d36de1a51527'
             ) THEN 1 
             ELSE 0 
         END) >= 0.8 * COUNT(*) THEN 'Yes'
@@ -100,12 +100,17 @@ LEFT OUTER JOIN
     AND o_f.concept_id = (
         SELECT concept_id 
         FROM concept 
-        WHERE uuid LIKE '758b9dd8-b6d0-4ac2-b245-0e7bffb4693a'
+        WHERE uuid LIKE 'c158e3b2-edf9-4e0e-9e95-d36de1a51527'
+    )
+    AND o_f.value_coded IN (
+        SELECT concept_id 
+        FROM concept 
+        WHERE uuid LIKE '7d469a03-a56b-4c51-a421-0e5787556630' OR uuid LIKE 'fc3909e3-9ddb-46e3-b4f7-6905732d977b'
     )
 WHERE 
     e.location_id in (:locationList)
-    AND e.encounter_datetime > :startDate
-    AND e.encounter_datetime < :endDate
+    AND DATE(e.encounter_datetime) >= :startDate
+    AND DATE(e.encounter_datetime) <= :endDate
     AND e.encounter_type = (
         SELECT encounter_type_id 
         FROM encounter_type s_et 
@@ -120,14 +125,14 @@ WHERE
             FROM encounter_type ss_et 
             WHERE ss_et.uuid LIKE '3fd606b6-4c9d-4077-a532-c1ac58644ad2'
         ) 
-        AND s_e.encounter_datetime <= :startDate
+        AND DATE(s_e.encounter_datetime) <= :startDate
     )
 
 UNION ALL
 
--- 80% have a Follow-up date and were given medication at least 4 weeks ago
+-- 80% (of registered patients with a Follow-up date and diagnosed with Hypertension & Diabetes) were given medication with at least a 4 weeks prescription
 SELECT
-    '80% (of registered patients with a Follow-up date) were given medication with at least a 4 weeks prescription' AS 'Indicator',
+    '80% (of registered patients with a Follow-up date and diagnosed with Hypertension & Diabetes) were given medication with at least a 4 weeks prescription' AS 'Indicator',
     CASE 
         WHEN SUM(CASE 
             WHEN medication_table.medication_duration_in_weeks >= 4 THEN 1 
@@ -139,6 +144,18 @@ FROM
     patient p 
 INNER JOIN 
     encounter e ON p.patient_id = e.patient_id 
+INNER JOIN 
+    obs o_diagnosis ON e.encounter_id = o_diagnosis.encounter_id 
+    AND o_diagnosis.concept_id = (
+        SELECT concept_id 
+        FROM concept 
+        WHERE uuid LIKE '45583478-f703-46e3-b63a-54b0a95c25f0'
+    )
+    AND o_diagnosis.value_coded IN (
+        SELECT concept_id 
+        FROM concept 
+        WHERE uuid LIKE '105903f4-7b6d-496a-b613-37ab9d0f5450' OR uuid LIKE '8b26ecd3-8726-4c8e-b042-cbe71e44a863' OR uuid LIKE '117399AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+    )
 INNER JOIN 
     obs o_f ON e.encounter_id = o_f.encounter_id 
     AND o_f.concept_id = (
@@ -166,5 +183,5 @@ LEFT OUTER JOIN
             concept c ON d_o.duration_units = c.concept_id
     ) medication_table ON medication_table.encounter_id = e.encounter_id
 WHERE 
-    e.location_id in (:locationList)
+    e.location_id IN (:locationList)
     AND o_f.value_datetime BETWEEN :startDate AND :endDate
