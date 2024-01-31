@@ -174,14 +174,14 @@ LEFT OUTER JOIN
                 WHEN c.uuid LIKE '1734AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' THEN (d_o.duration * 52.1429)
                 ELSE 0
             END AS 'medication_duration_in_weeks',
-            o.encounter_id
+            o.patient_id
         FROM 
             drug_order d_o
         INNER JOIN 
             orders o ON d_o.order_id = o.order_id
         INNER JOIN 
             concept c ON d_o.duration_units = c.concept_id
-    ) medication_table ON medication_table.encounter_id = e.encounter_id
+    ) medication_table ON medication_table.patient_id = e.patient_id
 WHERE 
     e.location_id IN (:locationList)
     AND o_f.value_datetime BETWEEN :startDate AND :endDate
