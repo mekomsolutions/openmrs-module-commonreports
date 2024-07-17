@@ -132,6 +132,21 @@ public class MSPPVaccinationReportManagerTest extends BaseModuleContextSensitive
 			        .getColumnValue("Diphtheria Tetanus Vaccination 11." + MSPPVaccinationReportManager.col5);
 			assertNotNull(_prenatalFemalesReceivedDT);
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
+			
+			Cohort _0mTo1yFemalesFullyVaccinated= (Cohort) row
+			        .getColumnValue("Is the child fully vaccinated?." + MSPPVaccinationReportManager.col1);
+			assertNotNull(_0mTo1yFemalesFullyVaccinated);
+			assertEquals(1, _0mTo1yFemalesFullyVaccinated.getSize());
+			
+			Cohort _0mTo1yMalesFullyVaccinated = (Cohort) row
+			        .getColumnValue("Is the child fully vaccinated?." + MSPPVaccinationReportManager.col3);
+			assertNotNull(_0mTo1yMalesFullyVaccinated);
+			assertEquals(1, _0mTo1yMalesFullyVaccinated.getSize());
+			
+			Cohort _prenatalFemalesFullyVaccinated = (Cohort) row
+			        .getColumnValue("Is the child fully vaccinated?." + MSPPVaccinationReportManager.col5);
+			assertNotNull(_prenatalFemalesFullyVaccinated);
+			assertEquals(1, _prenatalFemalesFullyVaccinated.getSize());
 		}
 		
 		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP ECV").iterator(); itr.hasNext();) {
