@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.openmrs.Location;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.ActivatedReportManager;
@@ -136,6 +137,22 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		// Vaccinations
 		String[] vaccinationConceptsListWithSequence = inizService
 		        .getValueFromKey("report.MSPP.vaccination.vaccinationConceptsListWithSequence").split(",");
+		
+		if (inizService.getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept") != null &&
+				inizService.getConceptFromKey("report.MSPP.vaccination.yesAnswer.concept") != null) {
+			CodedObsCohortDefinition isChildFullyVaccinated = new CodedObsCohortDefinition();
+			isChildFullyVaccinated.setQuestion(
+			    inizService.getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept"));
+			isChildFullyVaccinated.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+			isChildFullyVaccinated.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			isChildFullyVaccinated.setOperator(SetComparator.IN);
+			isChildFullyVaccinated
+			        .setValueList(Arrays.asList(inizService.getConceptFromKey("report.MSPP.vaccination.yesAnswer.concept")));
+			
+			vaccination.addRow(inizService
+			        .getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept").getDisplayString(),
+			    isChildFullyVaccinated, parameterMappings);
+		}
 		
 		for (String member : vaccinationConceptsListWithSequence) {
 			
