@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>commonreports</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.4.3</version>
 	</parent>
 
 	<artifactId>commonreports-api-2.2</artifactId>
