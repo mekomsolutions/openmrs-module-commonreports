@@ -134,5 +134,12 @@
     "report.patients.active" : "true",
     "report.appointments.active" : "true",
     "report.visits.active" : "true",
-    "report.disbursement.active": "true"
+    "report.disbursement.active" : "true",
+    "report.patientIdSticker.identifier" : "true",
+    "report.patientIdSticker.firstName" : "true",
+    "report.patientIdSticker.lastName" : "true",
+    "report.patientIdSticker.dob" : "true",
+    "report.patientIdSticker.age" : "true",
+    "report.patientIdSticker.gender" : "true",
+    "report.patientIdSticker.address" : "true"
 }

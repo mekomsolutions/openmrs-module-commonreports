@@ -31,7 +31,11 @@ public class CommonReportsConstants {
 	
 	public static final String PATIENTHISTORY_ID = "patientHistory";
 	
+	public static final String PATIENT_ID_STICKER_ID = "patientIdSticker";
+	
 	public static final String COMPONENT_REPORTMANAGER_PATIENTHISTORY = MODULE_ARTIFACT_ID + "." + PATIENTHISTORY_ID;
+	
+	public static final String COMPONENT_REPORTMANAGER_PATIENT_ID_STICKER = MODULE_ARTIFACT_ID + "." + PATIENT_ID_STICKER_ID;
 	
 	public static final String COMPONENT_REPORTMANAGER_LAB = MODULE_ARTIFACT_ID + ".lab";
 	
@@ -47,4 +51,9 @@ public class CommonReportsConstants {
 	 * The path to the style sheet for Patient History reports.
 	 */
 	public static final String PATIENT_HISTORY_XSL_PATH = "patientHistoryFopStylesheet.xsl";
+	
+	/**
+	 * The path to the style sheet for Patient History reports.
+	 */
+	public static final String PATIENT_ID_STICKER_XSL_PATH = "patientIdStickerFopStylesheet.xsl";
 }

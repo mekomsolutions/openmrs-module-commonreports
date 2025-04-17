@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class PatientDataPdfExportController {
+public class PatientHistoryDataPdfExportController {
 	
 	private final Log log = LogFactory.getLog(getClass());
 	
@@ -51,7 +51,7 @@ public class PatientDataPdfExportController {
 	private EncounterService es;
 	
 	@Autowired
-	public PatientDataPdfExportController(@Qualifier("patientService") PatientService ps,
+	public PatientHistoryDataPdfExportController(@Qualifier("patientService") PatientService ps,
 	    @Qualifier("encounterService") EncounterService es, PatientHistoryPdfReport pdfReport) {
 		this.ps = ps;
 		this.es = es;
