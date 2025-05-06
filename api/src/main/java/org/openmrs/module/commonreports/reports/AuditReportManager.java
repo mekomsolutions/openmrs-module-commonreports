@@ -55,10 +55,15 @@ public class AuditReportManager extends ActivatedReportManager {
 		        DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
 	}
 	
+	private Parameter getUserParameter() {
+		return new Parameter("username", "Username", String.class, null, "jdoe");
+	}
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
+		params.add(getUserParameter());
 		return params;
 	}
 	
@@ -83,6 +88,7 @@ public class AuditReportManager extends ActivatedReportManager {
 		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("startDateTime", "${startDateTime}");
+		parameterMappings.put("username", "${username}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
 		
