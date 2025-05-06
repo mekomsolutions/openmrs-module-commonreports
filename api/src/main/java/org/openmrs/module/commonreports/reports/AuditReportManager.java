@@ -1,5 +1,6 @@
 package org.openmrs.module.commonreports.reports;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,6 +55,11 @@ public class AuditReportManager extends ActivatedReportManager {
 		return new Parameter("startDateTime", "Start Date Time", Date.class, null,
 		        DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
 	}
+
+	private Parameter getEndDateParameter() {
+		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		return new Parameter("endDate", "End Date", Date.class, null, DateUtil.parseDate(today, "yyyy-MM-dd"));
+	}
 	
 	private Parameter getUserParameter() {
 		return new Parameter("username", "Username", String.class, null, "jdoe");
@@ -63,6 +69,7 @@ public class AuditReportManager extends ActivatedReportManager {
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
+		params.add(getEndDateParameter());
 		params.add(getUserParameter());
 		return params;
 	}
@@ -88,6 +95,7 @@ public class AuditReportManager extends ActivatedReportManager {
 		
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("startDateTime", "${startDateTime}");
+		parameterMappings.put("endDate", "${endDate}");
 		parameterMappings.put("username", "${username}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
