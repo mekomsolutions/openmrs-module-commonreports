@@ -17,8 +17,6 @@ import static org.openmrs.module.commonreports.CommonReportsConstants.MODULE_ART
 import static org.openmrs.module.commonreports.CommonReportsConstants.PATIENT_ID_STICKER_ID;
 import static org.openmrs.module.commonreports.reports.PatientIdStickerReportManager.DATASET_KEY_STICKER_FIELDS;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,17 +25,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,7 +45,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.annotation.Handler;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -67,8 +59,6 @@ import org.openmrs.module.reporting.report.renderer.ReportDesignRenderer;
 import org.openmrs.module.reporting.report.renderer.ReportRenderer;
 import org.openmrs.module.reporting.serializer.ReportingSerializer;
 import org.openmrs.serialization.SerializationException;
-import org.openmrs.util.OpenmrsClassLoader;
-import org.openmrs.util.OpenmrsUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -89,8 +79,6 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 	private MessageSourceService mss;
 	
 	private InitializerService inzService;
-	
-	private static final Map<String, String> logoCache = new HashMap<>();
 	
 	private MessageSourceService getMessageSourceService() {
 		
@@ -173,15 +161,7 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 		//
 		// - - - - - - - - - - - - - - - - - - - - - - - -
 		
-		final String ATTR_TYPE = "type";
 		final String ATTR_LABEL = "label";
-		final String ATTR_TIME = "time";
-		final String ATTR_UUID = "uuid";
-		final String ATTR_LOC = "location";
-		final String ATTR_PROVIDER = "provider";
-		
-		final String DATETIME_FORMAT = "dd MMM yyyy @ HH:mm";
-		final String TIME_FORMAT = "HH:mm:ss";
 		
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = null;
@@ -197,10 +177,9 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 		Element rootElement = doc.createElement("patientIdStickers");
 		doc.appendChild(rootElement);
 		
-		// Set sticker height and width
 		String stickerHeight = getInitializerService().getValueFromKey("report.patientIdSticker.size.height");
 		String stickerWidth = getInitializerService().getValueFromKey("report.patientIdSticker.size.width");
-		if (stickerHeight != null && stickerWidth != null) {
+		if (isNotNullOrEmpty(stickerHeight) && isNotNullOrEmpty(stickerWidth)) {
 			rootElement.setAttribute("sticker-height", stickerHeight);
 			rootElement.setAttribute("sticker-width", stickerWidth);
 		} else {
@@ -208,19 +187,72 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 			rootElement.setAttribute("sticker-width", "210mm");
 		}
 		
+		String stickerLayoutType = getInitializerService().getValueFromKey("report.patientIdSticker.layout");
+		if (isNotNullOrEmpty(stickerLayoutType)) {
+			rootElement.setAttribute("layout-type", stickerLayoutType);
+		}
+		
+		String labelFontSize = getInitializerService().getValueFromKey("report.patientIdSticker.fields.label.font.size");
+		System.out.println("labelFontSize: " + labelFontSize);
+		if (isNotNullOrEmpty(labelFontSize)) {
+			rootElement.setAttribute("label-font-size", labelFontSize);
+		}
+		
+		String labelFontFamily = getInitializerService().getValueFromKey("report.patientIdSticker.fields.label.font.family");
+		if (isNotNullOrEmpty(labelFontFamily)) {
+			rootElement.setAttribute("label-font-family", labelFontFamily);
+		}
+		
+		String valueFontSize = getInitializerService()
+		        .getValueFromKey("report.patientIdSticker.fields.label.value.font.size");
+		System.out.println("valueFontSize: " + valueFontSize);
+		if (isNotNullOrEmpty(valueFontSize)) {
+			System.out.println("valueFontSize: " + valueFontSize);
+			rootElement.setAttribute("value-font-size", valueFontSize);
+		}
+		
+		String valueFontfamily = getInitializerService()
+		        .getValueFromKey("report.patientIdSticker.fields.label.value.font.family");
+		if (isNotNullOrEmpty(valueFontfamily)) {
+			rootElement.setAttribute("value-font-family", valueFontfamily);
+		}
+		
+		String fieldVerticalGap = getInitializerService().getValueFromKey("report.patientIdSticker.fields.label.gap");
+		if (isNotNullOrEmpty(fieldVerticalGap)) {
+			rootElement.setAttribute("field-vertical-gap", fieldVerticalGap);
+		}
+		
+		// Create the sticker template element
 		Element templatePIDElement = doc.createElement("patientIdSticker");
 		
+		// Set Label names to use in template layouts
+		MessageSourceService i18nTranslator = Context.getMessageSourceService();
+		String patientIdKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.identifier");
+		String patientNameKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.patientname");
+		String genderKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.gender");
+		String dobKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.dob");
+		String ageKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.age");
+		String addressKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.fulladdress");
+		String firstNameKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.firstname");
+		String lastNameKey = i18nTranslator.getMessage("commonreports.patientIdSticker.fields.lastname");
+		
+		templatePIDElement.setAttribute("addressKey", addressKey);
+		templatePIDElement.setAttribute("patientIdKey", patientIdKey);
+		templatePIDElement.setAttribute("patientNameKey", patientNameKey);
+		templatePIDElement.setAttribute("genderKey", genderKey);
+		templatePIDElement.setAttribute("dobKey", dobKey);
+		templatePIDElement.setAttribute("ageKey", ageKey);
+		
+		// Handle header configuration
 		Element header = doc.createElement("header");
 		Element headerText = doc.createElement("headerText");
 		
 		String headerStringId = String.join(".", MODULE_ARTIFACT_ID, PATIENT_ID_STICKER_ID.toLowerCase(), "requestedby");
-		
 		headerText.setTextContent(
 		    getMessageSourceService().getMessage(headerStringId) + " " + Context.getAuthenticatedUser().getDisplayString());
 		header.appendChild(headerText);
 		
-		AdministrationService adminService = Context.getAdministrationService();
-		
+		// Handle logo if configured		
 		String logoUrlPath = getInitializerService().getValueFromKey("report.patientIdSticker.logourl");
 		if (!StringUtils.isBlank(logoUrlPath) && logoUrlPath.startsWith("http")) {
 			String logoPath = "";
@@ -250,12 +282,13 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 			header.appendChild(branding);
 		}
 		
-		boolean useHeader = "true".equals(adminService.getGlobalProperty(MODULE_ARTIFACT_ID + ".enableHeader"));
+		boolean useHeader = Boolean.TRUE.equals(getInitializerService().getBooleanFromKey("report.patientIdSticker.header"));
 		
 		if (useHeader) {
 			templatePIDElement.appendChild(header);
 		}
 		
+		// Include i18n strings
 		Element i18nStrings = doc.createElement("i18n");
 		
 		List<String> i18nIds = Arrays.asList("page", "of");
@@ -264,52 +297,81 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 			String fqnId = String.join(".", MODULE_ARTIFACT_ID, PATIENT_ID_STICKER_ID.toLowerCase(), id);
 			
 			Element i18nChild = doc.createElement(id + "String");
-			
 			i18nChild.setTextContent(getMessageSourceService().getMessage(fqnId));
-			
 			i18nStrings.appendChild(i18nChild);
 		}
 		
 		templatePIDElement.appendChild(i18nStrings);
 		
+		// Create barcode element
 		Element barcode = doc.createElement("barcode");
-		templatePIDElement.appendChild(barcode);
 		
-		String dataSetKey = "";
-		
-		dataSetKey = DATASET_KEY_STICKER_FIELDS;
+		// Process data set fields
+		String dataSetKey = DATASET_KEY_STICKER_FIELDS;
 		if (results.getDataSets().containsKey(dataSetKey)) {
-			MessageSourceService i18nTranslator = Context.getMessageSourceService();
 			DataSet dataSet = results.getDataSets().get(dataSetKey);
 			Element fields = doc.createElement("fields");
 			templatePIDElement.appendChild(fields);
 			
+			String barcodeValue = null;
+			
+			String firstName = null;
+			String lastName = null;
+			
 			for (DataSetRow row : dataSet) {
 				for (DataSetColumn column : dataSet.getMetaData().getColumns()) {
-					Element fieldData = doc.createElement("field");
-					fields.appendChild(fieldData);
-					fieldData.setAttribute(ATTR_LABEL, column.getLabel());
+					String columnLabel = i18nTranslator.getMessage(column.getLabel());
 					String strValue = getStringValue(row, column);
-					String patientIdColumnName = i18nTranslator
-					        .getMessage("commonreports.patientIdSticker.fields.identifier");
-					if (column.getLabel().equals(patientIdColumnName)) {
-						barcode.setAttribute("barcodeValue", strValue);
+					
+					if (columnLabel.equals(firstNameKey)) {
+						firstName = strValue;
+						continue;
+					} else if (columnLabel.equals(lastNameKey)) {
+						lastName = strValue;
+						continue;
 					}
 					
+					if (columnLabel.equals(patientIdKey)) {
+						barcodeValue = strValue;
+					}
+					
+					Element fieldData = doc.createElement("field");
+					fields.appendChild(fieldData);
+					fieldData.setAttribute(ATTR_LABEL, columnLabel);
 					fieldData.appendChild(doc.createTextNode(strValue));
 				}
+				
+				// Create merged Patient Name field if either first name or last name exists
+				if (isNotNullOrEmpty(firstName) || isNotNullOrEmpty(lastName)) {
+					Element patientNameField = doc.createElement("field");
+					fields.appendChild(patientNameField);
+					patientNameField.setAttribute(ATTR_LABEL, patientNameKey);
+					
+					StringBuilder fullName = new StringBuilder();
+					fullName.append(firstName.trim());
+					
+					if (fullName.length() > 0) {
+						fullName.append(" ");
+					}
+					fullName.append(lastName.trim());
+					
+					patientNameField.appendChild(doc.createTextNode(fullName.toString()));
+				}
+			}
+			
+			// Only add the barcode if a value was found
+			if (isNotNullOrEmpty(barcodeValue)) {
+				barcode.setAttribute("barcodeValue", barcodeValue);
+				templatePIDElement.appendChild(barcode);
 			}
 		}
 		
+		// Create multiple stickers as needed
 		String numOfIdStickersValue = getInitializerService().getValueFromKey("report.patientIdSticker.pages");
-		int numOfIdStickers = Integer.parseInt(numOfIdStickersValue);
+		int numOfIdStickers = Integer.parseInt(isNotNullOrEmpty(numOfIdStickersValue) ? numOfIdStickersValue : "1");
 		for (int i = 1; i <= numOfIdStickers; i++) {
 			Element clonedPidElement = (Element) templatePIDElement.cloneNode(true);
-			
-			// Update the ID to make it unique
 			clonedPidElement.setAttribute("page", "Page-" + i);
-			
-			// Append to root
 			rootElement.appendChild(clonedPidElement);
 		}
 		// Write the content to the output stream
@@ -321,6 +383,7 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 			throw new RenderingException(e.getLocalizedMessage());
 		}
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		
 		DOMSource source = new DOMSource(doc);
 		try {
@@ -335,5 +398,9 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 			"".toString();
 		}
 		
+	}
+	
+	private boolean isNotNullOrEmpty(String str) {
+		return !StringUtils.isBlank(str);
 	}
 }

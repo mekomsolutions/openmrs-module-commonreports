@@ -53,13 +53,13 @@ public class PatientIdStickerDataPdfExportController {
 		this.pdfReport = pdfReport;
 	}
 	
-	private void writeReponse(Patient patient, String contentDisposition, HttpServletResponse response) {
+	private void writeReponse(Patient patient, boolean inline, HttpServletResponse response) {
 		response.setContentType("application/pdf");
 		
-		if (StringUtils.isBlank(contentDisposition)) {
-			response.addHeader("Content-Disposition", "attachment;filename=" + PATIENT_ID_STICKER_ID + ".pdf");
+		if (inline) {
+			response.addHeader("Content-Disposition", "inline; filename=" + PATIENT_ID_STICKER_ID + ".pdf");
 		} else {
-			response.addHeader("Content-Disposition", contentDisposition);
+			response.addHeader("Content-Disposition", "attachment; filename=" + PATIENT_ID_STICKER_ID + ".pdf");
 		}
 		
 		try {
@@ -77,10 +77,9 @@ public class PatientIdStickerDataPdfExportController {
 	@RequestMapping(value = ROOT_URL + "/" + PATIENT_ID_STICKER_ID)
 	public void getPatientIdSticker(ModelMap model, HttpServletRequest request, HttpServletResponse response,
 	        @RequestParam(value = "patientUuid") String patientUuid,
-	        @RequestParam(value = "contentDisposition", required = false) String contentDisposition) {
+	        @RequestParam(value = "inline", required = false, defaultValue = "true") boolean inline) {
 		
 		Patient patient = ps.getPatientByUuid(patientUuid);
-		writeReponse(patient, contentDisposition, response);
+		writeReponse(patient, inline, response);
 	}
-	
 }

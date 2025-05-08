@@ -10,12 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.api.context.Context;
-import org.openmrs.messagesource.MessageSourceService;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.commonreports.library.BasePatientDataLibrary;
-import org.openmrs.module.commonreports.renderer.PatientHistoryXmlReportRenderer;
 import org.openmrs.module.commonreports.renderer.PatientIdStickerXmlReportRenderer;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.common.MessageUtil;
@@ -107,12 +104,8 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 		reportDef.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		MessageSourceService i18nTranslator = Context.getMessageSourceService();
-		PatientDataSetDefinition patientDataSetDef = createStickerFieldsDataSetDefinition(i18nTranslator);
+		PatientDataSetDefinition patientDataSetDef = createStickerFieldsDataSetDefinition();
 		reportDef.addDataSetDefinition(DATASET_KEY_STICKER_FIELDS, patientDataSetDef, mappings);
-		
-		// MessageSourceService i18nTranslator = Context.getMessageSourceService();
-		
 		return reportDef;
 	}
 	
@@ -132,29 +125,25 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	 * @param i18nTranslator the message source service for internationalization
 	 * @return the configured PatientDataSetDefinition
 	 */
-	private PatientDataSetDefinition createStickerFieldsDataSetDefinition(MessageSourceService i18nTranslator) {
+	private PatientDataSetDefinition createStickerFieldsDataSetDefinition() {
 		PatientDataSetDefinition patientDataSetDef = new PatientDataSetDefinition();
 		
 		// Map of column definitions with their corresponding data definitions
 		Map<String, PatientDataDefinition> columnDefinitions = new LinkedHashMap<>();
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.identifier"),
+		columnDefinitions.put("commonreports.patientIdSticker.fields.identifier",
 		    builtInPatientDataLibrary.getPreferredIdentifierIdentifier());
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.firstname"),
+		columnDefinitions.put("commonreports.patientIdSticker.fields.firstname",
 		    builtInPatientDataLibrary.getPreferredGivenName());
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.lastname"),
+		columnDefinitions.put("commonreports.patientIdSticker.fields.lastname",
 		    builtInPatientDataLibrary.getPreferredFamilyName());
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.dob"),
-		    basePatientDataLibrary.getBirthdate());
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.age"),
-		    basePatientDataLibrary.getAgeAtEndInYears());
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.gender"),
-		    builtInPatientDataLibrary.getGender());
-		columnDefinitions.put(i18nTranslator.getMessage("commonreports.patientIdSticker.fields.fulladdress"),
-		    basePatientDataLibrary.getAddressFull());
+		columnDefinitions.put("commonreports.patientIdSticker.fields.dob", basePatientDataLibrary.getBirthdate());
+		columnDefinitions.put("commonreports.patientIdSticker.fields.age", basePatientDataLibrary.getAgeAtEndInYears());
+		columnDefinitions.put("commonreports.patientIdSticker.fields.gender", builtInPatientDataLibrary.getGender());
+		columnDefinitions.put("commonreports.patientIdSticker.fields.fulladdress", basePatientDataLibrary.getAddressFull());
 		
 		// Add columns that should be included based on configuration
 		for (Map.Entry<String, PatientDataDefinition> entry : columnDefinitions.entrySet()) {
-			if (shouldIncludeColumn(entry.getKey(), i18nTranslator)) {
+			if (shouldIncludeColumn(entry.getKey())) {
 				addColumn(patientDataSetDef, entry.getKey(), entry.getValue());
 			}
 		}
@@ -170,8 +159,6 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	 * @param pdd the patient data definition
 	 */
 	private void addColumn(PatientDataSetDefinition dsd, String columnName, PatientDataDefinition pdd) {
-		System.out.println("level 3 adding: " + columnName);
-		
 		dsd.addColumn(columnName, pdd, Mapped.straightThroughMappings(pdd));
 	}
 	
@@ -182,7 +169,7 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	 * @param i18nTranslator the message source service
 	 * @return true if the column should be included, false otherwise
 	 */
-	private boolean shouldIncludeColumn(String columnName, MessageSourceService i18nTranslator) {
+	private boolean shouldIncludeColumn(String columnName) {
 		// Map of message keys to configuration keys
 		Map<String, String> configKeyMap = new HashMap<>();
 		configKeyMap.put("commonreports.patientIdSticker.fields.identifier", "report.patientIdSticker.fields.identifier");
@@ -195,7 +182,7 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 		
 		// Find the matching configuration key
 		for (Map.Entry<String, String> entry : configKeyMap.entrySet()) {
-			if (columnName.equals(i18nTranslator.getMessage(entry.getKey()))) {
+			if (columnName.equals(entry.getKey())) {
 				return Boolean.TRUE.equals(inizService.getBooleanFromKey(entry.getValue()));
 			}
 		}

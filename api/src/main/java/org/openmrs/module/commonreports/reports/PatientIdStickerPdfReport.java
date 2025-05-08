@@ -4,10 +4,13 @@ import static org.openmrs.module.commonreports.reports.PatientIdStickerReportMan
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -15,8 +18,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
@@ -39,6 +44,7 @@ import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.xml.sax.SAXException;
 
 @Component
 public class PatientIdStickerPdfReport {
@@ -62,15 +68,18 @@ public class PatientIdStickerPdfReport {
 	 * @param patient The patient for which the history is to be reported.
 	 * @param encounters The encounters to be reported.
 	 * @return The PDF bytes.
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ConfigurationException
 	 */
-	public byte[] getBytes(Patient patient, Set<Encounter> encounters)
-	        throws ContextAuthenticationException, IllegalArgumentException, FOPException, TransformerException {
+	public byte[] getBytes(Patient patient, Set<Encounter> encounters) throws ContextAuthenticationException,
+	        IllegalArgumentException, TransformerException, SAXException, IOException, ConfigurationException {
 		
 		EncounterEvaluationContext context = new EncounterEvaluationContext();
 		
 		Integer patientId = null;
 		if (patient != null) {
-			Context.requirePrivilege(CommonReportsPrivilegeConstants.VIEW_PATIENT_HISTORY);
+			Context.requirePrivilege(CommonReportsPrivilegeConstants.VIEW_PATIENT_ID_STICKER);
 			patientId = patient.getId();
 		}
 		
@@ -126,14 +135,22 @@ public class PatientIdStickerPdfReport {
 	 * @param xmlSourceStream A {@link StreamSource} built on the input XML.
 	 * @param xslTransformStream A {@link StreamSource} built on the XSL style sheet.
 	 * @param outStream
-	 * @throws FOPException
 	 * @throws TransformerException
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ConfigurationException
 	 */
 	protected void writeToOutputStream(StreamSource xmlSourceStream, StreamSource xslTransformStream, OutputStream outStream)
-	        throws FOPException, TransformerException {
+	        throws TransformerException, SAXException, IOException, ConfigurationException {
+		// Get Fop configuration file
+		DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
+		InputStream fopConfigStream = OpenmrsClassLoader.getInstance().getResourceAsStream("conf/fop.xconf");
+		Configuration cfg = cfgBuilder.build(fopConfigStream);
 		
 		// Step 1: Construct a FopFactory
 		FopFactory fopFactory = FopFactory.newInstance();
+		fopFactory.getFontManager().setFontBaseURL(OpenmrsClassLoader.getInstance().getResource("fonts").toString());
+		fopFactory.setUserConfig(cfg);
 		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
 		
 		// Step 2: Construct fop with desired output format
@@ -142,6 +159,9 @@ public class PatientIdStickerPdfReport {
 		// Step 3: Setup JAXP using identity transformer
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Transformer transformer = factory.newTransformer(xslTransformStream);
+		
+		// Set encoding to UTF-8 explicitly to ensure proper character rendering
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		
 		// Resulting SAX events (the generated FO) must be piped through to FOP
 		Result res = new SAXResult(fop.getDefaultHandler());
