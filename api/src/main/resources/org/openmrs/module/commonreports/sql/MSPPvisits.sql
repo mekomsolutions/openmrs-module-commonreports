@@ -10,6 +10,7 @@ FROM
    UNION ALL SELECT ":commonreports.report.MSPP.visits.category6.label"
    UNION ALL SELECT ":commonreports.report.MSPP.visits.category7.label"
    UNION ALL SELECT ":commonreports.report.MSPP.visits.category8.label"
+   UNION ALL SELECT ":commonreports.report.MSPP.visits.category10.label"
    UNION ALL SELECT ":commonreports.report.MSPP.visits.category9.label"
    UNION ALL SELECT ":commonreports.report.MSPP.visits.total.label") tab1
 LEFT OUTER JOIN
@@ -32,13 +33,16 @@ LEFT OUTER JOIN
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 15
                           AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 20
                           AND v.visit_type_id <> :prenatalVisitTypeId
+                          AND v.visit_type_id <> :postnatalVisitTypeId
                           AND v.visit_type_id <> :familyPlanningVisitTypeId THEN ":commonreports.report.MSPP.visits.category5.label"
                      WHEN DATEDIFF(v.date_started, pr.birthdate)/ 365.25 >= 20
                           AND DATEDIFF(v.date_started, pr.birthdate)/ 365.25 < 25
                           AND v.visit_type_id <> :prenatalVisitTypeId
+                          AND v.visit_type_id <> :postnatalVisitTypeId
                           AND v.visit_type_id <> :familyPlanningVisitTypeId THEN ":commonreports.report.MSPP.visits.category6.label"
                      WHEN v.visit_type_id = :prenatalVisitTypeId THEN ":commonreports.report.MSPP.visits.category7.label"
                      WHEN v.visit_type_id = :familyPlanningVisitTypeId THEN ":commonreports.report.MSPP.visits.category8.label"
+                     WHEN v.visit_type_id = :postnatalVisitTypeId THEN ":commonreports.report.MSPP.visits.category10.label"
                      ELSE ":commonreports.report.MSPP.visits.category9.label"
                  END) 'Category',
                       IF(IFNULL(prev_visit.visit_id, 'null') = 'null', '1', ' ') 'New visits',

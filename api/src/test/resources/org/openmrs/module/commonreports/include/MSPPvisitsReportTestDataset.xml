@@ -33,6 +33,7 @@
   <visit_type visit_type_id="97" name="Vaccination infantile" description="Vaccination infantile Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="91c6bdce-3b92-42a2-9fa8-6ef6b169c4b2"/>
   <visit_type visit_type_id="98" name="Malnutrition" description="Malnutrition Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="a631dbbc-daa4-48aa-8fe4-3b5784360ab1"/>
   <visit_type visit_type_id="99" name="G&#233;n&#233;ral" description="G&#233;n&#233;ral Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="b9ba7b27-e64b-44d1-b4c5-2ced77f477d0"/>
+  <visit_type visit_type_id="905" name="Postnatal" description="Postnatal Visit" creator="2" date_created="2025-05-09 06:30:03.0" retired="false" uuid="15177712-190c-4508-a76b-9f596a9a79f4"/>
   <visit_type visit_type_id="910" name="TB" description="TB Visit" creator="2" date_created="2021-06-09 06:30:03.0" retired="false" uuid="ad29e858-68a1-44eb-ae62-94157a8a52b0"/>
   
   <visit visit_id="91" patient_id="97" visit_type_id="99" date_started="2021-06-10 06:23:14.0" date_stopped="2021-06-10 11:23:14.0" location_id="1" creator="1" date_created="2021-06-10 06:23:14.0" voided="false" uuid="2ae0597c-680c-43ad-b235-f146d3bd4b3d"/>

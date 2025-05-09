@@ -138,19 +138,21 @@ public class MSPPVisitsReportManager extends ActivatedReportManager {
 	private Map<String, String> getMetadataReplacements() {
 		Map<String, String> map = new HashMap<String, String>();
 		String prenatalVisitTypeUuid = inizService.getValueFromKey("report.MSPP.visits.prenatal.visitType.uuid");
+		String postnatalVisitTypeUuid = inizService.getValueFromKey("report.MSPP.visits.postnatal.visitType.uuid");
 		String familyPlanningVisitTypeUuid = inizService.getValueFromKey("report.MSPP.visits.familyPlanning.visitType.uuid");
 		String[] properties = { "commonreports.report.MSPP.visits.category1.label",
 		        "commonreports.report.MSPP.visits.category2.label", "commonreports.report.MSPP.visits.category3.label",
 		        "commonreports.report.MSPP.visits.category4.label", "commonreports.report.MSPP.visits.category5.label",
 		        "commonreports.report.MSPP.visits.category6.label", "commonreports.report.MSPP.visits.category7.label",
-		        "commonreports.report.MSPP.visits.category8.label", "commonreports.report.MSPP.visits.category9.label",
-		        "commonreports.report.MSPP.visits.total.label" };
+		        "commonreports.report.MSPP.visits.category8.label", "commonreports.report.MSPP.visits.category10.label",
+		        "commonreports.report.MSPP.visits.category9.label", "commonreports.report.MSPP.visits.total.label" };
 		
 		for (String prop : properties) {
 			map.put(prop, MessageUtil.translate(prop));
 		}
 		map.put("familyPlanningVisitTypeId", vs.getVisitTypeByUuid(familyPlanningVisitTypeUuid).getId().toString());
 		map.put("prenatalVisitTypeId", vs.getVisitTypeByUuid(prenatalVisitTypeUuid).getId().toString());
+		map.put("postnatalVisitTypeId", vs.getVisitTypeByUuid(postnatalVisitTypeUuid).getId().toString());
 		
 		return map;
 	}
