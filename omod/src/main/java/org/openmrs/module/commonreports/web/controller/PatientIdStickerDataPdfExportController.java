@@ -16,20 +16,10 @@ package org.openmrs.module.commonreports.web.controller;
 import static org.openmrs.module.commonreports.CommonReportsConstants.PATIENT_ID_STICKER_ID;
 import static org.openmrs.module.commonreports.CommonReportsConstants.ROOT_URL;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.Encounter;
 import org.openmrs.Patient;
-import org.openmrs.api.EncounterService;
 import org.openmrs.api.PatientService;
 import org.openmrs.module.commonreports.reports.PatientIdStickerPdfReport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +43,11 @@ public class PatientIdStickerDataPdfExportController {
 		this.pdfReport = pdfReport;
 	}
 	
-	private void writeReponse(Patient patient, boolean inline, HttpServletResponse response) {
+	private void writeResponse(Patient patient, boolean inline, HttpServletResponse response) {
 		response.setContentType("application/pdf");
 		
-		if (inline) {
-			response.addHeader("Content-Disposition", "inline; filename=" + PATIENT_ID_STICKER_ID + ".pdf");
-		} else {
-			response.addHeader("Content-Disposition", "attachment; filename=" + PATIENT_ID_STICKER_ID + ".pdf");
-		}
+		String contentDisposition = inline ? "inline" : "attachment";
+		response.addHeader("Content-Disposition", contentDisposition + "; filename=" + PATIENT_ID_STICKER_ID + ".pdf");
 		
 		try {
 			byte[] pdfBytes = pdfReport.getBytes(patient, null);
@@ -80,6 +67,11 @@ public class PatientIdStickerDataPdfExportController {
 	        @RequestParam(value = "inline", required = false, defaultValue = "true") boolean inline) {
 		
 		Patient patient = ps.getPatientByUuid(patientUuid);
-		writeReponse(patient, inline, response);
+		if (patient == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		writeResponse(patient, inline, response);
 	}
 }

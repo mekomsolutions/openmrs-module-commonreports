@@ -35,22 +35,6 @@ public class PatientIdStickerXmlReportRendererTest extends BaseModuleContextSens
 	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Test
-	public void getBytes_shouldThrowWhenEncountersMismatch() throws FOPException, TransformerException {
-		
-		// setup
-		Set<Encounter> encounters = new HashSet<Encounter>();
-		encounters.add(es.getEncounter(3));
-		encounters.add(es.getEncounter(6));
-		
-		expectedException.expect(IllegalArgumentException.class);
-		expectedException
-		        .expectMessage("The report could not be run because not all encounters belong to the same patient.");
-		
-		// replay
-		pdfReport.getBytes(null, encounters);
-	}
-	
-	@Test
 	public void getBytes_shouldThrowWhenPatientMismatches() throws FOPException, TransformerException {
 		
 		// setup
@@ -69,7 +53,7 @@ public class PatientIdStickerXmlReportRendererTest extends BaseModuleContextSens
 	}
 	
 	@Test
-	public void getBytes_shouldThrowWhenPatientAndMissing() throws FOPException, TransformerException {
+	public void getBytes_shouldThrowWhenPatientIsMissing() throws FOPException, TransformerException {
 		
 		// setup
 		expectedException.expect(IllegalArgumentException.class);

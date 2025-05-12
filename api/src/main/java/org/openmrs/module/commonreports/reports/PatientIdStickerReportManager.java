@@ -30,11 +30,11 @@ import org.springframework.stereotype.Component;
 @Component(CommonReportsConstants.COMPONENT_REPORTMANAGER_PATIENT_ID_STICKER)
 public class PatientIdStickerReportManager extends ActivatedReportManager {
 	
-	public final static String REPORT_DESIGN_UUID = "f0f27c39-2b3a-4254-b09f-29dad8adbc7b";
+	public static final String REPORT_DESIGN_UUID = "f0f27c39-2b3a-4254-b09f-29dad8adbc7b";
 	
-	public final static String REPORT_DEFINITION_NAME = "Patient Identifier Sticker";
+	public static final String REPORT_DEFINITION_NAME = "Patient Identifier Sticker";
 	
-	public final static String DATASET_KEY_STICKER_FIELDS = "fields";
+	public static final String DATASET_KEY_STICKER_FIELDS = "fields";
 	
 	@Autowired
 	private BuiltInPatientDataLibrary builtInPatientDataLibrary;
@@ -43,7 +43,7 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	BasePatientDataLibrary basePatientDataLibrary;
 	
 	@Autowired
-	private InitializerService inizService;
+	private InitializerService initializerService;
 	
 	@Override
 	public boolean isActivated() {
@@ -62,7 +62,7 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	
 	@Override
 	public String getName() {
-		return "Patient Identifier Sticker";
+		return REPORT_DEFINITION_NAME;
 	}
 	
 	@Override
@@ -89,24 +89,29 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 		reportDef.setDescription(this.getDescription());
 		reportDef.setParameters(getParameters());
 		
+		// Add SQL dataset definition
+		SqlDataSetDefinition sqlDsd = createSqlDataSetDefinition();
+		Map<String, Object> parameterMappings = new HashMap<>();
+		parameterMappings.put("patientNameOrID", "${patientNameOrID}");
+		reportDef.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
+		
+		// Add patient dataset definition
+		PatientDataSetDefinition patientDataSetDef = createStickerFieldsDataSetDefinition();
+		reportDef.addDataSetDefinition(DATASET_KEY_STICKER_FIELDS, patientDataSetDef, new HashMap<>());
+		
+		return reportDef;
+	}
+	
+	private SqlDataSetDefinition createSqlDataSetDefinition() {
 		SqlDataSetDefinition sqlDsd = new SqlDataSetDefinition();
 		sqlDsd.setName(MessageUtil.translate("commonreports.report.patientIdSticker.datasetName"));
 		sqlDsd.setDescription(MessageUtil.translate("commonreports.report.patientIdSticker.datasetDescription"));
 		
 		String sql = getStringFromResource("org/openmrs/module/commonreports/sql/searchPatient.sql");
-		
 		sqlDsd.setSqlQuery(sql);
 		sqlDsd.addParameters(getParameters());
 		
-		Map<String, Object> parameterMappings = new HashMap<String, Object>();
-		parameterMappings.put("patientNameOrID", "${patientNameOrID}");
-		
-		reportDef.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
-		
-		Map<String, Object> mappings = new HashMap<String, Object>();
-		PatientDataSetDefinition patientDataSetDef = createStickerFieldsDataSetDefinition();
-		reportDef.addDataSetDefinition(DATASET_KEY_STICKER_FIELDS, patientDataSetDef, mappings);
-		return reportDef;
+		return sqlDsd;
 	}
 	
 	@Override
@@ -122,13 +127,25 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	/**
 	 * Creates a patient sticker fields dataset definition with configurable columns.
 	 * 
-	 * @param i18nTranslator the message source service for internationalization
 	 * @return the configured PatientDataSetDefinition
 	 */
 	private PatientDataSetDefinition createStickerFieldsDataSetDefinition() {
 		PatientDataSetDefinition patientDataSetDef = new PatientDataSetDefinition();
 		
 		// Map of column definitions with their corresponding data definitions
+		Map<String, PatientDataDefinition> columnDefinitions = createColumnDefinitions();
+		
+		// Add columns that should be included based on configuration
+		for (Map.Entry<String, PatientDataDefinition> entry : columnDefinitions.entrySet()) {
+			if (shouldIncludeColumn(entry.getKey())) {
+				addColumn(patientDataSetDef, entry.getKey(), entry.getValue());
+			}
+		}
+		
+		return patientDataSetDef;
+	}
+	
+	private Map<String, PatientDataDefinition> createColumnDefinitions() {
 		Map<String, PatientDataDefinition> columnDefinitions = new LinkedHashMap<>();
 		columnDefinitions.put("commonreports.patientIdSticker.fields.identifier",
 		    builtInPatientDataLibrary.getPreferredIdentifierIdentifier());
@@ -140,15 +157,7 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 		columnDefinitions.put("commonreports.patientIdSticker.fields.age", basePatientDataLibrary.getAgeAtEndInYears());
 		columnDefinitions.put("commonreports.patientIdSticker.fields.gender", builtInPatientDataLibrary.getGender());
 		columnDefinitions.put("commonreports.patientIdSticker.fields.fulladdress", basePatientDataLibrary.getAddressFull());
-		
-		// Add columns that should be included based on configuration
-		for (Map.Entry<String, PatientDataDefinition> entry : columnDefinitions.entrySet()) {
-			if (shouldIncludeColumn(entry.getKey())) {
-				addColumn(patientDataSetDef, entry.getKey(), entry.getValue());
-			}
-		}
-		
-		return patientDataSetDef;
+		return columnDefinitions;
 	}
 	
 	/**
@@ -166,11 +175,22 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 	 * Determines if a column should be included based on configuration.
 	 * 
 	 * @param columnName the name of the column to check
-	 * @param i18nTranslator the message source service
 	 * @return true if the column should be included, false otherwise
 	 */
 	private boolean shouldIncludeColumn(String columnName) {
-		// Map of message keys to configuration keys
+		Map<String, String> configKeyMap = createConfigKeyMap();
+		
+		// Find the matching configuration key
+		for (Map.Entry<String, String> entry : configKeyMap.entrySet()) {
+			if (columnName.equals(entry.getKey())) {
+				return Boolean.TRUE.equals(initializerService.getBooleanFromKey(entry.getValue()));
+			}
+		}
+		
+		return false;
+	}
+	
+	private Map<String, String> createConfigKeyMap() {
 		Map<String, String> configKeyMap = new HashMap<>();
 		configKeyMap.put("commonreports.patientIdSticker.fields.identifier", "report.patientIdSticker.fields.identifier");
 		configKeyMap.put("commonreports.patientIdSticker.fields.firstname", "report.patientIdSticker.fields.firstname");
@@ -179,14 +199,6 @@ public class PatientIdStickerReportManager extends ActivatedReportManager {
 		configKeyMap.put("commonreports.patientIdSticker.fields.dob", "report.patientIdSticker.fields.dob");
 		configKeyMap.put("commonreports.patientIdSticker.fields.gender", "report.patientIdSticker.fields.gender");
 		configKeyMap.put("commonreports.patientIdSticker.fields.fulladdress", "report.patientIdSticker.fields.fulladdress");
-		
-		// Find the matching configuration key
-		for (Map.Entry<String, String> entry : configKeyMap.entrySet()) {
-			if (columnName.equals(entry.getKey())) {
-				return Boolean.TRUE.equals(inizService.getBooleanFromKey(entry.getValue()));
-			}
-		}
-		
-		return false;
+		return configKeyMap;
 	}
 }

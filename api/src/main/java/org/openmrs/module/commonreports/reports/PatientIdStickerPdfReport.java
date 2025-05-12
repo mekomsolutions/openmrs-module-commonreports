@@ -76,43 +76,14 @@ public class PatientIdStickerPdfReport {
 	        IllegalArgumentException, TransformerException, SAXException, IOException, ConfigurationException {
 		
 		EncounterEvaluationContext context = new EncounterEvaluationContext();
-		
-		Integer patientId = null;
-		if (patient != null) {
-			Context.requirePrivilege(CommonReportsPrivilegeConstants.VIEW_PATIENT_ID_STICKER);
-			patientId = patient.getId();
-		}
+		Integer patientId = validateAndGetPatientId(patient, encounters);
 		
 		if (!CollectionUtils.isEmpty(encounters)) {
-			Set<Integer> encounterIds = new HashSet<Integer>();
-			Set<Integer> patientIds = new HashSet<Integer>();
-			
-			encounters.stream().forEach(e -> {
-				encounterIds.add(e.getId());
-				patientIds.add(e.getPatient().getId());
-			});
-			
-			if (patientIds.size() > 1) {
-				throw new IllegalArgumentException(
-				        "The report could not be run because not all encounters belong to the same patient.");
-			}
-			if (patientId != null) {
-				if (!patientIds.contains(patientId)) {
-					throw new IllegalArgumentException(
-					        "The report could not be run because the encounters do not correspond to the specified patient: '"
-					                + patient.getUuid() + "'");
-				}
-			} else {
-				patientId = patientIds.iterator().next();
-			}
-			
+			Set<Integer> encounterIds = new HashSet<>();
+			encounters.forEach(e -> encounterIds.add(e.getId()));
 			EncounterIdSet encIdSet = new EncounterIdSet(encounterIds);
 			context.addParameterValue("encounterIds", encIdSet);
 			context.setBaseEncounters(encIdSet);
-			
-		} else if (patient == null) {
-			throw new IllegalArgumentException(
-			        "The report could not be run because neither the patient nor the encounters were provided.");
 		}
 		
 		ReportDesign reportDesign = rs.getReportDesignByUuid(REPORT_DESIGN_UUID);
@@ -126,6 +97,39 @@ public class PatientIdStickerPdfReport {
 		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 		writeToOutputStream(xmlSourceStream, xslTransformStream, outStream);
 		return outStream.toByteArray();
+	}
+	
+	private Integer validateAndGetPatientId(Patient patient, Set<Encounter> encounters) {
+		Integer patientId = null;
+		if (patient != null) {
+			Context.requirePrivilege(CommonReportsPrivilegeConstants.VIEW_PATIENT_ID_STICKER);
+			patientId = patient.getId();
+		}
+		
+		if (!CollectionUtils.isEmpty(encounters)) {
+			Set<Integer> patientIds = new HashSet<>();
+			encounters.forEach(e -> patientIds.add(e.getPatient().getId()));
+			
+			if (patientIds.size() > 1) {
+				throw new IllegalArgumentException(
+				        "The report could not be run because not all encounters belong to the same patient.");
+			}
+			
+			if (patientId != null) {
+				if (!patientIds.contains(patientId)) {
+					throw new IllegalArgumentException(
+					        "The report could not be run because the encounters do not correspond to the specified patient: '"
+					                + patient.getUuid() + "'");
+				}
+			} else {
+				patientId = patientIds.iterator().next();
+			}
+		} else if (patient == null) {
+			throw new IllegalArgumentException(
+			        "The report could not be run because neither the patient nor the encounters were provided.");
+		}
+		
+		return patientId;
 	}
 	
 	/**
