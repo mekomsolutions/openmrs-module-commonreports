@@ -11,12 +11,15 @@ It is setup by setting the following properties in [initializer](https://github.
     ...,
     "report.MSPP.visits.active" : "true",
     "report.MSPP.visits.prenatal.visitType.uuid" : "35ba9aff-901c-49dc-8630-a59385480d18",
+    "report.MSPP.visits.postnatal.visitType.uuid" : "15177712-190c-4508-a76b-9f596a9a79f4",
     "report.MSPP.visits.familyPlanning.visitType.uuid" : "c4643116-8a61-499f-b62b-ff9375db0b7d"
 }
 ```
 `report.MSPP.visits.active` activates the report to be usable when the module is loaded.
 
 `report.MSPP.visits.prenatal.visitType.uuid` specifies the prenatal visit type.
+
+`report.MSPP.visits.postnatal.visitType.uuid` specifies the postnatal visit type.
 
 `report.MSPP.visits.familyPlanning.visitType.uuid` specifies the family planning visit type.
 
