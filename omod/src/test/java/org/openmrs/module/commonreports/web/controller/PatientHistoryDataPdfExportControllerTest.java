@@ -25,10 +25,10 @@ import org.springframework.ui.ModelMap;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.parser.PdfTextExtractor;
 
-public class PatientDataPdfExportControllerTest extends BaseModuleWebContextSensitiveTest {
+public class PatientHistoryDataPdfExportControllerTest extends BaseModuleWebContextSensitiveTest {
 	
 	@Autowired
-	private PatientDataPdfExportController ctrl;
+	private PatientHistoryDataPdfExportController ctrl;
 	
 	@Autowired
 	@Qualifier(CommonReportsConstants.COMPONENT_REPORTMANAGER_PATIENTHISTORY)
