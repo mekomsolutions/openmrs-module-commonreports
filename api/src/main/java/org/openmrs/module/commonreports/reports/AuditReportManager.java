@@ -52,17 +52,22 @@ public class AuditReportManager extends ActivatedReportManager {
 	}
 	
 	private Parameter getStartDateParameter() {
-		return new Parameter("startDateTime", "Start Date Time", Date.class, null,
+		return new Parameter("startDateTime", "Start Date", Date.class, null,
 		        DateUtil.parseDate("1970-01-01", "yyyy-MM-dd"));
 	}
-
+	
 	private Parameter getEndDateParameter() {
-		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		long oneDayTimestamp = 24 * 60 * 60 * 1000;
+		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis() + oneDayTimestamp));
 		return new Parameter("endDate", "End Date", Date.class, null, DateUtil.parseDate(today, "yyyy-MM-dd"));
 	}
 	
 	private Parameter getUserParameter() {
-		return new Parameter("username", "Username", String.class, null, "jdoe");
+		return new Parameter("username", "Username", String.class, null, "jdoe", null, false);
+	}
+	
+	private Parameter getPatientIdentifierParameter() {
+		return new Parameter("patientIdentifier", "Patient Identifier", String.class, null, null, null, false);
 	}
 	
 	@Override
@@ -71,6 +76,7 @@ public class AuditReportManager extends ActivatedReportManager {
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
 		params.add(getUserParameter());
+		params.add(getPatientIdentifierParameter());
 		return params;
 	}
 	
@@ -97,6 +103,7 @@ public class AuditReportManager extends ActivatedReportManager {
 		parameterMappings.put("startDateTime", "${startDateTime}");
 		parameterMappings.put("endDate", "${endDate}");
 		parameterMappings.put("username", "${username}");
+		parameterMappings.put("patientIdentifier", "${patientIdentifier}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
 		
@@ -105,7 +112,7 @@ public class AuditReportManager extends ActivatedReportManager {
 	
 	@Override
 	public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
-		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("989b07a4-f532-4b82-8b56-3d3042fd9037",
+		ReportDesign reportDesign = ReportManagerUtil.createCsvReportDesign("f80f225b-719a-4573-8555-bb13a3fc2f49",
 		    reportDefinition);
 		return Arrays.asList(reportDesign);
 	}
