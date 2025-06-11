@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import static org.openmrs.module.commonreports.common.Helper.getStringFromResource;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -63,7 +64,8 @@ public class AuditReportManager extends ActivatedReportManager {
 	}
 	
 	private Parameter getUserParameter() {
-		return new Parameter("username", "Username", String.class, null, "jdoe", null, false);
+		return new Parameter("username", "Username", String.class, null, Context.getAuthenticatedUser().getUsername(), null,
+		        false);
 	}
 	
 	private Parameter getPatientIdentifierParameter() {
