@@ -61,6 +61,11 @@
 			Logo image used to brand patient history reports
 		</description>
 	</globalProperty>
+    <globalProperty>
+        <property>reporting.serializer.whitelist.types</property>
+        <defaultValue>org.openmrs.module.commonreports.**</defaultValue>
+        <description>White-list of classes that are allowed for deserialization by the reporting module</description>
+    </globalProperty>
 
 	<!-- Required Privileges -->
 	<privilege>
