@@ -312,7 +312,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		firstVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		firstVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.one"));
-		antenatalGestation.addColumn(col1, createCohortComposition(firstVisit), null);
+		antenatalGestation.addColumn(col1, createCohortComposition(firstVisit), parameterMappings);
 		
 		// Second Visit column
 		CodedObsCohortDefinition secondVisit = new CodedObsCohortDefinition();
@@ -321,7 +321,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		secondVisit.setOperator(SetComparator.IN);
 		secondVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		secondVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.two"));
-		antenatalGestation.addColumn(col2, createCohortComposition(secondVisit), null);
+		antenatalGestation.addColumn(col2, createCohortComposition(secondVisit), parameterMappings);
 		
 		// Third Visit column
 		CodedObsCohortDefinition thirdVisit = new CodedObsCohortDefinition();
@@ -330,7 +330,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		thirdVisit.setOperator(SetComparator.IN);
 		thirdVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		thirdVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.three"));
-		antenatalGestation.addColumn(col3, createCohortComposition(thirdVisit), null);
+		antenatalGestation.addColumn(col3, createCohortComposition(thirdVisit), parameterMappings);
 		
 		// Fourth Visit column
 		CodedObsCohortDefinition fourthVisit = new CodedObsCohortDefinition();
@@ -339,7 +339,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		fourthVisit.setOperator(SetComparator.IN);
 		fourthVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		fourthVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.four"));
-		antenatalGestation.addColumn(col4, createCohortComposition(fourthVisit), null);
+		antenatalGestation.addColumn(col4, createCohortComposition(fourthVisit), parameterMappings);
 		
 		// Fifth Visit column
 		CodedObsCohortDefinition fifthVisit = new CodedObsCohortDefinition();
@@ -348,7 +348,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		fifthVisit.setOperator(SetComparator.IN);
 		fifthVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		fifthVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.fivePlus"));
-		antenatalGestation.addColumn(col5, createCohortComposition(fifthVisit), null);
+		antenatalGestation.addColumn(col5, createCohortComposition(fifthVisit), parameterMappings);
 		
 		// Total Visit column
 		CodedObsCohortDefinition totalVisit = new CodedObsCohortDefinition();
