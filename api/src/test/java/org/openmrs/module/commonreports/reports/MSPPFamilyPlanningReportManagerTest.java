@@ -3,7 +3,9 @@ package org.openmrs.module.commonreports.reports;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.DatabaseConfig;
@@ -12,18 +14,17 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
-import org.openmrs.module.commonreports.reports.MSPPFamilyPlanningReportManager;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSetRow;
+import org.openmrs.module.reporting.dataset.definition.CohortCrossTabDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
@@ -39,6 +40,8 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
@@ -100,23 +103,35 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 	}
 	
 	@Test
-	public void setupReport_shouldCreateExcelTemplateDesign() throws Exception {
-		// setup
-		
+	public void constructReportDesigns_shouldCreateCsvReportDesign() {
 		// replay
-		ReportManagerUtil.setupReport(manager);
+		ReportDefinition rd = manager.constructReportDefinition();
+		List<ReportDesign> designs = manager.constructReportDesigns(rd);
 		
-		// verif
-		ReportDesign design = rs.getReportDesignByUuid("c51fc24f-50ba-48f8-9678-90462f7cff80");
+		// verify
+		assertNotNull("Report designs should not be null", designs);
+		assertEquals("Should have 1 report design", 1, designs.size());
 		
-		Assert.assertEquals(1, design.getResources().size());
-		
-		ReportDefinition def = design.getReportDefinition();
-		Assert.assertEquals("efd7ba26-7888-45a8-9184-423833ab79d3", def.getUuid());
+		ReportDesign design = designs.get(0);
+		assertEquals("8e300676-75d7-48f8-82eb-4fe9971459fe", design.getUuid());
+		assertEquals(rd, design.getReportDefinition());
 	}
 	
 	@Test
-	public void testReport() throws Exception {
+	public void setupReport_shouldCreateCsvReportDesign() throws Exception {
+		// replay
+		ReportManagerUtil.setupReport(manager);
+		
+		// verify
+		ReportDesign design = rs.getReportDesignByUuid("8e300676-75d7-48f8-82eb-4fe9971459fe");
+		assertNotNull("Report design should exist", design);
+		
+		ReportDefinition def = design.getReportDefinition();
+		assertEquals("efd7ba26-7888-45a8-9184-423833ab79d3", def.getUuid());
+	}
+	
+	@Test
+	public void testReport_shouldEvaluateReportWithCorrectData() throws Exception {
 		// setup
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
@@ -127,28 +142,91 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 		ReportData data = rds.evaluate(rd, context);
 		
 		// verify
+		assertNotNull("Report data should not be null", data);
+		assertTrue("Should have data sets", data.getDataSets().size() > 0);
+		
 		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
+			
+			// Verify Microlut data
 			assertEquals(new Long(1), row.getColumnValue("existentMicrolutFemaleLT25"));
 			assertEquals(new Long(0), row.getColumnValue("existentMicrolutFemaleGT25"));
-			
 			assertEquals(new Long(1), row.getColumnValue("newMicrolutFemaleLT25"));
 			assertEquals(new Long(0), row.getColumnValue("newMicrolutFemaleGT25"));
 			
+			// Verify Jadel data
 			assertEquals(new Long(1), row.getColumnValue("newJadelFemaleLT25"));
 			assertEquals(new Long(0), row.getColumnValue("newJadelFemaleGT25"));
 			
+			// Verify Depo Provera data
 			assertEquals(new Long(1), row.getColumnValue("existentDepoFemaleGT25"));
 			assertEquals(new Long(0), row.getColumnValue("existentDepoFemaleLT25"));
 			
+			// Verify Condom Female data
 			assertEquals(new Long(1), row.getColumnValue("newCondomFemaleGT25"));
 			assertEquals(new Long(0), row.getColumnValue("newCondomFemaleLT25"));
 			
+			// Verify Condom Male data
 			assertEquals(new Long(1), row.getColumnValue("newCondomMaleGT25"));
 			assertEquals(new Long(0), row.getColumnValue("newCondomMaleLT25"));
 			
+			// Verify Total column exists
+			assertNotNull("Total column should exist", row.getColumnValue("Total"));
 		}
+	}
+
+	
+	@Test
+	public void testReport_shouldIncludeAllMethodRows() throws Exception {
+		// setup
+		EvaluationContext context = new EvaluationContext();
+		context.addParameterValue("startDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
+		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-30", "yyyy-MM-dd"));
 		
+		// replay
+		ReportDefinition rd = manager.constructReportDefinition();
+		ReportData data = rds.evaluate(rd, context);
+		
+		// verify - check that all method rows are present in the results
+		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
+			DataSetRow row = itr.next();
+			
+			// Verify Microgynon rows exist
+			assertNotNull("newMycogynonFemaleLT25 should exist", row.getColumnValue("newMycogynonFemaleLT25"));
+			assertNotNull("newMycogynonFemaleGT25 should exist", row.getColumnValue("newMycogynonFemaleGT25"));
+			assertNotNull("existentMycogynonFemaleLT25 should exist", row.getColumnValue("existentMycogynonFemaleLT25"));
+			assertNotNull("existentMycogynonFemaleGT25 should exist", row.getColumnValue("existentMycogynonFemaleGT25"));
+			
+			// Verify Microlut rows exist
+			assertNotNull("newMicrolutFemaleLT25 should exist", row.getColumnValue("newMicrolutFemaleLT25"));
+			assertNotNull("newMicrolutFemaleGT25 should exist", row.getColumnValue("newMicrolutFemaleGT25"));
+			assertNotNull("existentMicrolutFemaleLT25 should exist", row.getColumnValue("existentMicrolutFemaleLT25"));
+			assertNotNull("existentMicrolutFemaleGT25 should exist", row.getColumnValue("existentMicrolutFemaleGT25"));
+			
+			// Verify Depo Provera rows exist
+			assertNotNull("newDepoFemaleLT25 should exist", row.getColumnValue("newDepoFemaleLT25"));
+			assertNotNull("newDepoFemaleGT25 should exist", row.getColumnValue("newDepoFemaleGT25"));
+			assertNotNull("existentDepoFemaleLT25 should exist", row.getColumnValue("existentDepoFemaleLT25"));
+			assertNotNull("existentDepoFemaleGT25 should exist", row.getColumnValue("existentDepoFemaleGT25"));
+			
+			// Verify Jadel rows exist
+			assertNotNull("newJadelFemaleLT25 should exist", row.getColumnValue("newJadelFemaleLT25"));
+			assertNotNull("newJadelFemaleGT25 should exist", row.getColumnValue("newJadelFemaleGT25"));
+			assertNotNull("existentJadelFemaleLT25 should exist", row.getColumnValue("existentJadelFemaleLT25"));
+			assertNotNull("existentJadelFemaleGT25 should exist", row.getColumnValue("existentJadelFemaleGT25"));
+			
+			// Verify Condom Female rows exist
+			assertNotNull("newCondomFemaleLT25 should exist", row.getColumnValue("newCondomFemaleLT25"));
+			assertNotNull("newCondomFemaleGT25 should exist", row.getColumnValue("newCondomFemaleGT25"));
+			assertNotNull("existentCondomFemaleLT25 should exist", row.getColumnValue("existentCondomFemaleLT25"));
+			assertNotNull("existentCondomFemaleGT25 should exist", row.getColumnValue("existentCondomFemaleGT25"));
+			
+			// Verify Condom Male rows exist
+			assertNotNull("newCondomMaleLT25 should exist", row.getColumnValue("newCondomMaleLT25"));
+			assertNotNull("newCondomMaleGT25 should exist", row.getColumnValue("newCondomMaleGT25"));
+			assertNotNull("existentCondomMaleLT25 should exist", row.getColumnValue("existentCondomMaleLT25"));
+			assertNotNull("existentCondomMaleGT25 should exist", row.getColumnValue("existentCondomMaleGT25"));
+		}
 	}
 	
 	private void updateDatabase(String filename) throws Exception {
