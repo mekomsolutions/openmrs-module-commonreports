@@ -4,8 +4,10 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
 import org.dbunit.database.DatabaseConfig;
@@ -14,6 +16,8 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
@@ -145,37 +149,32 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 		// verify
 		assertNotNull("Report data should not be null", data);
 		assertTrue("Should have data sets", data.getDataSets().size() > 0);
-		
+
 		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			
-			// Verify Microlut data
-			Cohort  existentMicrolutFemaleLT25= (Cohort) row.getColumnValue("existentMicrolutFemaleLT25");
-			assertNotNull(existentMicrolutFemaleLT25);
-			assertEquals(1, existentMicrolutFemaleLT25.getSize());
-//			assertEquals(new Long(0), row.getColumnValue("existentMicrolutFemaleGT25"));
-//			assertEquals(new Long(1), row.getColumnValue("newMicrolutFemaleLT25"));
-//			assertEquals(new Long(0), row.getColumnValue("newMicrolutFemaleGT25"));
-//
-//			// Verify Jadel data
-//			assertEquals(new Long(1), row.getColumnValue("newJadelFemaleLT25"));
-//			assertEquals(new Long(0), row.getColumnValue("newJadelFemaleGT25"));
-//
-//			// Verify Depo Provera data
-//			assertEquals(new Long(1), row.getColumnValue("existentDepoFemaleGT25"));
-//			assertEquals(new Long(0), row.getColumnValue("existentDepoFemaleLT25"));
-//
-//			// Verify Condom Female data
-//			assertEquals(new Long(1), row.getColumnValue("newCondomFemaleGT25"));
-//			assertEquals(new Long(0), row.getColumnValue("newCondomFemaleLT25"));
-//
-//			// Verify Condom Male data
-//			assertEquals(new Long(1), row.getColumnValue("newCondomMaleGT25"));
-//			assertEquals(new Long(0), row.getColumnValue("newCondomMaleLT25"));
-//
-//			// Verify Total column exists
-//			assertNotNull("Total column should exist", row.getColumnValue("Total"));
+			Map<String, Integer> columnValuePairs = getColumnValues();
+			for (String column : columnValuePairs.keySet()) {
+				assertThat(column, ((Cohort) row.getColumnValue(column)).getSize(), is(columnValuePairs.get(column)));
+			}
 		}
+	}
+
+	private Map<String, Integer> getColumnValues() {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("existentMicrolutFemaleLT25", 1);
+		map.put("existentMicrolutFemaleGT25", 0);
+		map.put("newMicrolutFemaleLT25", 1);
+		map.put("newMicrolutFemaleGT25", 0);
+		map.put("newJadelFemaleLT25", 1);
+		map.put("newJadelFemaleGT25", 0);
+		map.put("existentDepoFemaleGT25", 1);
+		map.put("existentDepoFemaleLT25", 0);
+		map.put("newCondomFemaleGT25", 1);
+		map.put("newCondomFemaleLT25", 0);
+		map.put("newCondomMaleGT25", 1);
+		map.put("newCondomMaleLT25", 0);
+		return map;
+
 	}
 	
 	private void updateDatabase(String filename) throws Exception {
