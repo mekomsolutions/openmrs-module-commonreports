@@ -23,7 +23,7 @@ import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component(CommonReportsConstants.COMPONENT_REPORTMANAGER_FAMILY_PLANNING)
 public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 	
 	@Autowired

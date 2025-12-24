@@ -1,6 +1,7 @@
 package org.openmrs.module.commonreports.reports;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,7 +11,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
-import org.openmrs.api.ConceptService;
+import org.openmrs.module.commonreports.ActivatedReportManager;
+import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -22,14 +24,18 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensitiveTest {
+public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+
+	public MSPPFamilyPlanningReportManagerTest() throws SQLException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	@Autowired
 	private InitializerService iniz;
@@ -41,11 +47,8 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 	private ReportDefinitionService rds;
 
 	@Autowired
-	@Qualifier("conceptService")
-	private ConceptService cs;
-
-	@Autowired
-	private MSPPFamilyPlanningReportManager manager;
+	@Qualifier(CommonReportsConstants.COMPONENT_REPORTMANAGER_FAMILY_PLANNING)
+	private ActivatedReportManager manager;
 
 
 	@Before
@@ -89,7 +92,7 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 		assertNotNull("Report data should not be null", data);
 		assertTrue("Should have data sets", data.getDataSets().size() > 0);
 
-		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Family Planning").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
 			Map<String, Integer> columnValuePairs = getColumnValues();
 			for (String column : columnValuePairs.keySet()) {
