@@ -86,7 +86,7 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
-
+		
 		int fpAdministredConceptId = inizService.getConceptFromKey("report.MSPP.familyPlanning.FPAdministred")
 		        .getConceptId();
 		int familyPlanningConceptId = inizService.getConceptFromKey("report.MSPP.familyPlanning.familyPlanning")
