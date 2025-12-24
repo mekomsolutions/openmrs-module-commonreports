@@ -90,6 +90,8 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 
 		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Family Planning").iterator(); itr.hasNext(); ) {
 			DataSetRow row = itr.next();
+			System.out.println("Printing MSPPFamilyPlanningReportManagerTest " + row.getColumnValues().toString());
+
 			Cohort existentMicrolutFemaleLT25 = (Cohort) row.getColumnValue("existentMicrolutFemaleLT25 - Total");
 			assertNotNull(existentMicrolutFemaleLT25);
 			assertEquals(1, existentMicrolutFemaleLT25.getSize());
