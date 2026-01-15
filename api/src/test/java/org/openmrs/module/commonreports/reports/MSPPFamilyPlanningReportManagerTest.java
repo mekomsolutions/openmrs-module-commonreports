@@ -31,7 +31,6 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 	
 	public MSPPFamilyPlanningReportManagerTest() throws SQLException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Autowired
