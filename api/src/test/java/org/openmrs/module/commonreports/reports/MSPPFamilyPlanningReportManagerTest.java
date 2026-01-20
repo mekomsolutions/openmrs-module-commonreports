@@ -1,23 +1,15 @@
 package org.openmrs.module.commonreports.reports;
 
 import java.io.File;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.DatabaseUnitRuntimeException;
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.ext.mysql.MySqlDataTypeFactory;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.api.ConceptService;
-import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
-import org.openmrs.module.commonreports.reports.MSPPFamilyPlanningReportManager;
+import org.openmrs.Cohort;
+import org.openmrs.module.commonreports.ActivatedReportManager;
+import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -25,20 +17,15 @@ import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSetRow;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.report.ReportData;
-import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
 	
@@ -56,36 +43,11 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 	private ReportDefinitionService rds;
 	
 	@Autowired
-	@Qualifier("conceptService")
-	private ConceptService cs;
-	
-	@Autowired
-	private MSPPFamilyPlanningReportManager manager;
-	
-	@Override
-	public void executeDataSet(IDataSet dataset) {
-		try {
-			Connection connection = getConnection();
-			IDatabaseConnection dbUnitConn = setupDatabaseConnection(connection);
-			DatabaseOperation.REFRESH.execute(dbUnitConn, dataset);
-		}
-		catch (Exception e) {
-			throw new DatabaseUnitRuntimeException(e);
-		}
-	}
-	
-	private IDatabaseConnection setupDatabaseConnection(Connection connection) throws DatabaseUnitException {
-		IDatabaseConnection dbUnitConn = new DatabaseConnection(connection);
-		
-		DatabaseConfig config = dbUnitConn.getConfig();
-		config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
-		
-		return dbUnitConn;
-	}
+	@Qualifier(CommonReportsConstants.COMPONENT_REPORTMANAGER_FAMILY_PLANNING)
+	private ActivatedReportManager manager;
 	
 	@Before
-	public void setUp() throws Exception {
-		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
+	public void setup() throws Exception {
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
 		executeDataSet("org/openmrs/module/commonreports/include/MSPPfamilyPlanningTestDataset.xml");
 		
@@ -100,23 +62,18 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 	}
 	
 	@Test
-	public void setupReport_shouldCreateExcelTemplateDesign() throws Exception {
-		// setup
+	public void setupReport_shouldSetupFamilyPlanningReport() {
 		
 		// replay
 		ReportManagerUtil.setupReport(manager);
 		
-		// verif
-		ReportDesign design = rs.getReportDesignByUuid("c51fc24f-50ba-48f8-9678-90462f7cff80");
+		// verify
+		Assert.assertNotNull(rs.getReportDesignByUuid("8e300676-75d7-48f8-82eb-4fe9971459fe"));
 		
-		Assert.assertEquals(1, design.getResources().size());
-		
-		ReportDefinition def = design.getReportDefinition();
-		Assert.assertEquals("efd7ba26-7888-45a8-9184-423833ab79d3", def.getUuid());
 	}
 	
 	@Test
-	public void testReport() throws Exception {
+	public void testReport_shouldEvaluateReportWithCorrectData() throws Exception {
 		// setup
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
@@ -127,43 +84,59 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 		ReportData data = rds.evaluate(rd, context);
 		
 		// verify
-		for (Iterator<DataSetRow> itr = data.getDataSets().get(rd.getName()).iterator(); itr.hasNext();) {
+		assertNotNull("Report data should not be null", data);
+		assertTrue("Should have data sets", data.getDataSets().size() > 0);
+		
+		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Family Planning").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-			assertEquals(new Long(1), row.getColumnValue("existentMicrolutFemaleLT25"));
-			assertEquals(new Long(0), row.getColumnValue("existentMicrolutFemaleGT25"));
+
+			Cohort existentMicrolutFemaleLT25 = (Cohort) row.getColumnValue("existentMicrolutFemaleLT25.Total");
+			assertNotNull(existentMicrolutFemaleLT25);
+			assertEquals(1, existentMicrolutFemaleLT25.getSize());
 			
-			assertEquals(new Long(1), row.getColumnValue("newMicrolutFemaleLT25"));
-			assertEquals(new Long(0), row.getColumnValue("newMicrolutFemaleGT25"));
+			Cohort existentMicrolutFemaleGT25 = (Cohort) row.getColumnValue("existentMicrolutFemaleGT25.Total");
+			assertNotNull(existentMicrolutFemaleGT25);
+			assertEquals(0, existentMicrolutFemaleGT25.getSize());
 			
-			assertEquals(new Long(1), row.getColumnValue("newJadelFemaleLT25"));
-			assertEquals(new Long(0), row.getColumnValue("newJadelFemaleGT25"));
+			Cohort newMicrolutFemaleLT25 = (Cohort) row.getColumnValue("newMicrolutFemaleLT25.Total");
+			assertNotNull(newMicrolutFemaleLT25);
+			assertEquals(1, newMicrolutFemaleLT25.getSize());
 			
-			assertEquals(new Long(1), row.getColumnValue("existentDepoFemaleGT25"));
-			assertEquals(new Long(0), row.getColumnValue("existentDepoFemaleLT25"));
+			Cohort newMicrolutFemaleGT25 = (Cohort) row.getColumnValue("newMicrolutFemaleGT25.Total");
+			assertNotNull(newMicrolutFemaleGT25);
+			assertEquals(0, newMicrolutFemaleGT25.getSize());
 			
-			assertEquals(new Long(1), row.getColumnValue("newCondomFemaleGT25"));
-			assertEquals(new Long(0), row.getColumnValue("newCondomFemaleLT25"));
+			Cohort newJadelFemaleLT25 = (Cohort) row.getColumnValue("newJadelFemaleLT25.Total");
+			assertNotNull(newJadelFemaleLT25);
+			assertEquals(1, newJadelFemaleLT25.getSize());
 			
-			assertEquals(new Long(1), row.getColumnValue("newCondomMaleGT25"));
-			assertEquals(new Long(0), row.getColumnValue("newCondomMaleLT25"));
+			Cohort newJadelFemaleGT25 = (Cohort) row.getColumnValue("newJadelFemaleGT25.Total");
+			assertNotNull(newJadelFemaleGT25);
+			assertEquals(0, newJadelFemaleGT25.getSize());
 			
+			Cohort existentDepoFemaleGT25 = (Cohort) row.getColumnValue("existentDepoFemaleGT25.Total");
+			assertNotNull(existentDepoFemaleGT25);
+			assertEquals(1, existentDepoFemaleGT25.getSize());
+			
+			Cohort existentDepoFemaleLT25 = (Cohort) row.getColumnValue("existentDepoFemaleLT25.Total");
+			assertNotNull(existentDepoFemaleLT25);
+			assertEquals(0, existentDepoFemaleLT25.getSize());
+			
+			Cohort newCondomFemaleGT25 = (Cohort) row.getColumnValue("newCondomFemaleGT25.Total");
+			assertNotNull(newCondomFemaleGT25);
+			assertEquals(1, newCondomFemaleGT25.getSize());
+			
+			Cohort newCondomFemaleLT25 = (Cohort) row.getColumnValue("newCondomFemaleLT25.Total");
+			assertNotNull(newCondomFemaleLT25);
+			assertEquals(0, newCondomFemaleLT25.getSize());
+			
+			Cohort newCondomMaleGT25 = (Cohort) row.getColumnValue("newCondomMaleGT25.Total");
+			assertNotNull(newCondomMaleGT25);
+			assertEquals(1, newCondomMaleGT25.getSize());
+			
+			Cohort newCondomMaleLT25 = (Cohort) row.getColumnValue("newCondomMaleLT25.Total");
+			assertNotNull(newCondomMaleLT25);
+			assertEquals(0, newCondomMaleLT25.getSize());
 		}
-		
-	}
-	
-	private void updateDatabase(String filename) throws Exception {
-		Liquibase liquibase = getLiquibase(filename);
-		liquibase.update("Modify column datatype to longblob on reporting_report_design_resource table");
-		liquibase.getDatabase().getConnection().commit();
-	}
-	
-	private Liquibase getLiquibase(String filename) throws Exception {
-		Database liquibaseConnection = DatabaseFactory.getInstance()
-		        .findCorrectDatabaseImplementation(new JdbcConnection(getConnection()));
-		
-		liquibaseConnection.setDatabaseChangeLogTableName("LIQUIBASECHANGELOG");
-		liquibaseConnection.setDatabaseChangeLogLockTableName("LIQUIBASECHANGELOGLOCK");
-		
-		return new Liquibase(filename, new ClassLoaderResourceAccessor(getClass().getClassLoader()), liquibaseConnection);
 	}
 }
