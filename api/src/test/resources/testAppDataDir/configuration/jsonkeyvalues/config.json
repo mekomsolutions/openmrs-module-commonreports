@@ -135,5 +135,5 @@
     "report.patients.active" : "true",
     "report.appointments.active" : "true",
     "report.visits.active" : "true",
-    "report.disbursement.active": "true"
+    "report.disbursement.active" : "true"
 }

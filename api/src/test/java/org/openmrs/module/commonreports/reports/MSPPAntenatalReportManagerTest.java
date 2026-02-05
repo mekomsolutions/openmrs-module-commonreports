@@ -114,7 +114,6 @@ public class MSPPAntenatalReportManagerTest extends BaseModuleContextSensitiveMy
 		
 		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Antenatal Risks").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-
 			
 			// In CrossTabDataSet reports all rows and columns are in fact just columns of
 			// one row

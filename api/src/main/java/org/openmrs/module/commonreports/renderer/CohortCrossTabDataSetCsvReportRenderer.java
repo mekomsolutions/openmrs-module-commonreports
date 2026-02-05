@@ -66,25 +66,25 @@ public class CohortCrossTabDataSetCsvReportRenderer extends CsvReportRenderer {
 				Set<String> rows = dsd.getRows().keySet();
 				
 				// Add rest of the columns
-		        for (String column : columns) {
-		            metaData.addColumn(new DataSetColumn(column, column, Object.class));
-		        }
-		        data.setMetaData(metaData);
-		        
-		        // Add column values
-		        for (String row : rows) {
-		            DataSetRow dsr = new DataSetRow();
-		            for (DataSetColumn column : metaData.getColumns()) {
-		            	if (column.getName().equals("")) {
-		            		dsr.addColumnValue(column, row);
-		            	} else {
-		            		dsr.addColumnValue(column, ((Cohort) cohortCrossTabDataSetRow.getColumnValue(row + "." + column))
-		            				.size());
-		            	}
-		            }
-		            data.addRow(dsr);
-		        }
-		        dataSetsToRender.put(name, data);
+				for (String column : columns) {
+					metaData.addColumn(new DataSetColumn(column, column, Object.class));
+				}
+				data.setMetaData(metaData);
+				
+				// Add column values
+				for (String row : rows) {
+					DataSetRow dsr = new DataSetRow();
+					for (DataSetColumn column : metaData.getColumns()) {
+						if (column.getName().equals("")) {
+							dsr.addColumnValue(column, row);
+						} else {
+							dsr.addColumnValue(column,
+							    ((Cohort) cohortCrossTabDataSetRow.getColumnValue(row + "." + column)).size());
+						}
+					}
+					data.addRow(dsr);
+				}
+				dataSetsToRender.put(name, data);
 			} else {
 				dataSetsToRender.put(name, ds);
 			}

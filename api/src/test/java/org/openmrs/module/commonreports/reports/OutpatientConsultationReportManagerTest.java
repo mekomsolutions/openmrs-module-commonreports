@@ -80,7 +80,8 @@ public class OutpatientConsultationReportManagerTest extends BaseModuleContextSe
 		// verif
 		Assert.assertNotNull(rs.getReportDesignByUuid("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d"));
 		
-		assertEquals(rs.getReportDesignByUuid("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d").getRendererType(), CohortCrossTabDataSetCsvReportRenderer.class);
+		assertEquals(rs.getReportDesignByUuid("42b32ac1-fcd0-473d-8fdb-71fd6fc2e26d").getRendererType(),
+		    CohortCrossTabDataSetCsvReportRenderer.class);
 		
 	}
 	
@@ -173,12 +174,12 @@ public class OutpatientConsultationReportManagerTest extends BaseModuleContextSe
 		
 		// Replay
 		renderer.render(data, "", out);
-        
+		
 		// Verify
-		String expectedFormat = "\"\",\"0-28 days - Males\",\"0-28 days - Females\",\"1-12 months - Males\",\"1-12 months - Females\",\"1-4 years - Males\",\"1-4 years - Females\",\"5-14 years - Males\",\"5-14 years - Females\",\"15-24 years - Males\",\"15-24 years - Females\",\"25-49 years - Males\",\"25-49 years - Females\",\"50-64 years - Males\",\"50-64 years - Females\",\"_> 65 years - Males\",\"_> 65 years - Females\",\"Total - Males\",\"Total - Females\",\"Total\",\"Referred To - Males\",\"Referred To - Females\"\r\n" + 
-        		"\"MALARIA\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"2\",\"0\",\"1\"\r\n" + 
-        		"\"FEVER\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"1\",\"0\",\"0\"\r\n" + 
-        		"\"DIABETES\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"1\",\"0\",\"0\"\r\n";
+		String expectedFormat = "\"\",\"0-28 days - Males\",\"0-28 days - Females\",\"1-12 months - Males\",\"1-12 months - Females\",\"1-4 years - Males\",\"1-4 years - Females\",\"5-14 years - Males\",\"5-14 years - Females\",\"15-24 years - Males\",\"15-24 years - Females\",\"25-49 years - Males\",\"25-49 years - Females\",\"50-64 years - Males\",\"50-64 years - Females\",\"_> 65 years - Males\",\"_> 65 years - Females\",\"Total - Males\",\"Total - Females\",\"Total\",\"Referred To - Males\",\"Referred To - Females\"\r\n"
+		        + "\"MALARIA\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"2\",\"0\",\"1\"\r\n"
+		        + "\"FEVER\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"1\",\"0\",\"0\"\r\n"
+		        + "\"DIABETES\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"1\",\"0\",\"0\"\r\n";
 		
 		assertThat(out.toString(), is(expectedFormat));
 	}
