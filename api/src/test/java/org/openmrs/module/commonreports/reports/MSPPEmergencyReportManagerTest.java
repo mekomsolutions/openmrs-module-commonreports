@@ -128,6 +128,11 @@ public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTe
 		map.put("Sexual Violence - Women (15 years and above).Deceased", 0);
 		map.put("Sexual Violence - Women (15 years and above).Left without permission", 0);
 		map.put("Sexual Violence - Women (15 years and above).Cared for", 0);
+		map.put("Sexual Violence - Men (15 years and above).Total number", 0);
+		map.put("Sexual Violence - Men (15 years and above).Referred", 0);
+		map.put("Sexual Violence - Men (15 years and above).Deceased", 0);
+		map.put("Sexual Violence - Men (15 years and above).Left without permission", 0);
+		map.put("Sexual Violence - Men (15 years and above).Cared for", 0);
 		map.put("Physical Violence - Children (0-14 years).Total number", 1);
 		map.put("Physical Violence - Children (0-14 years).Referred", 0);
 		map.put("Physical Violence - Children (0-14 years).Deceased", 1);
