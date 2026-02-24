@@ -153,14 +153,14 @@ public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTe
 		map.put("Other Violence Type - Children (0-14 years).Deceased", 0);
 		map.put("Other Violence Type - Children (0-14 years).Left without permission", 0);
 		map.put("Other Violence Type - Children (0-14 years).Cared for", 0);
-		map.put("Other Violence Type - Men (15 years and above).Total number", 0);
+		map.put("Other Violence Type - Men (15 years and above).Total number", 1);
 		map.put("Other Violence Type - Men (15 years and above).Referred", 0);
 		map.put("Other Violence Type - Men (15 years and above).Deceased", 1);
 		map.put("Other Violence Type - Men (15 years and above).Left without permission", 0);
 		map.put("Other Violence Type - Men (15 years and above).Cared for", 0);
-		map.put("Other Violence Type - Women (15 years and above).Total number", 1);
+		map.put("Other Violence Type - Women (15 years and above).Total number", 0);
 		map.put("Other Violence Type - Women (15 years and above).Referred", 0);
-		map.put("Other Violence Type - Women (15 years and above).Deceased", 1);
+		map.put("Other Violence Type - Women (15 years and above).Deceased", 0);
 		map.put("Other Violence Type - Women (15 years and above).Left without permission", 0);
 		map.put("Other Violence Type - Women (15 years and above).Cared for", 0);
 		map.put("Medical and surgical emergency - Digestive.Total number", 2);
