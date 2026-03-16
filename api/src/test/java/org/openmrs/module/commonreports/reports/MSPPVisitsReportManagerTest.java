@@ -121,7 +121,8 @@ public class MSPPVisitsReportManagerTest extends BaseModuleContextSensitiveMysql
 		expectedValuesMap.put("Children under one year old", "null:null");
 		expectedValuesMap.put("Children aged 1 to 4 years old", "1.0:null");
 		expectedValuesMap.put("Children aged 5 to 9 years old", "1.0:null");
-		expectedValuesMap.put("Children aged 10 to 14", "4.0:null");
+		expectedValuesMap.put("Children aged 10 to 14", "2.0:null");
+		expectedValuesMap.put("Children aged 15 to 19", "2.0:null");
 		expectedValuesMap.put("Young adults aged 20 to 24", "3.0:1.0");
 		expectedValuesMap.put("Pregnant women", "null:3.0");
 		expectedValuesMap.put("Family planning clients", "null:2.0");

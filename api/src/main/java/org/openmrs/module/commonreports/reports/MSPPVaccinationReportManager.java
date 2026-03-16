@@ -138,8 +138,8 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		String[] vaccinationConceptsListWithSequence = inizService
 		        .getValueFromKey("report.MSPP.vaccination.vaccinationConceptsListWithSequence").split(",");
 		
-		if (inizService.getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept") != null &&
-				inizService.getConceptFromKey("report.MSPP.vaccination.yesAnswer.concept") != null) {
+		if (inizService.getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept") != null
+		        && inizService.getConceptFromKey("report.MSPP.vaccination.yesAnswer.concept") != null) {
 			CodedObsCohortDefinition isChildFullyVaccinated = new CodedObsCohortDefinition();
 			isChildFullyVaccinated.setQuestion(
 			    inizService.getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept"));

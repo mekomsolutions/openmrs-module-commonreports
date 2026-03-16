@@ -85,7 +85,7 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
-
+		
 		// verify
 		boolean indicator1 = false;
 		boolean indicator2 = false;
@@ -95,19 +95,23 @@ public class DisbursementReportManagerTest extends BaseModuleContextSensitiveMys
 			for (Iterator<DataSetRow> itr = ds.iterator(); itr.hasNext();) {
 				DataSetRow row = itr.next();
 				
-				if (row.getColumnValue("Indicator").equals("Registered patients aged 40 and above that have had their NCD screening for the first time")) {
+				if (row.getColumnValue("Indicator").equals(
+				    "Registered patients aged 40 and above that have had their NCD screening for the first time")) {
 					assertEquals("7", row.getColumnValue("Value"));
 					indicator1 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("Registered women aged 30 to 49 years that have had their CCS screening for the first time")) {
+				if (row.getColumnValue("Indicator").equals(
+				    "Registered women aged 30 to 49 years that have had their CCS screening for the first time")) {
 					assertEquals("8", row.getColumnValue("Value"));
 					indicator2 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred")) {
+				if (row.getColumnValue("Indicator").equals(
+				    "80% (of registered women aged 30 to 49 years that have had their CCS screening for the first time) were VIA positive and referred")) {
 					assertEquals("Yes", row.getColumnValue("Value"));
 					indicator3 = true;
 				}
-				if (row.getColumnValue("Indicator").equals("80% (of registered patients with a Follow-up date and diagnosed with Hypertension & Diabetes) were given medication with at least a 4 weeks prescription")) {
+				if (row.getColumnValue("Indicator").equals(
+				    "80% (of registered patients with a Follow-up date and diagnosed with Hypertension & Diabetes) were given medication with at least a 4 weeks prescription")) {
 					assertEquals("Yes", row.getColumnValue("Value"));
 					indicator4 = true;
 				}

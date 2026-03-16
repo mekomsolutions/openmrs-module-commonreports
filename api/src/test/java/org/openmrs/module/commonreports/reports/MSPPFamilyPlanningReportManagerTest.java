@@ -89,52 +89,52 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 		
 		for (Iterator<DataSetRow> itr = data.getDataSets().get("MSPP Family Planning").iterator(); itr.hasNext();) {
 			DataSetRow row = itr.next();
-
-			Cohort existentMicrolutFemaleLT25 = (Cohort) row.getColumnValue("existentMicrolutFemaleLT25.Total");
+			
+			Cohort existentMicrolutFemaleLT25 = (Cohort) row.getColumnValue("Existent - Microlut - Female - below 25.Total");
 			assertNotNull(existentMicrolutFemaleLT25);
 			assertEquals(1, existentMicrolutFemaleLT25.getSize());
 			
-			Cohort existentMicrolutFemaleGT25 = (Cohort) row.getColumnValue("existentMicrolutFemaleGT25.Total");
+			Cohort existentMicrolutFemaleGT25 = (Cohort) row.getColumnValue("Existent - Microlut - Female - above 25.Total");
 			assertNotNull(existentMicrolutFemaleGT25);
 			assertEquals(0, existentMicrolutFemaleGT25.getSize());
 			
-			Cohort newMicrolutFemaleLT25 = (Cohort) row.getColumnValue("newMicrolutFemaleLT25.Total");
+			Cohort newMicrolutFemaleLT25 = (Cohort) row.getColumnValue("New - Microlut - Female - below 25.Total");
 			assertNotNull(newMicrolutFemaleLT25);
 			assertEquals(1, newMicrolutFemaleLT25.getSize());
 			
-			Cohort newMicrolutFemaleGT25 = (Cohort) row.getColumnValue("newMicrolutFemaleGT25.Total");
+			Cohort newMicrolutFemaleGT25 = (Cohort) row.getColumnValue("New - Microlut - Female - above 25.Total");
 			assertNotNull(newMicrolutFemaleGT25);
 			assertEquals(0, newMicrolutFemaleGT25.getSize());
 			
-			Cohort newJadelFemaleLT25 = (Cohort) row.getColumnValue("newJadelFemaleLT25.Total");
+			Cohort newJadelFemaleLT25 = (Cohort) row.getColumnValue("New - Jadel - Female - below 25.Total");
 			assertNotNull(newJadelFemaleLT25);
 			assertEquals(1, newJadelFemaleLT25.getSize());
 			
-			Cohort newJadelFemaleGT25 = (Cohort) row.getColumnValue("newJadelFemaleGT25.Total");
+			Cohort newJadelFemaleGT25 = (Cohort) row.getColumnValue("New - Jadel - Female - above 25.Total");
 			assertNotNull(newJadelFemaleGT25);
 			assertEquals(0, newJadelFemaleGT25.getSize());
 			
-			Cohort existentDepoFemaleGT25 = (Cohort) row.getColumnValue("existentDepoFemaleGT25.Total");
+			Cohort existentDepoFemaleGT25 = (Cohort) row.getColumnValue("Existent - Depo - Female - above 25.Total");
 			assertNotNull(existentDepoFemaleGT25);
 			assertEquals(1, existentDepoFemaleGT25.getSize());
 			
-			Cohort existentDepoFemaleLT25 = (Cohort) row.getColumnValue("existentDepoFemaleLT25.Total");
+			Cohort existentDepoFemaleLT25 = (Cohort) row.getColumnValue("Existent - Depo - Female - below 25.Total");
 			assertNotNull(existentDepoFemaleLT25);
 			assertEquals(0, existentDepoFemaleLT25.getSize());
 			
-			Cohort newCondomFemaleGT25 = (Cohort) row.getColumnValue("newCondomFemaleGT25.Total");
+			Cohort newCondomFemaleGT25 = (Cohort) row.getColumnValue("New - Condom - Female - above 25.Total");
 			assertNotNull(newCondomFemaleGT25);
 			assertEquals(1, newCondomFemaleGT25.getSize());
 			
-			Cohort newCondomFemaleLT25 = (Cohort) row.getColumnValue("newCondomFemaleLT25.Total");
+			Cohort newCondomFemaleLT25 = (Cohort) row.getColumnValue("New - Condom - Female - below 25.Total");
 			assertNotNull(newCondomFemaleLT25);
 			assertEquals(0, newCondomFemaleLT25.getSize());
 			
-			Cohort newCondomMaleGT25 = (Cohort) row.getColumnValue("newCondomMaleGT25.Total");
+			Cohort newCondomMaleGT25 = (Cohort) row.getColumnValue("New - Condom - Male - above 25.Total");
 			assertNotNull(newCondomMaleGT25);
 			assertEquals(1, newCondomMaleGT25.getSize());
 			
-			Cohort newCondomMaleLT25 = (Cohort) row.getColumnValue("newCondomMaleLT25.Total");
+			Cohort newCondomMaleLT25 = (Cohort) row.getColumnValue("New - Condom - Male - below 25.Total");
 			assertNotNull(newCondomMaleLT25);
 			assertEquals(0, newCondomMaleLT25.getSize());
 		}

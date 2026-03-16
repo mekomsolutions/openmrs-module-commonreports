@@ -103,86 +103,115 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		
 		// Add rows for each method and user type combination
 		// Microgynon - New Users
-		familyPlanning.addRow("newMycogynonFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId,
-		    microgynonConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 1),
-		    parameterMappings);
-		familyPlanning.addRow("newMycogynonFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId,
-		    microgynonConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 1),
-		    parameterMappings);
 		familyPlanning
 		        .addRow(
-		            "existentMycogynonFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, microgynonConceptId,
-		                familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 1),
+		            "New - Mycogynon - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                microgynonConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 1),
 		            parameterMappings);
 		familyPlanning
 		        .addRow(
-		            "existentMycogynonFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, microgynonConceptId,
-		                familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 1),
+		            "New - Mycogynon - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                microgynonConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 1),
 		            parameterMappings);
+		familyPlanning.addRow(
+		    "Existent - Mycogynon - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		        microgynonConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 1),
+		    parameterMappings);
+		familyPlanning.addRow(
+		    "Existent - Mycogynon - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		        microgynonConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 1),
+		    parameterMappings);
 		
 		// Microlut - New Users
-		familyPlanning.addRow("newMicrolutFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, microlutConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 1), parameterMappings);
-		familyPlanning.addRow("newMicrolutFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, microlutConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 1), parameterMappings);
 		familyPlanning
 		        .addRow(
-		            "existentMicrolutFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, microlutConceptId,
-		                familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 1),
+		            "New - Microlut - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                microlutConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 1),
 		            parameterMappings);
 		familyPlanning
 		        .addRow(
-		            "existentMicrolutFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, microlutConceptId,
-		                familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 1),
+		            "New - Microlut - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                microlutConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 1),
 		            parameterMappings);
+		familyPlanning.addRow("Existent - Microlut - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    microlutConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 1),
+		    parameterMappings);
+		familyPlanning.addRow("Existent - Microlut - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    microlutConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 1),
+		    parameterMappings);
 		
 		// Depo Provera - New Users (3 months interval)
-		familyPlanning.addRow("newDepoFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId,
+		familyPlanning.addRow("New - Depo - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
 		    depoProveraInjectionConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 3),
 		    parameterMappings);
-		familyPlanning.addRow("newDepoFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId,
-		    depoProveraInjectionConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 3),
+		familyPlanning.addRow(
+		    "New - Depo - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		        depoProveraInjectionConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 3),
 		    parameterMappings);
 		familyPlanning
-		        .addRow("existentDepoFemaleLT25",
+		        .addRow("Existent - Depo - Female - below 25",
 		            createFamilyPlanningCohort(fpAdministredConceptId, depoProveraInjectionConceptId,
 		                familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 3),
 		            parameterMappings);
 		familyPlanning
-		        .addRow("existentDepoFemaleGT25",
+		        .addRow("Existent - Depo - Female - above 25",
 		            createFamilyPlanningCohort(fpAdministredConceptId, depoProveraInjectionConceptId,
 		                familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 3),
 		            parameterMappings);
 		
 		// Jadel - New Users (5 years interval)
-		familyPlanning.addRow("newJadelFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, jadelConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 60), parameterMappings);
-		familyPlanning.addRow("newJadelFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, jadelConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 60), parameterMappings);
-		familyPlanning.addRow("existentJadelFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, jadelConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 60), parameterMappings);
-		familyPlanning.addRow("existentJadelFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, jadelConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 60), parameterMappings);
+		familyPlanning.addRow("New - Jadel - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    jadelConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 60),
+		    parameterMappings);
+		familyPlanning.addRow("New - Jadel - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    jadelConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 60),
+		    parameterMappings);
+		familyPlanning
+		        .addRow(
+		            "Existent - Jadel - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                jadelConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 60),
+		            parameterMappings);
+		familyPlanning
+		        .addRow(
+		            "Existent - Jadel - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                jadelConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 60),
+		            parameterMappings);
 		
 		// Condom - New Users (no interval)
-		familyPlanning.addRow("newCondomFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 0), parameterMappings);
-		familyPlanning.addRow("newCondomFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 0), parameterMappings);
-		familyPlanning.addRow("existentCondomFemaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 0), parameterMappings);
-		familyPlanning.addRow("existentCondomFemaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 0), parameterMappings);
+		familyPlanning.addRow("New - Condom - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    condomConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, false, 0),
+		    parameterMappings);
+		familyPlanning.addRow("New - Condom - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    condomConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "F", 25, true, 0),
+		    parameterMappings);
+		familyPlanning
+		        .addRow(
+		            "Existent - Condom - Female - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                condomConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, false, 0),
+		            parameterMappings);
+		familyPlanning
+		        .addRow(
+		            "Existent - Condom - Female - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                condomConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "F", 25, true, 0),
+		            parameterMappings);
 		
 		// Condom - Males
-		familyPlanning.addRow("newCondomMaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "M", 25, false, 0), parameterMappings);
-		familyPlanning.addRow("newCondomMaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, newConceptId, "M", 25, true, 0), parameterMappings);
-		familyPlanning.addRow("existentCondomMaleLT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "M", 25, false, 0), parameterMappings);
-		familyPlanning.addRow("existentCondomMaleGT25", createFamilyPlanningCohort(fpAdministredConceptId, condomConceptId,
-		    familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "M", 25, true, 0), parameterMappings);
+		familyPlanning.addRow("New - Condom - Male - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    condomConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "M", 25, false, 0),
+		    parameterMappings);
+		familyPlanning.addRow("New - Condom - Male - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		    condomConceptId, familyPlanningConceptId, typeOfUserConceptId, newConceptId, "M", 25, true, 0),
+		    parameterMappings);
+		familyPlanning
+		        .addRow(
+		            "Existent - Condom - Male - below 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                condomConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "M", 25, false, 0),
+		            parameterMappings);
+		familyPlanning
+		        .addRow(
+		            "Existent - Condom - Male - above 25", createFamilyPlanningCohort(fpAdministredConceptId,
+		                condomConceptId, familyPlanningConceptId, typeOfUserConceptId, existentConceptId, "M", 25, true, 0),
+		            parameterMappings);
 		
 		// Add a single column for "Total" (all patients)
 		GenderCohortDefinition allGender = new GenderCohortDefinition();

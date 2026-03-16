@@ -133,7 +133,7 @@ public class MSPPVaccinationReportManagerTest extends BaseModuleContextSensitive
 			assertNotNull(_prenatalFemalesReceivedDT);
 			assertEquals(1, _prenatalFemalesReceivedDT.getSize());
 			
-			Cohort _0mTo1yFemalesFullyVaccinated= (Cohort) row
+			Cohort _0mTo1yFemalesFullyVaccinated = (Cohort) row
 			        .getColumnValue("Is the child fully vaccinated?." + MSPPVaccinationReportManager.col1);
 			assertNotNull(_0mTo1yFemalesFullyVaccinated);
 			assertEquals(1, _0mTo1yFemalesFullyVaccinated.getSize());

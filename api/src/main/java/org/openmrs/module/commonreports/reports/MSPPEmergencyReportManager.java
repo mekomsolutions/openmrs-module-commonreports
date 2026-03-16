@@ -178,11 +178,11 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			emergencies.addRow(
 			    svc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.women") + " "
 			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
-			    createCohortComposition(sexualViolence, males, above14y), parameterMappings);
-			emergencies.addRow(
-			    svc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.women") + " "
-			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
 			    createCohortComposition(sexualViolence, females, above14y), parameterMappings);
+			emergencies.addRow(
+			    svc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.men") + " "
+			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
+			    createCohortComposition(sexualViolence, males, above14y), parameterMappings);
 		}
 		
 		{
@@ -203,11 +203,11 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			emergencies.addRow(
 			    pvc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.men") + " "
 			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
-			    createCohortComposition(physicalViolence, females), parameterMappings);
+			    createCohortComposition(physicalViolence, males), parameterMappings);
 			emergencies.addRow(
 			    pvc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.women") + " "
 			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
-			    createCohortComposition(physicalViolence, males), parameterMappings);
+			    createCohortComposition(physicalViolence, females), parameterMappings);
 			
 		}
 		
@@ -230,11 +230,11 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			emergencies.addRow(
 			    ovtc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.men") + " "
 			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
-			    createCohortComposition(otherViolenceType, females), parameterMappings);
+			    createCohortComposition(otherViolenceType, males), parameterMappings);
 			emergencies.addRow(
 			    ovtc.getDisplayString() + " - " + MessageUtil.translate("commonreports.report.MSPP.emergency.women") + " "
 			            + MessageUtil.translate("commonreports.report.MSPP.emergency.above14years"),
-			    createCohortComposition(otherViolenceType, males), parameterMappings);
+			    createCohortComposition(otherViolenceType, females), parameterMappings);
 			
 		}
 		
