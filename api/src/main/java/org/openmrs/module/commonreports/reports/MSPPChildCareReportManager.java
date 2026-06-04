@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Concept;
+import org.openmrs.Location;
 import org.openmrs.VisitType;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.commonreports.ActivatedReportManager;
@@ -118,11 +119,16 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -162,6 +168,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		parameterMappings.put("effectiveDate", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		setColumnNames();
 		
@@ -217,13 +224,13 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		
 		VisitCohortDefinition visits = new VisitCohortDefinition();
 		visits.setVisitTypeList(vs.getAllVisitTypes(false));
-		visits.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
-		visits.addParameter(new Parameter("startedOnOrBefore", "On Or Before", Date.class));
+		addVisitParameters(visits);
 		
 		Map<String, Object> visitParameterMappings = new HashMap<String, Object>();
 		visitParameterMappings.put("startedOnOrAfter", "${startDate}");
 		visitParameterMappings.put("startedOnOrBefore", "${endDate}");
 		visitParameterMappings.put("effectiveDate", "${endDate}");
+		visitParameterMappings.put("locationList", "${locationList}");
 		
 		CompositionCohortDefinition totalChildrenSeen = createCohortComposition(visits, _0To60m);
 		totalChildrenSeen.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
@@ -231,11 +238,10 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		// Children seen for the first time
 		SqlCohortDefinition childrenSeenFirstTime = new SqlCohortDefinition();
 		String sql = "SELECT v.patient_id FROM visit v WHERE v.date_started BETWEEN :onOrAfter AND :onOrBefore "
-		        + "AND NOT EXISTS (SELECT 1 FROM visit new_v "
+		        + "AND v.location_id IN (:locationList) " + "AND NOT EXISTS (SELECT 1 FROM visit new_v "
 		        + "WHERE new_v.patient_id = v.patient_id AND new_v.visit_id <> v.visit_id);";
 		childrenSeenFirstTime.setQuery(sql);
-		childrenSeenFirstTime.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		childrenSeenFirstTime.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addSqlParameters(childrenSeenFirstTime);
 		childrenSeenFirstTime.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// Children seen for the first time + MUAC measurement
@@ -244,8 +250,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		
 		NumericObsCohortDefinition muacMeasured = new NumericObsCohortDefinition();
 		muacMeasured.setQuestion(muacMeasurementConcept);
-		muacMeasured.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		muacMeasured.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(muacMeasured);
 		
 		CompositionCohortDefinition childrenMeasuredForMuac = createCohortComposition(childrenSeenFirstTime, muacMeasured);
 		childrenMeasuredForMuac.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
@@ -254,8 +259,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		NumericObsCohortDefinition weightMeasured = new NumericObsCohortDefinition();
 		weightMeasured.setQuestion(
 		    inizService.getConceptFromKey("report.MSPP.childCare.weightMeasurement.numericQuestion.concept"));
-		weightMeasured.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		weightMeasured.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(weightMeasured);
 		CompositionCohortDefinition childrenMeasuredWeight = createCohortComposition(childrenSeenFirstTime, weightMeasured);
 		childrenMeasuredWeight.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
@@ -266,8 +270,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		muacMeasuredBetween115And125.setOperator1(RangeComparator.GREATER_EQUAL);
 		muacMeasuredBetween115And125.setValue2(12.5);
 		muacMeasuredBetween115And125.setOperator2(RangeComparator.LESS_EQUAL);
-		muacMeasuredBetween115And125.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		muacMeasuredBetween115And125.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(muacMeasuredBetween115And125);
 		
 		CompositionCohortDefinition childrenMeasuredForMuacBetween115And125 = createCohortComposition(childrenSeenFirstTime,
 		    muacMeasuredBetween115And125);
@@ -278,8 +281,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		muacMeasuredLessThan115.setQuestion(muacMeasurementConcept);
 		muacMeasuredLessThan115.setValue1(11.5);
 		muacMeasuredLessThan115.setOperator1(RangeComparator.LESS_THAN);
-		muacMeasuredLessThan115.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		muacMeasuredLessThan115.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(muacMeasuredLessThan115);
 		
 		CompositionCohortDefinition childrenMeasuredForMuacLessThan115 = createCohortComposition(childrenSeenFirstTime,
 		    muacMeasuredLessThan115);
@@ -330,11 +332,11 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.childCare.malnutrition.visitType.uuid"));
 		VisitCohortDefinition malnutritionChildren = new VisitCohortDefinition();
 		malnutritionChildren.setVisitTypeList(Arrays.asList(vt));
+		addVisitParameters(malnutritionChildren);
 		
 		// admitted
 		CodedObsCohortDefinition firstVisitChildren = new CodedObsCohortDefinition();
-		firstVisitChildren.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		firstVisitChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(firstVisitChildren);
 		firstVisitChildren.setOperator(SetComparator.IN);
 		firstVisitChildren.setQuestion(inizService.getConceptFromKey("report.MSPP.childCare.firstVisitQuestion.concept"));
 		firstVisitChildren
@@ -345,8 +347,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		
 		// cured
 		CodedObsCohortDefinition curedChildren = new CodedObsCohortDefinition();
-		curedChildren.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		curedChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(curedChildren);
 		curedChildren.setOperator(SetComparator.IN);
 		curedChildren.setQuestion(resultOfVisitQuestion);
 		Concept curedConcept = inizService.getConceptFromKey("report.MSPP.childCare.resultOfVisit.curedAnswer.concept");
@@ -356,8 +357,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		
 		// withdrawn
 		CodedObsCohortDefinition withdrawnChildren = new CodedObsCohortDefinition();
-		withdrawnChildren.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		withdrawnChildren.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(withdrawnChildren);
 		withdrawnChildren.setOperator(SetComparator.IN);
 		withdrawnChildren.setQuestion(resultOfVisitQuestion);
 		Concept withdrawalConcept = inizService
@@ -397,8 +397,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		dose1.setQuestion(dosageQuestion);
 		dose1.setValue1(1.0);
 		dose1.setOperator1(RangeComparator.EQUAL);
-		dose1.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		dose1.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(dose1);
 		dose1.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// dose 2
@@ -406,8 +405,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		dose2.setQuestion(dosageQuestion);
 		dose2.setValue1(2.0);
 		dose2.setOperator1(RangeComparator.EQUAL);
-		dose2.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		dose2.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(dose2);
 		dose2.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// dose 3
@@ -415,14 +413,12 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		dose3.setQuestion(dosageQuestion);
 		dose3.setValue1(3.0);
 		dose3.setOperator1(RangeComparator.EQUAL);
-		dose3.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		dose3.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(dose3);
 		dose3.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		
 		// distribution of Vitamin A
 		CodedObsCohortDefinition vitaminA = new CodedObsCohortDefinition();
-		vitaminA.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		vitaminA.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(vitaminA);
 		vitaminA.setOperator(SetComparator.IN);
 		vitaminA.setQuestion(vaccinationsQuestion);
 		Concept vitaminAConcept = inizService.getConceptFromKey("report.MSPP.childCare.vitaminA.concept");
@@ -431,8 +427,7 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		
 		// albendazole
 		CodedObsCohortDefinition albendazole = new CodedObsCohortDefinition();
-		albendazole.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		albendazole.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(albendazole);
 		albendazole.setOperator(SetComparator.IN);
 		albendazole.setQuestion(vaccinationsQuestion);
 		Concept albendazoleConcept = inizService.getConceptFromKey("report.MSPP.childCare.albendazole.concept");
@@ -498,6 +493,30 @@ public class MSPPChildCareReportManager extends ActivatedReportManager {
 		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose2.label");
 		cCol9 = MessageUtil.translate("commonreports.report.MSPP.childCare.ageCategory3.label") + " - "
 		        + MessageUtil.translate("commonreports.report.MSPP.childCare.dose3.label");
+	}
+	
+	private void addObsParameters(CodedObsCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addObsParameters(NumericObsCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addSqlParameters(SqlCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addVisitParameters(VisitCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("startedOnOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 	}
 	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
