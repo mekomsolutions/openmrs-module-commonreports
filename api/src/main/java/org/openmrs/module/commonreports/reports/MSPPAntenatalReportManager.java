@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Concept;
+import org.openmrs.Location;
 import org.openmrs.VisitType;
-import org.openmrs.api.ConceptService;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.ActivatedReportManager;
@@ -72,6 +72,10 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	public String getGestationName() {
 		return MessageUtil.translate("commonreports.report.MSPP.antenatalGestation.reportName");
 	}
@@ -99,6 +103,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -125,14 +130,14 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		String[] gestationDurations = inizService.getValueFromKey("report.MSPP.antenatal.gestationDuration").split(",");
 		for (String member : gestationDurations) {
 			
 			if (member.equals("Total")) {
 				CodedObsCohortDefinition gestationDuration = new CodedObsCohortDefinition();
-				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				addObsParameters(gestationDuration);
 				gestationDuration.setOperator(SetComparator.IN);
 				gestationDuration
 				        .setGroupingConcept(inizService.getConceptFromKey("report.MSPP.antenatal.estimatedGestationalAge"));
@@ -149,8 +154,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 				gestationDuration
 				        .setGroupingConcept(inizService.getConceptFromKey("report.MSPP.antenatal.estimatedGestationalAge"));
 				gestationDuration.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.numberOfWeeks"));
-				gestationDuration.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				gestationDuration.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				addObsParameters(gestationDuration);
 				gestationDuration.setValue1(Double.parseDouble(firstNumber));
 				gestationDuration.setValue2(Double.parseDouble(lastNumber));
 				gestationDuration.setOperator1(RangeComparator.GREATER_EQUAL);
@@ -170,8 +174,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Risky Pregnancies
 		CodedObsCohortDefinition riskyPregnancy = new CodedObsCohortDefinition();
-		riskyPregnancy.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		riskyPregnancy.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(riskyPregnancy);
 		riskyPregnancy.setOperator(SetComparator.IN);
 		
 		riskyPregnancy.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.riskyPregnancy"));
@@ -181,13 +184,13 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Iron def ANC visit Pregnancies
 		CodedObsCohortDefinition anemia = new CodedObsCohortDefinition();
-		anemia.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		anemia.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(anemia);
 		anemia.setOperator(SetComparator.IN);
 		anemia.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.codedDiagnosis"));
 		anemia.setValueList(Arrays.asList(inizService.getConceptFromKey("report.MSPP.antenatal.anemiaIronDeficiency")));
 		
 		VisitCohortDefinition _prenatal = new VisitCohortDefinition();
+		addVisitParameters(_prenatal);
 		_prenatal.setVisitTypeList(Arrays.asList(Context.getVisitService()
 		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.antenatal.prenatalVisitType"))));
 		CompositionCohortDefinition ccd = new CompositionCohortDefinition();
@@ -196,14 +199,15 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		    parameterMappings);
 		
 		// Prenatal visit + Fer Folate Co prescribed
-		SqlCohortDefinition sqd = new SqlCohortDefinition("select patient_id from orders where concept_id="
-		        + inizService.getConceptFromKey("report.MSPP.antenatal.ferrousFolate").getConceptId()
-		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
-		        + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
-		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
+		SqlCohortDefinition sqd = new SqlCohortDefinition(
+		        "select o.patient_id from orders o" + " inner join encounter e on o.encounter_id = e.encounter_id"
+		                + " inner join visit v on e.visit_id = v.visit_id where o.concept_id="
+		                + inizService.getConceptFromKey("report.MSPP.antenatal.ferrousFolate").getConceptId()
+		                + " and o.order_type_id =(select order_type_id from order_type where uuid = '"
+		                + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
+		                + "') AND o.date_created BETWEEN :onOrAfter AND :onOrBefore AND v.location_id IN (:locationList)");
 		
-		sqd.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		sqd.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addSqlParameters(sqd);
 		CompositionCohortDefinition ccd1 = new CompositionCohortDefinition();
 		ccd1.initializeFromElements(_prenatal, sqd, female);
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.prenatalIron"), ccd1,
@@ -217,8 +221,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		// Mothers with a birth plan
 		//Assumption made that who ever comes for visit has a birth plan
 		CodedObsCohortDefinition birthPlan = new CodedObsCohortDefinition();
-		birthPlan.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		birthPlan.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(birthPlan);
 		birthPlan.setOperator(SetComparator.IN);
 		
 		birthPlan.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
@@ -236,8 +239,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Prenatal visit + malaria test positive + chloroquine co prescribed
 		CodedObsCohortDefinition malaria = new CodedObsCohortDefinition();
-		malaria.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		malaria.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(malaria);
 		malaria.setOperator(SetComparator.IN);
 		
 		malaria.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.malaria"));
@@ -251,13 +253,14 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		malaria.setValueList(malariaPositiveConceptSet);
 		
-		SqlCohortDefinition sql = new SqlCohortDefinition("select patient_id from orders where concept_id="
-		        + inizService.getConceptFromKey("report.MSPP.antenatal.chloroquine").getConceptId()
-		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
-		        + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
-		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
-		sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		SqlCohortDefinition sql = new SqlCohortDefinition(
+		        "select o.patient_id from orders o" + " inner join encounter e on o.encounter_id = e.encounter_id"
+		                + " inner join visit v on e.visit_id = v.visit_id where o.concept_id="
+		                + inizService.getConceptFromKey("report.MSPP.antenatal.chloroquine").getConceptId()
+		                + " and o.order_type_id =(select order_type_id from order_type where uuid = '"
+		                + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
+		                + "') AND o.date_created BETWEEN :onOrAfter AND :onOrBefore AND v.location_id IN (:locationList)");
+		addSqlParameters(sql);
 		CompositionCohortDefinition ccd2 = new CompositionCohortDefinition();
 		ccd2.initializeFromElements(_prenatal, sql, malaria, female);
 		antenatalRisks.addRow(
@@ -266,8 +269,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Prenatal + MUAC =<21cm
 		NumericObsCohortDefinition muac = new NumericObsCohortDefinition();
-		muac.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		muac.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(muac);
 		muac.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.midUpperArmCircumference"));
 		muac.setOperator1(RangeComparator.GREATER_EQUAL);
 		muac.setValue1(0.0);
@@ -288,15 +290,17 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		}
 		
 		VisitCohortDefinition _other = new VisitCohortDefinition();
+		addVisitParameters(_other);
 		_other.setVisitTypeList(lVT);
 		
-		SqlCohortDefinition sqdc = new SqlCohortDefinition("select patient_id from orders where concept_id="
-		        + inizService.getConceptFromKey("report.MSPP.antenatal.ferrousFolate").getConceptId()
-		        + " and order_type_id =(select order_type_id from order_type where uuid = '"
-		        + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
-		        + "') AND date_created BETWEEN :onOrAfter AND :onOrBefore");
-		sqdc.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		sqdc.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		SqlCohortDefinition sqdc = new SqlCohortDefinition(
+		        "select o.patient_id from orders o" + " inner join encounter e on o.encounter_id = e.encounter_id"
+		                + " inner join visit v on e.visit_id = v.visit_id where o.concept_id="
+		                + inizService.getConceptFromKey("report.MSPP.antenatal.ferrousFolate").getConceptId()
+		                + " and o.order_type_id =(select order_type_id from order_type where uuid = '"
+		                + inizService.getValueFromKey("report.MSPP.antenatal.drugOrder")
+		                + "') AND o.date_created BETWEEN :onOrAfter AND :onOrBefore AND v.location_id IN (:locationList)");
+		addSqlParameters(sqdc);
 		CompositionCohortDefinition ccd5 = new CompositionCohortDefinition();
 		ccd5.initializeFromElements(_other, sqdc, female);
 		antenatalRisks.addRow(MessageUtil.translate("commonreports.report.MSPP.antenatalRisks.womenIron"), ccd5,
@@ -306,8 +310,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// First Visit column
 		CodedObsCohortDefinition firstVisit = new CodedObsCohortDefinition();
-		firstVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		firstVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(firstVisit);
 		firstVisit.setOperator(SetComparator.IN);
 		
 		firstVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
@@ -316,8 +319,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Second Visit column
 		CodedObsCohortDefinition secondVisit = new CodedObsCohortDefinition();
-		secondVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		secondVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(secondVisit);
 		secondVisit.setOperator(SetComparator.IN);
 		secondVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		secondVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.two"));
@@ -325,8 +327,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Third Visit column
 		CodedObsCohortDefinition thirdVisit = new CodedObsCohortDefinition();
-		thirdVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		thirdVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(thirdVisit);
 		thirdVisit.setOperator(SetComparator.IN);
 		thirdVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		thirdVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.three"));
@@ -334,8 +335,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Fourth Visit column
 		CodedObsCohortDefinition fourthVisit = new CodedObsCohortDefinition();
-		fourthVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		fourthVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(fourthVisit);
 		fourthVisit.setOperator(SetComparator.IN);
 		fourthVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		fourthVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.four"));
@@ -343,8 +343,7 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		
 		// Fifth Visit column
 		CodedObsCohortDefinition fifthVisit = new CodedObsCohortDefinition();
-		fifthVisit.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		fifthVisit.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addObsParameters(fifthVisit);
 		fifthVisit.setOperator(SetComparator.IN);
 		fifthVisit.setQuestion(inizService.getConceptFromKey("report.MSPP.antenatal.visitNumber"));
 		fifthVisit.addValue(inizService.getConceptFromKey("report.MSPP.antenatal.fivePlus"));
@@ -380,6 +379,28 @@ public class MSPPAntenatalReportManager extends ActivatedReportManager {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
 		return compCD;
+	}
+	
+	private void addObsParameters(CodedObsCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addObsParameters(NumericObsCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addSqlParameters(SqlCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addVisitParameters(VisitCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 	}
 	
 	@Override
