@@ -66,7 +66,7 @@ public class MSPPLabReportManager extends ActivatedReportManager {
 	private Parameter getLocationParameter() {
 		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
 	}
-
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();

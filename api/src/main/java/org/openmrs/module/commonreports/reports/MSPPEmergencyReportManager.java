@@ -71,7 +71,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 	private Parameter getLocationParameter() {
 		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
 	}
-
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
@@ -353,14 +353,15 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 		cohortDefinition.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 	}
-
+	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
-		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
-		if (size > 0) {
-			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
-		}
+		compCD.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		compCD.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		compCD.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+		
 		return compCD;
 	}
 }
