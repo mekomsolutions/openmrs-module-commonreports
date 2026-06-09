@@ -3,6 +3,7 @@ package org.openmrs.module.commonreports.reports;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.dbunit.DatabaseUnitException;
@@ -61,7 +62,7 @@ public class MSPPLabReportManagerTest extends BaseModuleContextSensitiveMysqlBac
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
-	
+
 	@Autowired
 	private MSPPLabReportManager manager;
 	
@@ -124,6 +125,7 @@ public class MSPPLabReportManagerTest extends BaseModuleContextSensitiveMysqlBac
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
+		context.addParameterValue("locationList", Arrays.asList("Unknown Location", "Xanadu", "Never Never Land"));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();

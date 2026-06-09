@@ -1,5 +1,6 @@
 package org.openmrs.module.commonreports.reports;
 
+import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import java.io.File;
@@ -42,7 +43,7 @@ public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTe
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
-	
+
 	@Autowired
 	private MSPPEmergencyReportManager manager;
 	
@@ -78,7 +79,8 @@ public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTe
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2019-08-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-09-30", "yyyy-MM-dd"));
-		
+		context.addParameterValue("locationList", Arrays.asList("Unknown Location", "Xanadu", "Never Never Land"));
+
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		
