@@ -45,7 +45,7 @@ public class MSPPChildCareReportManagerTest extends BaseModuleContextSensitiveMy
 	
 	@Autowired
 	private ReportDefinitionService rds;
-
+	
 	@Autowired
 	private MSPPChildCareReportManager manager;
 	
@@ -82,7 +82,7 @@ public class MSPPChildCareReportManagerTest extends BaseModuleContextSensitiveMy
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-06-30", "yyyy-MM-dd"));
 		context.addParameterValue("locationList", Arrays.asList("Unknown Location", "Xanadu", "Never Never Land"));
-
+		
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		data.getDataSets();

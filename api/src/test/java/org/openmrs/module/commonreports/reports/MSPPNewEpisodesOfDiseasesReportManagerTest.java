@@ -63,7 +63,7 @@ public class MSPPNewEpisodesOfDiseasesReportManagerTest extends BaseModuleContex
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
-
+	
 	@Autowired
 	private MSPPNewEpisodesOfDiseasesReportManager manager;
 	
@@ -128,7 +128,7 @@ public class MSPPNewEpisodesOfDiseasesReportManagerTest extends BaseModuleContex
 		context.addParameterValue("startDate", DateUtil.parseDate("2008-08-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2009-09-30", "yyyy-MM-dd"));
 		context.addParameterValue("locationList", Arrays.asList("Unknown Location", "Xanadu", "Never Never Land"));
-
+		
 		boolean malariaVerified = false;
 		boolean feverVerified = false;
 		boolean diabetesVerified = false;

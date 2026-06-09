@@ -43,7 +43,7 @@ public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTe
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
-
+	
 	@Autowired
 	private MSPPEmergencyReportManager manager;
 	
@@ -80,7 +80,7 @@ public class MSPPEmergencyReportManagerTest extends BaseModuleContextSensitiveTe
 		context.addParameterValue("startDate", DateUtil.parseDate("2019-08-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-09-30", "yyyy-MM-dd"));
 		context.addParameterValue("locationList", Arrays.asList("Unknown Location", "Xanadu", "Never Never Land"));
-
+		
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
 		

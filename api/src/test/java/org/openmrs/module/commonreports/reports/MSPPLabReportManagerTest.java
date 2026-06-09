@@ -62,7 +62,7 @@ public class MSPPLabReportManagerTest extends BaseModuleContextSensitiveMysqlBac
 	@Autowired
 	@Qualifier("conceptService")
 	private ConceptService cs;
-
+	
 	@Autowired
 	private MSPPLabReportManager manager;
 	

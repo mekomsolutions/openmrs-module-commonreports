@@ -43,7 +43,7 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 	
 	@Autowired
 	private ReportDefinitionService rds;
-
+	
 	@Autowired
 	@Qualifier(CommonReportsConstants.COMPONENT_REPORTMANAGER_FAMILY_PLANNING)
 	private ActivatedReportManager manager;
