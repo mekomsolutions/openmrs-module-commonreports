@@ -153,9 +153,9 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 			}
 			
 			SqlCohortDefinition conditions = new SqlCohortDefinition();
-			String sql = "SELECT c.patient_id FROM conditions c WHERE c.concept_id IN (" + conditionList + ") "
-			        + "AND c.`status`='ACTIVE' AND NOT EXISTS (SELECT 1 FROM conditions new_c "
-			        + "WHERE new_c.previous_condition_id = c.condition_id);";
+			String sql = "SELECT c.patient_id FROM conditions c WHERE c.condition_coded IN (" + conditionList + ") "
+			        + "AND c.clinical_status='ACTIVE' AND NOT EXISTS (SELECT 1 FROM conditions new_c "
+			        + "WHERE new_c.previous_version = c.condition_id);";
 			conditions.setQuery(sql);
 			
 			PresenceOrAbsenceCohortDefinition absentInConditions = new PresenceOrAbsenceCohortDefinition();
@@ -260,8 +260,13 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 		referral.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 		referral.setOperator(SetComparator.IN);
 		referral.setQuestion(inizService.getConceptFromKey("report.MSPP.chronicIllnesses.referral.concept"));
-		chronicIllnessesDsd.addColumn(col13, createCohortComposition(referral, females), parameterMappings);
-		chronicIllnessesDsd.addColumn(col14, createCohortComposition(referral, males), parameterMappings);
+		
+		Map<String, Object> referralParameterMappings = new HashMap<String, Object>();
+		referralParameterMappings.put("onOrAfter", "${startDate}");
+		referralParameterMappings.put("onOrBefore", "${endDate}");
+		referralParameterMappings.put("locationList", "${locationList}");
+		chronicIllnessesDsd.addColumn(col13, createCohortComposition(referral, females), referralParameterMappings);
+		chronicIllnessesDsd.addColumn(col14, createCohortComposition(referral, males), referralParameterMappings);
 		
 		return rd;
 	}
