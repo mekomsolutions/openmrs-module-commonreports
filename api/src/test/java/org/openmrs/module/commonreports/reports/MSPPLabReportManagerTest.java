@@ -125,7 +125,10 @@ public class MSPPLabReportManagerTest extends BaseModuleContextSensitiveMysqlBac
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
-		context.addParameterValue("locationList", Arrays.asList("Unknown Location", "Xanadu", "Never Never Land"));
+		context.addParameterValue("locationList",
+		    Arrays.asList(org.openmrs.api.context.Context.getLocationService().getLocation(1),
+		        org.openmrs.api.context.Context.getLocationService().getLocation(2),
+		        org.openmrs.api.context.Context.getLocationService().getLocation(3)));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();
