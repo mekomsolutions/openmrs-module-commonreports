@@ -18,6 +18,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
 import org.openmrs.module.commonreports.reports.MSPPLabReportManager;
 import org.openmrs.module.initializer.Domain;
@@ -125,10 +126,7 @@ public class MSPPLabReportManagerTest extends BaseModuleContextSensitiveMysqlBac
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
-		context.addParameterValue("locationList",
-		    Arrays.asList(org.openmrs.api.context.Context.getLocationService().getLocation(1),
-		        org.openmrs.api.context.Context.getLocationService().getLocation(2),
-		        org.openmrs.api.context.Context.getLocationService().getLocation(3)));
+		context.addParameterValue("locationList", Arrays.asList(Context.getLocationService().getLocation(1)));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();

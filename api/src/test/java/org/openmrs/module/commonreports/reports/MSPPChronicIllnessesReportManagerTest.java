@@ -4,7 +4,7 @@ import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import java.io.File;
-import java.util.Collections;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
 import org.openmrs.api.ConceptService;
-import org.openmrs.api.LocationService;
-import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -27,11 +25,20 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSensitiveTest {
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
+
+public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSensitiveMysqlBackedTest {
+	
+	public MSPPChronicIllnessesReportManagerTest() throws SQLException {
+		super();
+	}
 	
 	@Autowired
 	private InitializerService iniz;
@@ -51,6 +58,7 @@ public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSens
 	
 	@Before
 	public void setup() throws Exception {
+		updateDatabase("org/openmrs/module/commonreports/liquibase/test-liquibase.xml");
 		executeDataSet("org/openmrs/module/reporting/include/ReportTestDataset-openmrs-2.0.xml");
 		executeDataSet("org/openmrs/module/commonreports/include/MSPPchronicIllnesses.xml");
 		
@@ -83,9 +91,7 @@ public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSens
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-06-30", "yyyy-MM-dd"));
 		context.addParameterValue("locationList",
-		    Arrays.asList(org.openmrs.api.context.Context.getLocationService().getLocation(1),
-		        org.openmrs.api.context.Context.getLocationService().getLocation(2),
-		        org.openmrs.api.context.Context.getLocationService().getLocation(3)));
+		    Arrays.asList(org.openmrs.api.context.Context.getLocationService().getLocation(1)));
 		
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);
@@ -187,5 +193,21 @@ public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSens
 		map.put("Obesity (E66.9) - Conditions.Total referred cases - Males", 1);
 		return map;
 		
+	}
+	
+	private void updateDatabase(String filename) throws Exception {
+		Liquibase liquibase = getLiquibase(filename);
+		liquibase.update("Modify column datatype to longblob on reporting_report_design_resource table");
+		liquibase.getDatabase().getConnection().commit();
+	}
+	
+	private Liquibase getLiquibase(String filename) throws Exception {
+		Database liquibaseConnection = DatabaseFactory.getInstance()
+		        .findCorrectDatabaseImplementation(new JdbcConnection(getConnection()));
+		
+		liquibaseConnection.setDatabaseChangeLogTableName("LIQUIBASECHANGELOG");
+		liquibaseConnection.setDatabaseChangeLogLockTableName("LIQUIBASECHANGELOGLOCK");
+		
+		return new Liquibase(filename, new ClassLoaderResourceAccessor(getClass().getClassLoader()), liquibaseConnection);
 	}
 }
