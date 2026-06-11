@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.openmrs.Concept;
+import org.openmrs.Location;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
@@ -97,11 +98,16 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -125,12 +131,14 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		parameterMappings.put("startedOnOrAfter", "${startDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		// Add new diagnosis & condition rows for each illness concept member
 		for (Concept member : illnesses.getSetMembers()) {
 			CodedObsCohortDefinition diag = new CodedObsCohortDefinition();
 			diag.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			diag.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			diag.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 			diag.setOperator(SetComparator.IN);
 			diag.setQuestion(inizService.getConceptFromKey("report.MSPP.chronicIllnesses.diagnosisQuestion.concept"));
 			
@@ -145,9 +153,9 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 			}
 			
 			SqlCohortDefinition conditions = new SqlCohortDefinition();
-			String sql = "SELECT c.patient_id FROM conditions c WHERE c.concept_id IN (" + conditionList + ") "
-			        + "AND c.`status`='ACTIVE' AND NOT EXISTS (SELECT 1 FROM conditions new_c "
-			        + "WHERE new_c.previous_condition_id = c.condition_id);";
+			String sql = "SELECT c.patient_id FROM conditions c WHERE c.condition_coded IN (" + conditionList + ") "
+			        + "AND c.clinical_status='ACTIVE' AND NOT EXISTS (SELECT 1 FROM conditions new_c "
+			        + "WHERE new_c.previous_version = c.condition_id);";
 			conditions.setQuery(sql);
 			
 			PresenceOrAbsenceCohortDefinition absentInConditions = new PresenceOrAbsenceCohortDefinition();
@@ -157,14 +165,18 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 			newDiagnosis.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
 			newDiagnosis.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			newDiagnosis.addParameter(new Parameter("onOrBefore", "On Or after", Date.class));
+			newDiagnosis.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 			
 			VisitCohortDefinition visits = new VisitCohortDefinition();
 			visits.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
+			visits.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 			
 			CompositionCohortDefinition visitsWithConditions = createCohortComposition(visits, conditions);
 			visitsWithConditions.addParameter(new Parameter("startedOnOrAfter", "On Or After", Date.class));
 			visitsWithConditions.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			visitsWithConditions.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			visitsWithConditions
+			        .addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 			
 			chronicIllnessesDsd.addRow(
 			    member.getDisplayString() + " - "
@@ -245,10 +257,16 @@ public class MSPPChronicIllnessesReportManager extends ActivatedReportManager {
 		CodedObsCohortDefinition referral = new CodedObsCohortDefinition();
 		referral.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		referral.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		referral.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 		referral.setOperator(SetComparator.IN);
 		referral.setQuestion(inizService.getConceptFromKey("report.MSPP.chronicIllnesses.referral.concept"));
-		chronicIllnessesDsd.addColumn(col13, createCohortComposition(referral, females), null);
-		chronicIllnessesDsd.addColumn(col14, createCohortComposition(referral, males), null);
+		
+		Map<String, Object> referralParameterMappings = new HashMap<String, Object>();
+		referralParameterMappings.put("onOrAfter", "${startDate}");
+		referralParameterMappings.put("onOrBefore", "${endDate}");
+		referralParameterMappings.put("locationList", "${locationList}");
+		chronicIllnessesDsd.addColumn(col13, createCohortComposition(referral, females), referralParameterMappings);
+		chronicIllnessesDsd.addColumn(col14, createCohortComposition(referral, males), referralParameterMappings);
 		
 		return rd;
 	}

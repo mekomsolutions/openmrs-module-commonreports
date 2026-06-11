@@ -4,6 +4,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Iterator;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.DatabaseUnitRuntimeException;
@@ -17,8 +18,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.commonreports.reports.BaseModuleContextSensitiveMysqlBackedTest;
-import org.openmrs.module.commonreports.reports.MSPPNewEpisodesOfDiseasesReportManager;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -126,6 +126,8 @@ public class MSPPNewEpisodesOfDiseasesReportManagerTest extends BaseModuleContex
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2008-08-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2009-09-30", "yyyy-MM-dd"));
+		context.addParameterValue("locationList", Arrays.asList(Context.getLocationService().getLocation(1)));
+		
 		boolean malariaVerified = false;
 		boolean feverVerified = false;
 		boolean diabetesVerified = false;

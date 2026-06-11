@@ -78,6 +78,10 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	public String getVaccinationName() {
 		return MessageUtil.translate("commonreports.report.MSPP.vaccination.all.reportName");
 	}
@@ -109,6 +113,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -133,6 +138,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		// Vaccinations
 		String[] vaccinationConceptsListWithSequence = inizService
@@ -145,6 +151,8 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 			    inizService.getConceptFromKey("report.MSPP.vaccination.isChildFullyVaccinatedQuestion.concept"));
 			isChildFullyVaccinated.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 			isChildFullyVaccinated.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+			isChildFullyVaccinated
+			        .addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 			isChildFullyVaccinated.setOperator(SetComparator.IN);
 			isChildFullyVaccinated
 			        .setValueList(Arrays.asList(inizService.getConceptFromKey("report.MSPP.vaccination.yesAnswer.concept")));
@@ -164,11 +172,11 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
-				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId() + ");";
+				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId()
+				        + ") AND location_id IN (:locationList);";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
-				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				addSqlParameters(sql);
 				vaccination.addRow(conceptService.getConceptByUuid(member).getDisplayString(), sql, parameterMappings);
 				
 			} else {
@@ -180,13 +188,13 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
 				        + " and value_coded =" + conceptService.getConceptByUuid(vacName).getConceptId()
-				        + ") AND concept_id =" + inizService
-				                .getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept").getConceptId()
-				        + " AND value_numeric =" + lastIndex + ")";
+				        + ") AND concept_id ="
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept")
+				                .getConceptId()
+				        + " AND value_numeric =" + lastIndex + " AND location_id IN (:locationList))";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
-				sql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				sql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+				addSqlParameters(sql);
 				vaccination.addRow(conceptService.getConceptByUuid(vacName).getDisplayString() + " " + lastIndex, sql,
 				    parameterMappings);
 				
@@ -208,7 +216,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + " and value_coded=" + conceptService.getConceptByUuid(member).getConceptId()
 				        + ") AND concept_id = "
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
-				        + " and value_datetime <= :onOrBefore )";
+				        + " and value_datetime <= :onOrBefore AND location_id IN (:locationList) )";
 				
 			} else {
 				int lastIndex = Integer.parseInt(lastOne);
@@ -220,16 +228,17 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + " and value_coded = " + conceptService.getConceptByUuid(vacName).getConceptId()
 				        + " ) AND concept_id = "
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
-				        + " and value_datetime <= :onOrBefore ) AND concept_id =" + inizService
-				                .getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept").getConceptId()
-				        + " and value_numeric = " + lastIndex + "  AND :onOrAfter = :onOrAfter)";
+				        + " and value_datetime <= :onOrBefore ) AND concept_id ="
+				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept")
+				                .getConceptId()
+				        + " and value_numeric = " + lastIndex
+				        + "  AND :onOrAfter = :onOrAfter AND location_id IN (:locationList))";
 			}
 		}
 		ecvQuery = ecvQuery + ";";
 		SqlCohortDefinition ecvSql = new SqlCohortDefinition(ecvQuery);
 		
-		ecvSql.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-		ecvSql.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		addSqlParameters(ecvSql);
 		ecv.addRow("ECV", ecvSql, parameterMappings);
 		
 		setColumnNames();
@@ -257,7 +266,11 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		Map<String, Object> ageParameterMappings = new HashMap<String, Object>();
 		ageParameterMappings.put("effectiveDate", "${endDate}");
 		
+		Map<String, Object> visitParameterMappings = new HashMap<String, Object>();
+		visitParameterMappings.put("locationList", "${locationList}");
+		
 		VisitCohortDefinition _prenatal = new VisitCohortDefinition();
+		addVisitParameters(_prenatal);
 		_prenatal.setVisitTypeList(Arrays.asList(Context.getVisitService()
 		        .getVisitTypeByUuid(inizService.getValueFromKey("report.MSPP.vaccination.prenatalVisitType"))));
 		
@@ -265,7 +278,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		vaccination.addColumn(col2, createCohortComposition(_1To2y, females), ageParameterMappings);
 		vaccination.addColumn(col3, createCohortComposition(_0mTo1y, males), ageParameterMappings);
 		vaccination.addColumn(col4, createCohortComposition(_1To2y, males), ageParameterMappings);
-		vaccination.addColumn(col5, createCohortComposition(_prenatal, females), null);
+		vaccination.addColumn(col5, createCohortComposition(_prenatal, females), visitParameterMappings);
 		
 		ecv.addColumn(col1, createCohortComposition(_0mTo1y, females), ageParameterMappings);
 		ecv.addColumn(col2, createCohortComposition(_1To2y, females), ageParameterMappings);
@@ -304,6 +317,16 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
 		}
 		return compCD;
+	}
+	
+	private void addSqlParameters(SqlCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
+	private void addVisitParameters(VisitCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openmrs.Location;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.api.InitializerService;
@@ -62,11 +63,16 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -86,6 +92,7 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		int fpAdministredConceptId = inizService.getConceptFromKey("report.MSPP.familyPlanning.FPAdministred")
 		        .getConceptId();
@@ -260,17 +267,20 @@ public class MSPPFamilyPlanningReportManager extends ActivatedReportManager {
 		}
 		
 		String sql = "SELECT DISTINCT obs.person_id " + "FROM obs "
-		        + "INNER JOIN person ON obs.person_id = person.person_id " + "WHERE obs.voided = 0 "
-		        + "AND obs.concept_id = " + fpAdministredConceptId + " AND obs.value_coded = " + methodConceptId + " "
-		        + "AND obs.obs_group_id IN (" + "  SELECT obs_group_id FROM obs WHERE " + "obs.obs_group_id IN ("
-		        + " SELECT obs_id FROM obs " + "WHERE obs_datetime >= " + intervalClause
-		        + " AND obs_datetime <= :onOrBefore " + "AND concept_id = " + familyPlanningConceptId
-		        + " ) AND person.gender = '" + gender + "' " + "AND " + ageCondition + " AND obs.concept_id = "
-		        + typeOfUserConceptId + " AND obs.value_coded = " + userTypeConceptId + ")";
+		        + "INNER JOIN person ON obs.person_id = person.person_id "
+		        + "INNER JOIN encounter e ON obs.encounter_id = e.encounter_id "
+		        + "INNER JOIN visit v ON e.visit_id = v.visit_id " + "WHERE obs.voided = 0 " + "AND obs.concept_id = "
+		        + fpAdministredConceptId + " AND obs.value_coded = " + methodConceptId + " "
+		        + "AND v.location_id IN (:locationList) " + "AND obs.obs_group_id IN ("
+		        + "  SELECT obs_group_id FROM obs WHERE " + "obs.obs_group_id IN (" + " SELECT obs_id FROM obs "
+		        + "WHERE obs_datetime >= " + intervalClause + " AND obs_datetime <= :onOrBefore " + "AND concept_id = "
+		        + familyPlanningConceptId + " ) AND person.gender = '" + gender + "' " + "AND " + ageCondition
+		        + " AND obs.concept_id = " + typeOfUserConceptId + " AND obs.value_coded = " + userTypeConceptId + ")";
 		
 		SqlCohortDefinition cohort = new SqlCohortDefinition(sql);
 		cohort.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
 		cohort.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohort.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
 		
 		return cohort;
 	}
