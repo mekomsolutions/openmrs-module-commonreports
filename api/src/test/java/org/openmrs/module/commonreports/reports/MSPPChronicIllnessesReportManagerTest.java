@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
 import org.openmrs.api.ConceptService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.initializer.api.loaders.Loader;
@@ -91,7 +92,7 @@ public class MSPPChronicIllnessesReportManagerTest extends BaseModuleContextSens
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-06-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-06-30", "yyyy-MM-dd"));
 		context.addParameterValue("locationList",
-		    Arrays.asList(org.openmrs.api.context.Context.getLocationService().getLocation(1)));
+		    Arrays.asList(Context.getLocationService().getLocation(1), Context.getLocationService().getLocation(2)));
 		
 		ReportDefinition rd = manager.constructReportDefinition();
 		ReportData data = rds.evaluate(rd, context);

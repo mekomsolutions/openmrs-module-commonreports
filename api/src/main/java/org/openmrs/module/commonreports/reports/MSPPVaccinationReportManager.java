@@ -172,9 +172,8 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
 				        + " and value_datetime BETWEEN :onOrAfter AND :onOrBefore ) AND concept_id ="
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinations").getConceptId()
-				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId() + ") "
-				        + "AND encounter_id IN (SELECT e.encounter_id FROM encounter e "
-				        + "INNER JOIN visit v ON v.visit_id = e.visit_id WHERE v.location_id IN (:locationList));";
+				        + " and value_coded =" + conceptService.getConceptByUuid(member).getConceptId()
+				        + ") AND location_id IN (:locationList);";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				addSqlParameters(sql);
@@ -192,9 +191,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + ") AND concept_id ="
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept")
 				                .getConceptId()
-				        + " AND value_numeric =" + lastIndex
-				        + " AND encounter_id IN (SELECT e.encounter_id FROM encounter e "
-				        + "INNER JOIN visit v ON v.visit_id = e.visit_id WHERE v.location_id IN (:locationList)))";
+				        + " AND value_numeric =" + lastIndex + " AND location_id IN (:locationList))";
 				
 				SqlCohortDefinition sql = new SqlCohortDefinition(sqlQuery);
 				addSqlParameters(sql);
@@ -207,9 +204,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 		
 		// ECV
 		String[] ecvList = inizService.getValueFromKey("report.MSPP.vaccination.ecvList").split(",");
-		String ecvQuery = "SELECT DISTINCT person_id FROM obs where encounter_id IN "
-		        + "(SELECT e.encounter_id FROM encounter e INNER JOIN visit v ON v.visit_id = e.visit_id "
-		        + "WHERE v.location_id IN (:locationList))";
+		String ecvQuery = "SELECT DISTINCT person_id FROM obs where 1=1";
 		
 		for (String member : ecvList) {
 			String[] bit = member.split(":");
@@ -221,9 +216,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + " and value_coded=" + conceptService.getConceptByUuid(member).getConceptId()
 				        + ") AND concept_id = "
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationDateConcept").getConceptId()
-				        + " and value_datetime <= :onOrBefore "
-				        + "AND encounter_id IN (SELECT e.encounter_id FROM encounter e "
-				        + "INNER JOIN visit v ON v.visit_id = e.visit_id WHERE v.location_id IN (:locationList)) )";
+				        + " and value_datetime <= :onOrBefore AND location_id IN (:locationList) )";
 				
 			} else {
 				int lastIndex = Integer.parseInt(lastOne);
@@ -239,9 +232,7 @@ public class MSPPVaccinationReportManager extends ActivatedReportManager {
 				        + inizService.getConceptFromKey("report.MSPP.vaccination.vaccinationSequenceNumberConcept")
 				                .getConceptId()
 				        + " and value_numeric = " + lastIndex
-				        + " AND encounter_id IN (SELECT e.encounter_id FROM encounter e "
-				        + "INNER JOIN visit v ON v.visit_id = e.visit_id WHERE v.location_id IN (:locationList))"
-				        + "  AND :onOrAfter = :onOrAfter)";
+				        + "  AND :onOrAfter = :onOrAfter AND location_id IN (:locationList))";
 			}
 		}
 		ecvQuery = ecvQuery + ";";
