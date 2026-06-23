@@ -35,4 +35,40 @@
 			<column name="xslt" type="TEXT" />
 		</addColumn>
 	</changeSet>
+	<changeSet id="2026-06-10_01" author="Test">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="conditions" />
+			<not>
+				<columnExists tableName="conditions" columnName="clinical_status" />
+			</not>
+		</preConditions>
+		<comment>Add clinical_status column to conditions table</comment>
+		<addColumn tableName="conditions">
+			<column name="clinical_status" type="VARCHAR(50)" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="2026-06-10_02" author="Test">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="conditions" />
+			<not>
+				<columnExists tableName="conditions" columnName="condition_coded" />
+			</not>
+		</preConditions>
+		<comment>Add condition_coded column to conditions table</comment>
+		<addColumn tableName="conditions">
+			<column name="condition_coded" type="INT" />
+		</addColumn>
+	</changeSet>
+	<changeSet id="2026-06-10_03" author="Test">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="conditions" />
+			<not>
+				<columnExists tableName="conditions" columnName="previous_version" />
+			</not>
+		</preConditions>
+		<comment>Add previous_version column to conditions table</comment>
+		<addColumn tableName="conditions">
+			<column name="previous_version" type="INT" />
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

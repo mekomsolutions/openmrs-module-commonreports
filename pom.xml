@@ -56,7 +56,7 @@
 		<appointmentsVersion>1.4.0</appointmentsVersion>
 		<openmrsTestutilsVersion>1.3</openmrsTestutilsVersion>
 		<openpdfVersion>1.3.11</openpdfVersion>
-		<mysqlTestContainerVersion>1.15.2</mysqlTestContainerVersion>
+		<mysqlTestContainerVersion>1.21.4</mysqlTestContainerVersion>
 	</properties>
 
 	<dependencies>

@@ -17,4 +17,5 @@ sum(CASE WHEN concept_id=(select DISTINCT concept_id from concept where uuid = :
 sum(CASE WHEN concept_id=(select DISTINCT concept_id from concept where uuid = :bloodGroup and retired = 0) AND value_coded IS NOT NULL and visit_type.uuid<> :prenatalVisitType THEN 1 ELSE 0 END) as otherbloodGroup
 FROM obs inner join encounter ON obs.encounter_id=encounter.encounter_id inner join visit ON  encounter.visit_id=visit.visit_id inner join visit_type ON visit.visit_type_id=visit_type.visit_type_id
 where obs.voided = 0 
-AND date(obs.obs_datetime) BETWEEN :startDate AND :endDate ;
+AND date(obs.obs_datetime) BETWEEN :startDate AND :endDate
+AND visit.location_id IN (:locationList) ;

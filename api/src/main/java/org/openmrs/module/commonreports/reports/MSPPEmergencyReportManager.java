@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.openmrs.Concept;
+import org.openmrs.Location;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.initializer.api.InitializerService;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
@@ -67,11 +68,16 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 		return new Parameter("endDate", "End Date", Date.class);
 	}
 	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
+	}
+	
 	@Override
 	public List<Parameter> getParameters() {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -93,6 +99,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 		parameterMappings.put("onOrAfter", "${startDate}");
 		parameterMappings.put("onOrBefore", "${endDate}");
 		parameterMappings.put("effectiveDate", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		Concept questionConcept = inizService.getConceptFromKey("report.MSPP.emergency.question.concept");
 		
@@ -130,9 +137,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			for (Concept accident : roadAccidents.getSetMembers()) {
 				
 				CodedObsCohortDefinition roadAccident = new CodedObsCohortDefinition();
-				roadAccident.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				roadAccident.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				roadAccident.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+				addObsParameters(roadAccident);
 				roadAccident.setOperator(SetComparator.IN);
 				roadAccident.setQuestion(questionConcept);
 				roadAccident.setValueList(Arrays.asList(accident));
@@ -146,9 +151,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			CodedObsCohortDefinition workAccident = new CodedObsCohortDefinition();
 			Concept wac = inizService.getConceptFromKey("report.MSPP.emergency.workAccident.concept");
 			
-			workAccident.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			workAccident.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			workAccident.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(workAccident);
 			workAccident.setOperator(SetComparator.IN);
 			workAccident.setQuestion(questionConcept);
 			workAccident.setValueList(Arrays.asList(wac));
@@ -160,9 +163,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			CodedObsCohortDefinition sexualViolence = new CodedObsCohortDefinition();
 			Concept svc = inizService.getConceptFromKey("report.MSPP.emergency.sexualViolence.concept");
 			
-			sexualViolence.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			sexualViolence.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			sexualViolence.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(sexualViolence);
 			sexualViolence.setOperator(SetComparator.IN);
 			sexualViolence.setQuestion(questionConcept);
 			sexualViolence.setValueList(Arrays.asList(svc));
@@ -189,9 +190,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			// Physical violence
 			CodedObsCohortDefinition physicalViolence = new CodedObsCohortDefinition();
 			Concept pvc = inizService.getConceptFromKey("report.MSPP.emergency.physicalViolence.concept");
-			physicalViolence.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			physicalViolence.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			physicalViolence.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(physicalViolence);
 			physicalViolence.setOperator(SetComparator.IN);
 			physicalViolence.setQuestion(questionConcept);
 			physicalViolence.setValueList(Arrays.asList(pvc));
@@ -216,9 +215,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			CodedObsCohortDefinition otherViolenceType = new CodedObsCohortDefinition();
 			Concept ovtc = inizService.getConceptFromKey("report.MSPP.emergency.otherViolenceType.concept");
 			
-			otherViolenceType.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			otherViolenceType.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			otherViolenceType.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(otherViolenceType);
 			otherViolenceType.setOperator(SetComparator.IN);
 			otherViolenceType.setQuestion(questionConcept);
 			otherViolenceType.setValueList(Arrays.asList(ovtc));
@@ -248,9 +245,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			for (Concept emergency : msecs.getSetMembers()) {
 				
 				CodedObsCohortDefinition medicalAndSurgicalEmergencies = new CodedObsCohortDefinition();
-				medicalAndSurgicalEmergencies.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-				medicalAndSurgicalEmergencies.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-				medicalAndSurgicalEmergencies.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+				addObsParameters(medicalAndSurgicalEmergencies);
 				medicalAndSurgicalEmergencies.setOperator(SetComparator.IN);
 				medicalAndSurgicalEmergencies.setQuestion(mseq);
 				medicalAndSurgicalEmergencies.setValueList(new ArrayList<Concept>(emergency.getSetMembers()));
@@ -267,9 +262,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			Concept oec = inizService.getConceptFromKey("report.MSPP.emergency.otherEmergencies.conceptSet");
 			Concept oeq = inizService.getConceptFromKey("report.MSPP.emergency.otherEmergenciesQuestion.concept");
 			
-			otherEmergencies.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			otherEmergencies.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			otherEmergencies.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(otherEmergencies);
 			otherEmergencies.setOperator(SetComparator.IN);
 			otherEmergencies.setQuestion(oeq);
 			otherEmergencies.setValueList(new ArrayList<Concept>(oec.getSetMembers()));
@@ -296,9 +289,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			Concept lwpc = inizService.getConceptFromKey("report.MSPP.emergency.leftWithoutPermission.concept");
 			Concept yesAns = inizService.getConceptFromKey("report.MSPP.emergency.yes.concept");
 			
-			leftWithoutPermissionCategory.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			leftWithoutPermissionCategory.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			leftWithoutPermissionCategory.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(leftWithoutPermissionCategory);
 			leftWithoutPermissionCategory.setOperator(SetComparator.IN);
 			leftWithoutPermissionCategory.setQuestion(lwpc);
 			leftWithoutPermissionCategory.setValueList(Arrays.asList(yesAns));
@@ -313,9 +304,7 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			CodedObsCohortDefinition referralCategory = new CodedObsCohortDefinition();
 			Concept referralConcept = inizService.getConceptFromKey("report.MSPP.emergency.referral.concept");
 			
-			referralCategory.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
-			referralCategory.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
-			referralCategory.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+			addObsParameters(referralCategory);
 			referralCategory.setOperator(SetComparator.IN);
 			referralCategory.setQuestion(referralConcept);
 			
@@ -338,13 +327,13 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 			
 			emergencies.addColumn(
 			    MessageUtil.translate("commonreports.report.MSPP.emergency.leftWithoutPermissionCategory.label"),
-			    leftWithoutPermission, null);
+			    leftWithoutPermission, parameterMappings);
 			emergencies.addColumn(MessageUtil.translate("commonreports.report.MSPP.emergency.deceasedCategory.label"),
 			    deceased, null);
 			emergencies.addColumn(MessageUtil.translate("commonreports.report.MSPP.emergency.referredCategory.label"),
-			    referrals, null);
+			    referrals, parameterMappings);
 			emergencies.addColumn(MessageUtil.translate("commonreports.report.MSPP.emergency.notInCategory.label"), caredFor,
-			    null);
+			    parameterMappings);
 			
 		}
 		
@@ -358,13 +347,21 @@ public class MSPPEmergencyReportManager extends ActivatedReportManager {
 		return Arrays.asList(reportDesign);
 	}
 	
+	private void addObsParameters(CodedObsCohortDefinition cohortDefinition) {
+		cohortDefinition.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		cohortDefinition.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		cohortDefinition.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		cohortDefinition.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+	}
+	
 	private CompositionCohortDefinition createCohortComposition(Object... elements) {
 		CompositionCohortDefinition compCD = new CompositionCohortDefinition();
 		compCD.initializeFromElements(elements);
-		Long size = Arrays.asList(elements).stream().filter(def -> (def instanceof AgeCohortDefinition)).count();
-		if (size > 0) {
-			compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
-		}
+		compCD.addParameter(new Parameter("onOrAfter", "On Or After", Date.class));
+		compCD.addParameter(new Parameter("onOrBefore", "On Or Before", Date.class));
+		compCD.addParameter(new Parameter("effectiveDate", "Effective Date", Date.class));
+		compCD.addParameter(new Parameter("locationList", "Visit Location", Location.class, List.class, null));
+		
 		return compCD;
 	}
 }

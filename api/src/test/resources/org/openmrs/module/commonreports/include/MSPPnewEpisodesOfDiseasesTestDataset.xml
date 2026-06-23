@@ -3,11 +3,14 @@
 <dataset>
 	<person person_id="97" gender="M" birthdate="1988-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:45:51.0" voided="false" uuid="7629f32a-5f33-4a47-915c-9766ddacd95a" deathdate_estimated="false"/>
 	<person person_id="98" gender="F" birthdate="1990-06-10" birthdate_estimated="false" dead="false" creator="1" date_created="2021-06-10 06:48:34.0" voided="false" uuid="904bc161-f75d-4984-8494-bba49d0a4ebe" deathdate_estimated="false"/>
-  
+
 	<patient patient_id="97" creator="1" date_created="2021-06-10 06:23:13.0" voided="false" allergy_status="Unknown"/>
 	<patient patient_id="98" creator="1" date_created="2021-06-10 06:24:54.0" voided="false" allergy_status="Unknown"/>
-  
-	<encounter encounter_id="3000" encounter_type="2" patient_id="7" visit_id="4" location_id="1" form_id="1" 
+
+	<visit_type visit_type_id="90" name="New episodes test visit" description="New episodes test visit" creator="1" date_created="2008-08-01 00:00:00.0" retired="false" uuid="998f4814-0084-4ac5-ad64-5c08fef8f908"/>
+	<visit visit_id="3000" patient_id="97" visit_type_id="90" date_started="2008-08-01 00:00:00.0" location_id="1" creator="1" date_created="2008-08-01 00:00:00.0" voided="false" uuid="f8ac51d2-bf2f-4ca2-b243-465e41ea44f1"/>
+
+	<encounter encounter_id="3000" encounter_type="2" patient_id="7" visit_id="3000" location_id="1" form_id="1"
 	encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-18 14:09:05.0" 
 	voided="false" uuid="713ab6cf-71e6-4f69-9a8a-747b948a5656"/>
 	

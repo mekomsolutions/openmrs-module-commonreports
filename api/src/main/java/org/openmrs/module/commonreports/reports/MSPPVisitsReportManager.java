@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
+import org.openmrs.Location;
 import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.ActivatedReportManager;
@@ -66,6 +67,7 @@ public class MSPPVisitsReportManager extends ActivatedReportManager {
 		List<Parameter> params = new ArrayList<Parameter>();
 		params.add(getStartDateParameter());
 		params.add(getEndDateParameter());
+		params.add(getLocationParameter());
 		return params;
 	}
 	
@@ -92,6 +94,7 @@ public class MSPPVisitsReportManager extends ActivatedReportManager {
 		Map<String, Object> parameterMappings = new HashMap<String, Object>();
 		parameterMappings.put("startDate", "${startDate}");
 		parameterMappings.put("endDate", "${endDate}");
+		parameterMappings.put("locationList", "${locationList}");
 		
 		rd.addDataSetDefinition(getName(), sqlDsd, parameterMappings);
 		
@@ -124,6 +127,10 @@ public class MSPPVisitsReportManager extends ActivatedReportManager {
 	
 	private Parameter getEndDateParameter() {
 		return new Parameter("endDate", "End Date", Date.class);
+	}
+	
+	private Parameter getLocationParameter() {
+		return new Parameter("locationList", "Visit Location", Location.class, List.class, null);
 	}
 	
 	private String applyMetadataReplacements(String rawSql) {

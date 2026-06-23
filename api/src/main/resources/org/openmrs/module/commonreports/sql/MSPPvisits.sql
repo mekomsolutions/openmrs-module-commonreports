@@ -63,8 +63,10 @@ LEFT OUTER JOIN
 
          LEFT OUTER JOIN visit prev_visit ON prev_visit.patient_id = v.patient_id
          AND prev_visit.date_started < v.date_started AND YEAR(prev_visit.date_started) = YEAR(:startDate)
+         AND prev_visit.location_id IN (:locationList)
          WHERE p.voided = 0
            AND date(v.date_started) BETWEEN :startDate AND :endDate
+           AND v.location_id IN (:locationList)
          GROUP BY v.visit_id) tab2
       GROUP BY tab2.`Category`) tab3
    GROUP BY tab3.Category WITH ROLLUP) tab4 ON tab1.Category = tab4.Category;

@@ -2,12 +2,15 @@ package org.openmrs.module.commonreports.reports;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.commonreports.ActivatedReportManager;
 import org.openmrs.module.commonreports.CommonReportsConstants;
 import org.openmrs.module.initializer.Domain;
@@ -78,6 +81,7 @@ public class MSPPFamilyPlanningReportManagerTest extends BaseModuleContextSensit
 		EvaluationContext context = new EvaluationContext();
 		context.addParameterValue("startDate", DateUtil.parseDate("2021-07-01", "yyyy-MM-dd"));
 		context.addParameterValue("endDate", DateUtil.parseDate("2021-07-30", "yyyy-MM-dd"));
+		context.addParameterValue("locationList", Arrays.asList(Context.getLocationService().getLocation(1)));
 		
 		// replay
 		ReportDefinition rd = manager.constructReportDefinition();
