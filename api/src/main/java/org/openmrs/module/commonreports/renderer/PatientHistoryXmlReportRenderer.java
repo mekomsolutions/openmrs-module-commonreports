@@ -33,10 +33,7 @@ import static org.openmrs.module.commonreports.reports.PatientHistoryReportManag
 import static org.openmrs.module.commonreports.reports.PatientHistoryReportManager.VISIT_TYPE_LABEL;
 import static org.openmrs.module.commonreports.reports.PatientHistoryReportManager.VISIT_UUID_LABEL;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
@@ -73,14 +70,10 @@ import org.openmrs.module.reporting.report.ReportRequest;
 import org.openmrs.module.reporting.report.renderer.RenderingException;
 import org.openmrs.module.reporting.report.renderer.ReportDesignRenderer;
 import org.openmrs.module.reporting.report.renderer.ReportRenderer;
-import org.openmrs.module.reporting.serializer.ReportingSerializer;
 import org.openmrs.obs.handler.AbstractHandler;
-import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.thoughtworks.xstream.XStream;
 
 /**
  * ReportRenderer that renders to a default XML format
@@ -136,37 +129,6 @@ public class PatientHistoryXmlReportRenderer extends ReportDesignRenderer {
 	
 	@Override
 	public void render(ReportData results, String argument, OutputStream out) throws IOException, RenderingException {
-		
-		// - - - - - - - - - - - - - - - - - - - - - - - -
-		// TODO This should go eventually.
-		// - - - - - - - - - - - - - - - - - - - - - - - -
-		if (false == StringUtils.equals(argument, "in_tests")) {
-			
-			// Marhsalling using Xstream directly
-			try {
-				File xmlFile = File.createTempFile("sampleReportData_Xstream_", ".xml");
-				BufferedWriter outWriter = new BufferedWriter(new FileWriter(xmlFile));
-				XStream xstream = new XStream();
-				xstream.toXML(results, outWriter);
-			}
-			catch (IOException e) {
-				System.out.println("IOException Occured" + e.getMessage());
-			}
-			
-			// Marhsalling using ReportingSerializer
-			try {
-				File xmlFile = File.createTempFile("sampleReportData_ReportingSerializer_", ".xml");
-				ReportingSerializer serializer = new ReportingSerializer();
-				serializer.serializeToStream(results, new FileOutputStream(xmlFile));
-				
-			}
-			catch (SerializationException e) {
-				System.out.println("SerializationException Occured" + e.getMessage());
-			}
-		}
-		// - - - - - - - - - - - - - - - - - - - - - - - -
-		//
-		// - - - - - - - - - - - - - - - - - - - - - - - -
 		
 		final String ATTR_TYPE = "type";
 		final String ATTR_LABEL = "label";
@@ -384,11 +346,6 @@ public class PatientHistoryXmlReportRenderer extends ReportDesignRenderer {
 		}
 		catch (TransformerException e) {
 			throw new RenderingException(e.getLocalizedMessage());
-		}
-		
-		{
-			System.out.println(out);
-			"".toString();
 		}
 		
 	}

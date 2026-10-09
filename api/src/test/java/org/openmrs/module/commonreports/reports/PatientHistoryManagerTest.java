@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -417,6 +419,36 @@ public class PatientHistoryManagerTest extends BaseModuleContextSensitiveTest {
 			
 			Assert.assertEquals("child", child.getTextContent().trim());
 		}
+	}
+	
+	@Test
+	public void render_shouldNotWriteReportDataToTempFiles() throws Throwable {
+		// Setup
+		ReportDesign reportDesign = setupAndReturnReportDesign();
+		PatientSummaryTemplate patientSummaryTemplate = this.patientSummaryService
+		        .getPatientSummaryTemplate(reportDesign.getId());
+		Set<String> tempFilesBefore = listReportDataTempFiles();
+		
+		// Replay
+		PatientSummaryResult patientSummaryResult = this.patientSummaryService
+		        .evaluatePatientSummaryTemplate(patientSummaryTemplate, 7, new EncounterEvaluationContext());
+		
+		// Verify
+		if (patientSummaryResult.getErrorDetails() != null) {
+			throw patientSummaryResult.getErrorDetails();
+		}
+		Document xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+		        .parse(new ByteArrayInputStream(patientSummaryResult.getRawContents()));
+		assertEquals("patientHistory", xmlDoc.getDocumentElement().getNodeName());
+		assertEquals(tempFilesBefore, listReportDataTempFiles());
+	}
+	
+	private Set<String> listReportDataTempFiles() {
+		String[] names = new File(System.getProperty("java.io.tmpdir")).list();
+		if (names == null) {
+			return new HashSet<String>();
+		}
+		return Arrays.stream(names).filter(name -> name.startsWith("sampleReportData_")).collect(Collectors.toSet());
 	}
 	
 	private String getStringValue(DataSetRow row, String columnName) {
